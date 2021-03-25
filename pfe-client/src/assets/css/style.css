@@ -1,0 +1,67 @@
+.notif{
+    background-color: blue;
+    border-radius: 30px;}      
+    
+.number{
+    position: absolute;
+    background-color: #FB404B;
+    text-align: center;
+    border-radius: 10px;
+    min-width: 18px;
+    padding: 0 5px;
+    height: 18px;
+    font-size: 12px;
+ 
+    font-weight: bold;
+    line-height: 18px;
+    top: 4px;
+    left: 2px;
+
+}      
+
+.ahref{
+    font-size: 15px;
+    position: relative;
+    top: -10px;
+    left: 2px;
+
+}
+
+.etat{
+    background-color: #6cb858;
+    width: 75px;
+    padding-left: 5px;
+    border-radius: 10px;
+    color: rgb(255, 255, 255);
+    border: darkgrey 1px solid;
+
+}
+
+.icon{
+font-size: 20px;
+position: relative;
+top: -1px;
+
+
+}
+
+.iconuser{
+    border: 1px solid rgb(150, 148, 148);
+    align-Items:'center';
+    justify-Content:'center';
+    width:30px;
+    height:30px;
+    background-color: rgb(238, 238, 237);
+    border-Radius:50px;
+    padding:5px;
+    color: #1b1b1b;
+}
+
+.profile{
+    position: relative;
+    top: -1px;
+}
+.envoyerIcon{
+    color: #418131;
+}
+
