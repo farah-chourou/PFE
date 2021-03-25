@@ -188,7 +188,7 @@ class Header extends React.Component {
                       </DropdownItem>
                       <hr></hr>
                       <DropdownItem  >  
-                     <RiLogoutBoxRLine size={22}/> se deconnecter
+                     <RiLogoutBoxRLine size={22}/> <Link to="/login">  se deconnecter</Link> 
                   
                       </DropdownItem>
                 </DropdownMenu>

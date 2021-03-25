@@ -115,26 +115,7 @@ class Sidebar extends React.Component {
               );
             })}
 
-      <Container fluid  className="fixed-bottom text-left ml-3">
-           <Row>
-            <Col md={5}> 
-             <Link  to="/login" className=" text-light text-uppercase font-weight-bold  ">
-             LogOUT
-            </Link> 
-            </Col>
-            <Col md={6}> </Col>
-
-            </Row>
-            <Row>
-            <Col > 
-           
-          .
-            </Col>
-            
-
-            </Row>
-            </Container>
-           
+  
 
           </Nav>
 

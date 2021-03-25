@@ -4,6 +4,7 @@ import com.pfe.demo.DAO.NotificationRepository;
 import com.pfe.demo.DAO.SuivisBullMedRepository;
 import com.pfe.demo.DAO.SuivisBullRepository;
 import com.pfe.demo.DAO.UserRepository;
+import com.pfe.demo.Entities.Notification;
 import com.pfe.demo.Entities.User;
 import com.pfe.demo.Exception.RessourceNotFoundException;
 import com.pfe.demo.RestController.Util.ApiResponse;
@@ -94,11 +95,22 @@ public class UserRestController {
 
     @DeleteMapping("/deleteUser/{id}")
     public void deleteUser(@PathVariable Long id ){
-     /*   userRepo.deleteById(id);
-        User user = userRepo.findById(id).orElseThrow(()-> new RessourceNotFoundException("mafamech"));
-        suivisBullRepo.deleteByExpediteurId(id);
-        notificationRepo.deleteByExpediteurNotifId(id);*/
-
-
+            userRepo.deleteById(id);
     }
+
+    @GetMapping("/getEtatUser/{id}")
+    public  ResponseEntity<String>  getEtatUser(@PathVariable Long id){
+
+       User user = userRepo.findById(id).orElseThrow(()-> new RessourceNotFoundException("mafamech"));
+
+        Notification n= notificationRepo.findByRecepteur(user.getUserName());
+        Notification N = notificationRepo.findByExpediteurNotif(user);
+
+        if (n == null & N == null){
+            userRepo.deleteById(id);
+            return new ResponseEntity<>("ok", HttpStatus.OK);
+        }else
+            return new ResponseEntity<>("not ok", HttpStatus.ALREADY_REPORTED);
+    }
+
 }
