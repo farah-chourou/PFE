@@ -1,44 +1,74 @@
 
 import React from "react";
- 
 import {Link} from "react-router-dom";
 import {Card,CardHeader,CardBody,CardTitle,Table,Row,Col,} from "reactstrap";
 import axios from "axios";
 import AddBulletin from "./AddBulletin";
-import {Tabs, Tab, Button} from "react-bootstrap"
-import { MdDeleteSweep } from 'react-icons/md';
+import {Tabs, Tab, Button, Modal,Form} from "react-bootstrap"
 import {IoIosAddCircle} from 'react-icons/io';
 import{MdModeEdit} from 'react-icons/md';
 import {FaUserEdit} from 'react-icons/fa';
+import {FiAlertCircle} from 'react-icons/fi';
+import NotificationAlert from "react-notification-alert";
+import EditUser from "./Responsable/EditUser";
+import DeleteUser from "./Responsable/DeleteUser";
+import { MdDeleteSweep } from 'react-icons/md';
+
 class Tables extends React.Component {
 
   constructor(props) {
     super(props);
     const intialState =   this.state = {
 
-    user:[],
     validateurs:[],
     medecins:[],
     number:0,
+    show : false,
+    ok:false,
+    color:"",
+    title:"",
+    message:"",
+    icon:"",
+    showUpdate:"",
+
+    
     
 
    }
-this.deleteUser = this.deleteUser.bind(this);
 this.handlePush =this.handlePush.bind(this);
+
 
 }
 
+
+
+
 componentDidMount(){
-  const local = localStorage.getItem("user");
-  console.log(JSON.parse(local));
-  this.setState({
-    user: JSON.parse(local),
-  })
+ 
  this.getValidateurs();
  this.getMedecins();
+
   }
 
 
+
+
+  handleShow () {
+    this.setState({
+        show : true,
+        
+    });
+}
+
+
+
+handleClose () {
+    this.setState({
+        show : false,
+        ok:true
+
+    });
+}
 getValidateurs =()=>{
   axios.get('http://localhost:8080/getValidateurs').then( res => {
     this.setState({ validateurs: res.data})
@@ -47,13 +77,9 @@ getValidateurs =()=>{
 }
 
 
-deleteUser = (id) =>{
-  axios.delete('http://localhost:8080/deleteUser/'+id).then(res => {
-    this.setState({
-      validateurs: this.state.validateurs.filter( user => user.id !== id) ,// condtion de filtrage
-      medecins: this.state.medecins.filter( user => user.id !== id) ,
-    })
-})}
+
+
+
 
 getMedecins =()=>{
   axios.get('http://localhost:8080/getMedecins').then( res => {
@@ -68,9 +94,15 @@ handlePush =() => {
 }
 
 
+
+
+
+
+
   render() {
     return (
       <>
+
         <div className="content">
           <Row>
   
@@ -119,13 +151,14 @@ handlePush =() => {
                                <td><Link> {v.userName} </Link> </td>
                                <td>{v.email}</td>
                                <td>{v.tel}</td>
-                               <td>  
-                                 <h4 className="text-center"> 
-                                 <FaUserEdit className="iconuser" />   &nbsp;
-                                 <MdDeleteSweep className="iconuser" onClick={()=> this.deleteUser(v.id)}/>
+                               <td className="text-center">  
+                               
+                                <div className="d-inline-block mr-3"><EditUser id={v.id}/> </div> 
+                             
+                               <div className="d-inline-block">  <DeleteUser id={v.id}/> </div>
    
 
-                                 </h4> 
+                                
                                </td>
                              </tr>
                             
@@ -160,7 +193,9 @@ handlePush =() => {
                                <td  > 
                                   <h3 className="text-center">
                                     <MdDeleteSweep onClick={()=> this.deleteUser(v.id)}/>
-                                    <MdModeEdit/>           
+                                    <MdModeEdit/>     
+                                 
+      
                                
                                   </h3> 
                                </td>
@@ -173,6 +208,11 @@ handlePush =() => {
                     
                      </Tabs>
                   </Table>
+
+
+
+    
+
                 </CardBody>
               </Card>
             </Col>

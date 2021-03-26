@@ -8,6 +8,7 @@ import com.pfe.demo.Entities.Notification;
 import com.pfe.demo.Entities.User;
 import com.pfe.demo.Exception.RessourceNotFoundException;
 import com.pfe.demo.RestController.Util.ApiResponse;
+import com.pfe.demo.RestController.Util.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -93,24 +94,39 @@ public class UserRestController {
     }
 
 
+   @GetMapping("/getUser/{id}")
+   public User getUser(@PathVariable Long id ){
+        return   userRepo.findById(id).orElseThrow(()-> new RessourceNotFoundException("mafamech"));
+
+   }
+
+
     @DeleteMapping("/deleteUser/{id}")
-    public void deleteUser(@PathVariable Long id ){
+    public  Status getEtatUser(@PathVariable Long id){
+
+        User user = userRepo.findById(id).orElseThrow(()-> new RessourceNotFoundException("mafamech"));
+
+        List <Notification> n= notificationRepo.findByRecepteur(user.getUserName());
+        List <Notification> b = notificationRepo.findByExpediteurNotif(user);
+
+        if ( b.isEmpty() == true && n.isEmpty() == true ){
             userRepo.deleteById(id);
-    }
-
-    @GetMapping("/getEtatUser/{id}")
-    public  ResponseEntity<String>  getEtatUser(@PathVariable Long id){
-
-       User user = userRepo.findById(id).orElseThrow(()-> new RessourceNotFoundException("mafamech"));
-
-        Notification n= notificationRepo.findByRecepteur(user.getUserName());
-        Notification N = notificationRepo.findByExpediteurNotif(user);
-
-        if (n == null & N == null){
-            userRepo.deleteById(id);
-            return new ResponseEntity<>("ok", HttpStatus.OK);
+            return Status.OK;
         }else
-            return new ResponseEntity<>("not ok", HttpStatus.ALREADY_REPORTED);
+            return Status.Not_OK;
     }
+
+    @PutMapping("/updateUserAdmin/{id}")
+    public User updateUserAdmin(@PathVariable Long id, @RequestBody User newUser){
+        User user = userRepo.findById(id).orElseThrow(()-> new RessourceNotFoundException("mafamech"));
+        user.setAdresse(newUser.getAdresse());
+        user.setNom(newUser.getUserName());
+        user.setPrenom(newUser.getPrenom());
+        user.setRole(newUser.getRole());
+        user.setTel(newUser.getTel());
+        userRepo.save(user);
+        return user;
+    }
+
 
 }

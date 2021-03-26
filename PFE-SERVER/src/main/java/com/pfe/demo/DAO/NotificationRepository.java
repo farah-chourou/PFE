@@ -15,8 +15,8 @@ public interface NotificationRepository extends JpaRepository<Notification,Long>
 
     Optional<Notification>  findById(Long id );
 
-    Notification findByRecepteur(String username);
-    Notification findByExpediteurNotif(User user);
+   List <Notification> findByRecepteur(String username);
+   List <Notification> findByExpediteurNotif(User user);
 
 
 
