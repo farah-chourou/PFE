@@ -61,6 +61,17 @@ public class NotifRestController {
      return n;
     }
 
+    @PutMapping("/updateVuNotif/{id}")
+    public Notification updateVuNotif(@PathVariable Long id){
+        Optional<Notification> notif = notificationRepo.findById(id);
+
+        Notification n=notif.get();
+        n.setVu(true);
+        notificationRepo.save(n);
+
+        return n;
+    }
+
     @GetMapping("/getBullFromNotif/{id}")
     public SuivisBull getBull(@PathVariable Long id ){
         Notification notif = notificationRepo.findById(id).orElseThrow(()-> new RessourceNotFoundException("mafamech"));

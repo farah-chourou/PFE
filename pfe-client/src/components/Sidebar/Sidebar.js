@@ -88,12 +88,14 @@ class Sidebar extends React.Component {
             
       if(this.state.user.role == "responsable"){ 
 
-           if(prop.invisible) return null;
+        if(prop.role =="validateur" || prop.role == "medecin" || prop.invisible ) return null;
+       
           
-          }else if (this.state.user.role =="validateur" || this.state.user.role =="medecin"){
-            if(prop.role =="responsable") return null;
+          }else if (this.state.user.role =="validateur" ){
+            if(prop.role =="responsable" || prop.role == "medecin" || prop.invisible ) return null;
+          }else if (this.state.user.role =="medecin" ){
+          if(prop.role =="validateur" || prop.role == "responsable" || prop.invisible ) return null;
           }
-
            
               return (
                 <li

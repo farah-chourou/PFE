@@ -247,7 +247,7 @@
       @include sidebar-text-color($default-color);
     }
     &[data-color="black"]{
-      @include sidebar-color($dark-color);
+      @include sidebar-color($dark-color); //houni
     }
 
 

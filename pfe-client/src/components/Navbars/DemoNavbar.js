@@ -6,7 +6,7 @@ import routes from "routes.js";
 import axios from "axios";
 import Notification from './Notification.js';
 import "assets/css/style.css";
-import {BiUserCircle} from "react-icons/bi";
+import {AiOutlineAlignLeft} from "react-icons/ai";
 import {FaUserCircle} from "react-icons/fa";
 import {RiLogoutBoxRLine} from "react-icons/ri";
 class Header extends React.Component {
@@ -58,7 +58,7 @@ class Header extends React.Component {
   }
 
   getBrand() {
-    let brandName = "Default Brand";
+    let brandName = <AiOutlineAlignLeft/>;
     routes.map((prop, key) => {
       if (window.location.href.indexOf(prop.layout + prop.path) !== -1) {
         brandName = prop.name;
@@ -131,7 +131,7 @@ class Header extends React.Component {
             : "navbar-absolute fixed-top " +
               (this.state.color === "transparent" ? "navbar-transparent " : "")
         }>
-        <Container fluid>
+        <Container fluid >
           <div className="navbar-wrapper">
             <div className="navbar-toggle">
               <button type="button" ref={this.sidebarToggle} className="navbar-toggler" onClick={() => this.openSidebar()}>

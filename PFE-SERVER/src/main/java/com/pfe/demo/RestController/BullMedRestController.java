@@ -43,16 +43,15 @@ public class BullMedRestController {
             return  new ResponseEntity(new ApiResponse(false, "Bull already exist !"),
                     HttpStatus.ALREADY_REPORTED);
         }
+
         SuivisBullMed bullMed =new SuivisBullMed();
 
-        User exped = userRepo.findByUserName(userName);
-        bullMed.setExpediteur(exped);
-
         User recep = userRepo.findBySpecialite(specialiteMed);
+        User exped = userRepo.findByUserName(userName);
+
+        bullMed.setExpediteur(exped);
         bullMed.setRecepteur(recep.getUserName());
-
         bullMed.setSpecialiteMed(specialiteMed);
-
         bullMed.setNumBull(numBull);
         bullMed.setDate(new Date());
         bullMed.setEtape(2);
@@ -61,15 +60,20 @@ public class BullMedRestController {
         SuivisBullMed bull =  suivisBullMedRepo.save(bullMed);
 
         Notification notif = new Notification();
+
+        SuivisBullMed su = suivisBullMedRepo.findByNumBull(numBull);
+
         notif.setMessage("un nouveau msg du responsable");
         notif.setDate(new Date());
         notif.setExpediteurNotif(exped);
         notif.setRecepteur(recep.getUserName());
         notif.setEtat(false);
-        SuivisBullMed su = suivisBullMedRepo.findByNumBull(numBull);
+        notif.setVu(false);
         notif.setSuivisBullMed(su);
 
         notificationRepo.save(notif);
+
+
 
         return ResponseEntity.ok(bull);
     }

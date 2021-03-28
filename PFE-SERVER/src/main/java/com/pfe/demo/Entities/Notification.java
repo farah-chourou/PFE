@@ -21,8 +21,10 @@ public class Notification {
     private String message;
     private Date date;
     private String recepteur;
+    private  Boolean vu;
     @Column(columnDefinition = "boolean default false")
     private  Boolean etat;
+
 
 
     @ManyToOne

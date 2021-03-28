@@ -22,6 +22,7 @@ var ps;
           user:[],
           notifications:[],
           notificationsNonLu:[],
+          notificationsNonVu:[],
 
           expediteurNotif:[],
           number:"",
@@ -59,6 +60,13 @@ var ps;
     
     
       dropdownToggle(e) {
+
+        this.state.notificationsNonLu.map(n => 
+          <>
+          {axios.put('http://localhost:8080/updateVuNotif/'+ n.id)}
+          </>
+          )
+
         this.setState({
           dropdownOpen: !this.state.dropdownOpen,
           number: 0
@@ -110,13 +118,27 @@ var ps;
       
               ( this.state.notificationsNonLu.push(e),
               this.setState({
-                number: this.state.notificationsNonLu.length
               }) )
             
               :false  }
       
               </div>
               )
+
+
+              res.data.map(e => 
+                <div key={e.id}>
+                { ( e.recepteur == this.state.user.userName  && e.vu== false)? 
+        
+                ( this.state.notificationsNonVu.push(e),
+                this.setState({
+                  number: this.state.notificationsNonVu.length
+                }) )
+              
+                :false  }
+        
+                </div>
+                )
 
             })
 

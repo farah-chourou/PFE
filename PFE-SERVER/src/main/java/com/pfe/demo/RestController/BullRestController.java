@@ -79,25 +79,20 @@ public class BullRestController {
         notif.setExpediteurNotif(exp);
         notif.setRecepteur(recepteur);
         notif.setEtat(false);
+        notif.setVu(false);
+
         SuivisBull s = suivisBullRepo.findByNumBull(suivisBulletein.getNumBull());
         notif.setSuivisBull(s);
 
         notificationRepo.save(notif);
-        sendSimpleMessage(recep.getEmail(),"hhhh","hfffgfgf");
+        String expediteur=exp.getUserName();
+        sendSimpleMessage(recep.getEmail(),"Nouvelle notification (MUTUAL by CODWAY)","Bonjour, \nvous avez une nouvelle notification de la part " + expediteur + " . \nBien recu a vous.");
         return ResponseEntity.ok(bull);
     }
-/*
-    @GetMapping("/getAllBull/{numBull}")
-    public SuivisBull getAllBull(@PathVariable int numBull){
-
-       return suivisBullRepo.findByNumBull(numBull);
-
-    }*/
 
     @GetMapping("/getAllBull")
     public List<SuivisBull> getAlBull(){
-   /* User recepteur = userRepo.findByUserName(username);
-    List<SuivisBull> bull = suivisBullRepo.findByRecepteurAndEtat(recepteur, "en cours");*/
+
     List<SuivisBull>  bull = suivisBullRepo.findAll();
     return bull;
     }
@@ -106,12 +101,18 @@ public class BullRestController {
     @DeleteMapping("/deleteBull/{numBull}")
     public void deleteBull(@PathVariable int numBull ){
         suivisBullRepo.deleteByNumBull(numBull);
-       /* User user = userRepo.findById(id).orElseThrow(()-> new RessourceNotFoundException("mafamech"));
-        suivisBullRepo.deleteByExpediteurId(id);
-        notificationRepo.deleteByExpediteurNotifId(id);*/
-
 
     }
+
+    @PutMapping("/updateEtapeBull/{numBull}")
+    public SuivisBull updateEtatBull(@PathVariable int numBull){
+        SuivisBull bull = suivisBullRepo.findByNumBull(numBull);
+        bull.setEtape(2);
+        suivisBullRepo.save(bull);
+        return bull;
+
+    }
+
 
 
 }

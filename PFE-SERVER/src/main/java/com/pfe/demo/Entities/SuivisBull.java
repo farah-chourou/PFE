@@ -41,4 +41,6 @@ public class SuivisBull {
     @OneToOne(mappedBy = "suivisBull",cascade = CascadeType.ALL,fetch=FetchType.LAZY)
     private Notification notification;
 
+
+
 }

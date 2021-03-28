@@ -8,7 +8,7 @@ import javax.management.ListenerNotFoundException;
 import javax.transaction.Transactional;
 import java.util.List;
 
-public interface SuivisBullRepository extends JpaRepository<SuivisBull,Long> {
+public interface SuivisBullRepository extends JpaRepository<SuivisBull,Integer> {
 
   SuivisBull findByNumBull(int numBull);
   List<SuivisBull> findByRecepteurAndEtat(User user, String etat);

@@ -118,7 +118,7 @@ handlePush =() => {
                      </Col>
 
                      <Col md={4}>  
-                     &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
+                     &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
                     <Button onClick={() => this.handlePush()}> <IoIosAddCircle className="icon" />  Ajouter un utilisateur</Button> 
                      </Col>
                   
@@ -190,14 +190,12 @@ handlePush =() => {
 
                                <td>{v.email}</td>
                                <td>{v.tel}</td>
-                               <td  > 
-                                  <h3 className="text-center">
-                                    <MdDeleteSweep onClick={()=> this.deleteUser(v.id)}/>
-                                    <MdModeEdit/>     
+                               <td className="text-center" > 
+                                  <div className="d-inline-block mr-3"><EditUser id={v.id}/> </div> 
+                                  <div className="d-inline-block">  <DeleteUser id={v.id}/> </div>
                                  
       
                                
-                                  </h3> 
                                </td>
                                </tr>
                             

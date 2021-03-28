@@ -71,7 +71,8 @@ var routes = [
     icon: "nc-icon nc-spaceship",
     component: AddUser,
     layout: "/user",
-    role:"responsable"
+    invisible: true,
+
   },
   {
     path: "/AddBulletin",
@@ -80,7 +81,6 @@ var routes = [
     component: AddBulletin,
     layout: "/user",
     role:"validateur",
-    invisible: true,
 
   },
   {
