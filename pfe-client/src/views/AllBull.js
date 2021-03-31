@@ -17,7 +17,6 @@ class AllBull extends React.Component {
    
       user:[],
       bulletinsResp:[],
-      bulletinsMed:[],
 
       numberBull:"",
       number: 0
@@ -33,7 +32,6 @@ class AllBull extends React.Component {
       user: JSON.parse(local),
     })
     this.getAllBullResp();
-    this.getAllBullMed();
   }
 
 
@@ -55,23 +53,6 @@ class AllBull extends React.Component {
     )})
   }
 
-   getAllBullMed =() =>{
-     axios.get('http://localhost:8080/getAllBullMed').then(res => {
-   console.log(res.data);
-      res.data.map(k => 
-        <div >
-         {(k.recepteur == this.state.user.userName) ?  
-        ( this.state.bulletinsMed.push(k),
-        this.setState({
-          numberBull:this.state.bulletinsMed.length
-        })
-        )  
-        : false}
-        </div>
-    )
-
-     })
-   }
 
 
   deleteBull = (numBull) =>{
@@ -125,7 +106,6 @@ class AllBull extends React.Component {
       <>
     <NotificationAlert ref={this.notificationAlert} />
 
-         {console.log(this.state.bulletinsMed)     }      
 
         <div className="content">
           <Row>
@@ -133,7 +113,7 @@ class AllBull extends React.Component {
               <Card>
                 <CardHeader>
                 
-                  <h5 className="title">Listes des bulletins a envoyer</h5>
+                  <h5 className="title">Listes des bulletins</h5>
                   <p className="category">
                     Created using Montserrat Font Family
                   </p>
@@ -141,40 +121,8 @@ class AllBull extends React.Component {
                 <CardBody>
                 <Table responsive>
                   <Tabs defaultActiveKey="home" transition={false} id="noanim-tab-example" >
-                    {this.state.user.role == "medecin" ? 
-                    <Tab eventKey="home" title="Toutes la liste" >
-                    <Table  bordered hover size="sm">
-                       <thead>
-                         <tr>
-                           <th>Numero bulletin</th>
-                           <th>Date</th>
-                           <th>envoyer par</th>
-                           <th>autre</th>
-                         </tr>
-                       </thead>
-                       <tbody >
-                       {this.state.bulletinsMed.map(b =>
-                               <tr key={b.numBull}>   
-                           <td>{b.numBull} </td>
-                           <td>{b.date}</td>
-                        
-                           <td>{b.expediteur.userName}</td>
-                           <td>  
-                             <h4 className="text-center"> 
-                          
-                             <MdDeleteSweep  onClick={()=> this.deleteBull(b.numBull)}/> &nbsp;
-                               <MdSend  size={20} className="envoyerIcon" onClick={()=> this.envoyerBull(b.numBull,b.specialiteMed)}/>    
-                             </h4> 
-                           </td>
-                         </tr>
-                        
-                         
-                      )} </tbody>
-                   </Table>
-                   </Tab>
-                :
-                 
-                        <Tab eventKey="home" title="Toutes la liste" >
+               
+                        <Tab eventKey="home" title="Toute la liste" >
                         <Table  bordered hover size="sm">
                            <thead>
                              <tr>
@@ -208,7 +156,7 @@ class AllBull extends React.Component {
                              
                           )} </tbody>
                        </Table>
-                       </Tab> }
+                       </Tab> 
                     
                     
 

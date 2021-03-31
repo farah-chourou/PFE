@@ -10,7 +10,7 @@ import UpgradeToPro from "views/Upgrade.js";
 import AddBulletin from "views/AddBulletin.js";
 import AddUser from "views/AddUser";
 import BulletinNotif from "views/BulletinNotif";
-
+import BullMed from "views/Medecin/BullMed";
 var routes = [
   {
     path: "/dashboard",
@@ -34,13 +34,7 @@ var routes = [
     component: Maps,
     layout: "/user",
   },*/
-  {
-    path: "/notifications",
-    name: "Notifications",
-    icon: "nc-icon nc-bell-55",
-    component: Notifications,
-    layout: "/user",
-  },
+
   {
     path: "/user-page",
     name: "User Profile",
@@ -59,10 +53,20 @@ var routes = [
   },
   {
     path: "/bulletin",
-    name: " Bulletin",
+    name: " Bulletin ",
     icon: "nc-icon nc-caps-small",
     component: AllBull,
     layout: "/user",
+    role:"responsable"
+
+  },
+  {
+    path: "/bulletinMedecin",
+    name: " Bulletin recu",
+    icon: "nc-icon nc-caps-small",
+    component: BullMed,
+    layout: "/user",
+    role:"medecin"
 
   },
   {
@@ -84,13 +88,27 @@ var routes = [
 
   },
   {
-    path: "/bulletin:id",
+    path: "/soloBulletin:id",
     name: "bulletin",
     icon: "nc-icon nc-spaceship",
     component: BulletinNotif,
     layout: "/user",
     invisible: true,
 
+  },
+  {
+    path: "/historiqueBull",
+    name: "historique",
+    icon: "nc-icon nc-bell-55",
+    component: Notifications,
+    layout: "/user",
+  },
+  {
+    path: "/notifications",
+    name: "Notifications",
+    icon: "nc-icon nc-bell-55",
+    component: Notifications,
+    layout: "/user",
   },
 
  /* {

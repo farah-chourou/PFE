@@ -5,4 +5,6 @@ import com.pfe.demo.Entities.SuivisBullMed;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AvisRepository extends JpaRepository<Avis,Long> {
+    Avis findByAvis(String avis);
+
 }

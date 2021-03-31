@@ -1,13 +1,7 @@
 package com.pfe.demo.RestController;
 
-import com.pfe.demo.DAO.NotificationRepository;
-import com.pfe.demo.DAO.SuivisBullMedRepository;
-import com.pfe.demo.DAO.SuivisBullRepository;
-import com.pfe.demo.DAO.UserRepository;
-import com.pfe.demo.Entities.Notification;
-import com.pfe.demo.Entities.SuivisBull;
-import com.pfe.demo.Entities.SuivisBullMed;
-import com.pfe.demo.Entities.User;
+import com.pfe.demo.DAO.*;
+import com.pfe.demo.Entities.*;
 import com.pfe.demo.Exception.RessourceNotFoundException;
 import com.pfe.demo.RestController.Util.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +28,9 @@ public class BullMedRestController {
 
     @Autowired
     NotificationRepository notificationRepo;
+
+    @Autowired
+    AvisRepository avisRepository;
 
 
   @PostMapping("/addBullMed/{numBull}/{specialiteMed}/{userName}")
@@ -81,12 +78,82 @@ public class BullMedRestController {
 
     @GetMapping("/getAllBullMed")
     public List<SuivisBullMed> getAlBull(){
-   /* User recepteur = userRepo.findByUserName(username);
-    List<SuivisBull> bull = suivisBullRepo.findByRecepteurAndEtat(recepteur, "en cours");*/
         List<SuivisBullMed>  bull = suivisBullMedRepo.findAll();
         return bull;
     }
 
+    @GetMapping("/getAllAvis")
+    public List<Avis> getAllAvis(){
+        List<Avis> avis = avisRepository.findAll();
+        return avis;
+    }
+
+    @GetMapping("/getAllAvis/{numBull}")
+    public SuivisBullMed getBullMed(@PathVariable int numBull){
+        SuivisBullMed  bull = suivisBullMedRepo.findByNumBull(numBull);
+        return bull;
+    }
+
+
+
+    @PutMapping("/ajouterAvis/{numBull}/{avis}")
+    public SuivisBullMed addAvis( @PathVariable int numBull , @PathVariable String avis, @RequestBody SuivisBullMed bullMed){
+        SuivisBullMed bull = suivisBullMedRepo.findByNumBull(numBull);
+        Avis a = avisRepository.findByAvis(avis);
+        bull.setAvis(a);
+        bull.setCommentaireMed(bullMed.getCommentaireMed());
+        bull.setEtape(3);
+        bull.setEtat(a.getAvis());
+        suivisBullMedRepo.save(bull);
+
+        User expediteur = userRepo.findByUserName(bull.getRecepteur());
+        String recepteur = bull.getExpediteur().getUserName();
+
+        Notification notif = new Notification();
+        notif.setMessage("un nouveau msg du medecin");
+        notif.setDate(new Date());
+        notif.setExpediteurNotif(expediteur);
+        notif.setRecepteur(recepteur);
+        notif.setEtat(false);
+        notif.setVu(false);
+        notif.setSuivisBullMed(bull);
+
+        notificationRepo.save(notif);
+
+
+        return bull;
+    }
+
+
+    @PutMapping("/ajouterAvis/{numBull}/{avis}/{autreAvis}")
+    public SuivisBullMed addOtherAvis( @PathVariable int numBull , @PathVariable String avis, @PathVariable String autreAvis, @RequestBody SuivisBullMed bullMed){
+        SuivisBullMed bull = suivisBullMedRepo.findByNumBull(numBull);
+        Avis a = new Avis();
+        a.setAvis(autreAvis);
+        avisRepository.save(a);
+        bull.setAvis(a);
+        bull.setCommentaireMed(bullMed.getCommentaireMed());
+        bull.setEtape(3);
+        bull.setEtat(a.getAvis());
+        suivisBullMedRepo.save(bull);
+
+
+        User expediteur = userRepo.findByUserName(bull.getRecepteur());
+        String recepteur = bull.getExpediteur().getUserName();
+
+        Notification notif = new Notification();
+        notif.setMessage("un nouveau msg du medecin");
+        notif.setDate(new Date());
+        notif.setExpediteurNotif(expediteur);
+        notif.setRecepteur(recepteur);
+        notif.setEtat(false);
+        notif.setVu(false);
+        notif.setSuivisBullMed(bull);
+
+        notificationRepo.save(notif);
+
+        return bull;
+    }
 
 
 

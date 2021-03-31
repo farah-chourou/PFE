@@ -11,7 +11,6 @@ import {FaUserEdit} from 'react-icons/fa';
 import {FiAlertCircle} from 'react-icons/fi';
 import NotificationAlert from "react-notification-alert";
 import EditUser from "./Responsable/EditUser";
-import DeleteUser from "./Responsable/DeleteUser";
 import { MdDeleteSweep } from 'react-icons/md';
 
 class Tables extends React.Component {
@@ -30,12 +29,14 @@ class Tables extends React.Component {
     message:"",
     icon:"",
     showUpdate:"",
+    id:""
 
     
     
 
    }
 this.handlePush =this.handlePush.bind(this);
+this.handleDelete =this.handleDelete.bind(this);
 
 
 }
@@ -51,34 +52,59 @@ componentDidMount(){
   }
 
 
-
-
-  handleShow () {
+  handleShow (v) {
     this.setState({
         show : true,
-        
-    });
-}
-
-
+        id:v.id
+    }) }
 
 handleClose () {
-    this.setState({
-        show : false,
-        ok:true
+      this.setState({
+          show : false,
+      });}
 
-    });
+handleDelete =()=> {
+ 
+
+    axios.delete('http://localhost:8080/deleteUser/'+this.state.id).then(res => {
+      console.log(res.data);
+       
+      if(res.data == "Not_OK" ) {
+        this.setState({
+          color: "danger",
+          title:"Erreur !",
+          message:"Impossible de supprimer cet utilisateur",
+          icon:"nc-icon nc-simple-remove",
+          show : false,
+
+        })
+        this.notify("br") ;
+      
+      }else {
+        this.setState({
+          color: "success",
+          title:"Succé",
+          message:"utilisateur supprimer avec succé",
+          icon:"nc-icon nc-check-2"
+        })
+        this.notify("br") ;
+          this.setState({
+            validateurs: this.state.validateurs.filter( user => user.id !== this.state.id) ,// condtion de filtrage
+            show : false,
+
+          })  }
+
+      })
 }
+
+
+
 getValidateurs =()=>{
   axios.get('http://localhost:8080/getValidateurs').then( res => {
     this.setState({ validateurs: res.data})
     
   })
 }
-
-
-
-
 
 
 getMedecins =()=>{
@@ -96,12 +122,36 @@ handlePush =() => {
 
 
 
+   
+notificationAlert = React.createRef();
+notify(place) {
+
+
+  var options = {};
+  options = {
+    place: place,
+    message: (
+      <div className="text-left " style={{}}>
+        <div>
+        <b>{this.state.title}</b> <br></br>
+        {this.state.message}
+         </div>
+      </div>
+    ),
+    type: this.state.color,
+    icon: this.state.icon,
+    autoDismiss: 7,
+  };
+  this.notificationAlert.current.notificationAlert(options);
+}
+
 
 
 
   render() {
     return (
       <>
+               <NotificationAlert ref={this.notificationAlert} />
 
         <div className="content">
           <Row>
@@ -155,7 +205,7 @@ handlePush =() => {
                                
                                 <div className="d-inline-block mr-3"><EditUser id={v.id}/> </div> 
                              
-                               <div className="d-inline-block">  <DeleteUser id={v.id}/> </div>
+                                <div className="d-inline-block mr-3"> <MdDeleteSweep size={25} onClick={()=> this.handleShow(v)}/>  </div>   
    
 
                                 
@@ -191,9 +241,10 @@ handlePush =() => {
                                <td>{v.email}</td>
                                <td>{v.tel}</td>
                                <td className="text-center" > 
-                                  <div className="d-inline-block mr-3"><EditUser id={v.id}/> </div> 
-                                  <div className="d-inline-block">  <DeleteUser id={v.id}/> </div>
-                                 
+                                   <div className="d-inline-block mr-3"><EditUser id={v.id}/> </div> 
+                             
+                                   <div className="d-inline-block mr-3"> <MdDeleteSweep size={25} onClick={()=> this.handleShow(v)}/>  </div>   
+   
       
                                
                                </td>
@@ -218,6 +269,41 @@ handlePush =() => {
 
           </Row>
         </div>
+
+
+
+
+
+
+
+
+
+
+        <Modal
+        show={this.state.show}
+        onHide={() =>this.handleClose()}
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>CONFIRMER </Modal.Title>
+        </Modal.Header>
+        <Modal.Body  >
+
+        <h5>< FiAlertCircle size={55} color="orange"/>    &nbsp; Est-vous sur de supprimer cet utilisateur ?</h5> 
+        </Modal.Body>
+         <Modal.Footer>
+          <Button style={{backgroundColor: "orange"}} className="text-light border border-muted" onClick={() => this.handleDelete()}>
+         <b>  oui, supprimer-le !</b> 
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+
+
+
+
+
       </>
     );
   }

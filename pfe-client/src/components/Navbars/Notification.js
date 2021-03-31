@@ -146,7 +146,7 @@ var ps;
       }
     
       getBull = (id) => {
-        this.props.history.push('/user/bulletin'+id);
+        this.props.history.push('/user/soloBulletin'+id);
         window.location.reload(false);
 
       }

@@ -1,12 +1,11 @@
 package com.pfe.demo.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.Set;
 
 @Entity
@@ -16,10 +15,11 @@ import java.util.Set;
 public class Avis {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String avis;
 
-
+    @JsonIgnore
     @OneToMany(mappedBy = "avis")
     private Set< SuivisBullMed> suivisBulleteinMeds;
 }

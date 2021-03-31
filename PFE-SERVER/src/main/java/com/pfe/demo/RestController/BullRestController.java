@@ -85,8 +85,8 @@ public class BullRestController {
         notif.setSuivisBull(s);
 
         notificationRepo.save(notif);
-        String expediteur=exp.getUserName();
-        sendSimpleMessage(recep.getEmail(),"Nouvelle notification (MUTUAL by CODWAY)","Bonjour, \nvous avez une nouvelle notification de la part " + expediteur + " . \nBien recu a vous.");
+       /* String expediteur=exp.getUserName();
+        sendSimpleMessage(recep.getEmail(),"Nouvelle notification (MUTUAL by CODWAY)","Bonjour, \nvous avez une nouvelle notification de la part " + expediteur + " . \nBien recu a vous.");*/
         return ResponseEntity.ok(bull);
     }
 

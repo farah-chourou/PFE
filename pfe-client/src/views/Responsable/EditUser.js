@@ -20,6 +20,7 @@ export default class EditUser extends Component {
             specialite:"",
             id:props.id,
             showSpec:false,
+            showUpdate:false
              
         }
         this.handleChange=this.handleChange.bind(this);
@@ -67,7 +68,10 @@ export default class EditUser extends Component {
               this.setState({
                 showSpec:true,
     
-              }) }
+              }) }else this.setState({
+                showSpec:false,
+    
+              })
           }
      
         updateUser = ()=>{
@@ -199,7 +203,7 @@ export default class EditUser extends Component {
                     </Form.Group>
                       </Col>
                     </Row>
-                    : <div> </div> }
+                    :  false }
                    
   
   

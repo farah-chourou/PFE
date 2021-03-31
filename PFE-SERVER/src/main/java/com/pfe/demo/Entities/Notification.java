@@ -33,6 +33,6 @@ public class Notification {
     @OneToOne
     private SuivisBull suivisBull;
 
-    @OneToOne
+    @ManyToOne
     private SuivisBullMed suivisBullMed;
 }
