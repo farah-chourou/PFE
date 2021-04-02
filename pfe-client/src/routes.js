@@ -2,13 +2,12 @@
 import Dashboard from "views/Dashboard.js";
 import Notifications from "views/Notifications.js";
 import Icons from "views/Icons.js";
-import AllBull from "views/AllBull.js";
-import TableList from "views/Tables.js";
+import AllBull from "views/Responsable/AllBull.js";
+import UsersList from "views/Responsable/UsersList.js";
 import Maps from "views/Map.js";
 import UserPage from "views/User.js";
 import UpgradeToPro from "views/Upgrade.js";
 import AddBulletin from "views/AddBulletin.js";
-import AddUser from "views/AddUser";
 import BulletinNotif from "views/BulletinNotif";
 import BullMed from "views/Medecin/BullMed";
 var routes = [
@@ -46,7 +45,7 @@ var routes = [
     path: "/tables",
     name: "users List",
     icon: "nc-icon nc-tile-56",
-    component: TableList,
+    component: UsersList,
     layout: "/user",
     role:"responsable"
 
@@ -69,15 +68,7 @@ var routes = [
     role:"medecin"
 
   },
-  {
-    path: "/addUser",
-    name: "Add user",
-    icon: "nc-icon nc-spaceship",
-    component: AddUser,
-    layout: "/user",
-    invisible: true,
 
-  },
   {
     path: "/AddBulletin",
     name: "Add bulletin",
