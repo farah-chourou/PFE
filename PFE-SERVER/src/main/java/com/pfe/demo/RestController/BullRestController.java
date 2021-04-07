@@ -16,6 +16,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class BullRestController {
     private JavaMailSender emailSender;
 
     public void sendSimpleMessage(
-            String to, String subject, String text) {
+         String to, String subject, String text) {
 
 
         SimpleMailMessage message = new SimpleMailMessage();
@@ -54,6 +55,7 @@ public class BullRestController {
     }
    @PostMapping("/addBull/{id}/{recepteur}")
     public ResponseEntity<SuivisBull> addBull(@RequestBody SuivisBull suivisBulletein, @PathVariable Long id, @PathVariable String recepteur){
+
       if(suivisBullRepo.findByNumBull(suivisBulletein.getNumBull()) != null){
           return  new ResponseEntity(new ApiResponse(false, "Bull already exist !"),
                   HttpStatus.ALREADY_REPORTED);
@@ -67,7 +69,7 @@ public class BullRestController {
        // expediteur.addS(suivisBulletein);
         suivisBulletein.setExpediteur(exp);
 
-        suivisBulletein.setDate(new Date());
+        suivisBulletein.setDate(LocalDate.now());
         suivisBulletein.setEtape(1);
         suivisBulletein.setEtat("en cours");
 
@@ -96,6 +98,14 @@ public class BullRestController {
     List<SuivisBull>  bull = suivisBullRepo.findAll();
     return bull;
     }
+
+    @GetMapping("/getAllBullUser/{id}")
+    public List<SuivisBull> getAlBullUser(@PathVariable Long id ){
+        User user = userRepo.findById(id).orElseThrow(()-> new RessourceNotFoundException("mafamech"));
+        List<SuivisBull>  bull = suivisBullRepo.findByExpediteur(user);
+        return bull;
+    }
+
 
 
     @DeleteMapping("/deleteBull/{numBull}")

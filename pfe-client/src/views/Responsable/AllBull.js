@@ -30,6 +30,10 @@ import axios from "axios";
 import {Card,CardHeader,CardBody,CardTitle,Row,Col,} from "reactstrap";
 import {MdSend} from 'react-icons/md';
 import AddCommentOutlinedIcon from '@material-ui/icons/AddCommentOutlined';
+import BullRecuMed from "./BullRecuMed"
+import {FiAlertCircle} from 'react-icons/fi';
+
+
 //pagination
 const useStyles1 = makeStyles((theme) => ({
   root: {
@@ -149,10 +153,13 @@ TablePaginationActions.propTypes = {
 
 
 
-
-function createData(numBull, date, expediteur,specialite,etat,recepteur) {
-  return { numBull, date ,expediteur,specialite,etat,recepteur};
+function createData(numBull, date, expediteur,specialite,etat,recepteur,commentaireMed,commentaireResp) {
+  return { numBull, date ,expediteur,specialite,etat,recepteur, history: [
+    { commentaireMed, commentaireResp , numBull },
+   
+  ],};
 }
+
 
 export default function CustomPaginationActionsTable() {
   const theme = useTheme();
@@ -241,7 +248,7 @@ const getAllBullMed =() =>{
 
 var rowsMedecin =[];
 bulletinsMed.map((d)=> {
-rowsMedecin.push(createData(d.numBull,d.date, d.expediteur.userName, d.specialiteMed,d.etat,d.recepteur))
+rowsMedecin.push(createData(d.numBull,d.date, d.expediteur.userName, d.specialiteMed,d.etat,d.recepteur,d.commentaireMed,d.commentaireResp))
 
 }) 
 
@@ -251,24 +258,31 @@ const handleDelete =()=> {
     setBulletinsResp(bulletinsResp.filter(user => user.numBull !== numBull))
 
          })
+         title ="Succés"
+         color="success"
+         message ="Bulletin supprimer avec succés"
+         icon ="nc-icon nc-check-2"
+          notify("br"); 
+     
 }
 
 const envoyerBull = (numBull,specialiteMed) => {
+
   axios.post('http://localhost:8080/addBullMed/'+ numBull + "/" + specialiteMed + "/"+ user.userName).then(res => {
     console.log(res.data);
-    color ="success";
-    title ="Succés!";
-    message="Bulletin envoyer avec succés"
-    icon ="nc-icon nc-simple-remove"
-    notify("br"); 
-    setBulletinsResp(bulletinsResp.filter( bulletins => bulletins.numBull !== numBull))
-
-
   })
 
   axios.put('http://localhost:8080/updateEtapeBull/'+ numBull ).then(res => {
     console.log(res.data);
   })
+
+  setBulletinsResp(bulletinsResp.filter( bulletins => bulletins.numBull !== numBull))
+  color ="success";
+  title ="Succés!";
+  message="Bulletin envoyer avec succés"
+  icon ="nc-icon nc-simple-remove"
+  notify("br"); 
+ 
 }
 
 const notificationAlert = React.createRef();
@@ -311,7 +325,7 @@ const handleChangeRowsPerPage = (event) => {
 };
 
   return (
-    <div className="content">
+    <div className="content" component={Paper}>
   <NotificationAlert ref={notificationAlert} />
 
   <Row>
@@ -423,7 +437,7 @@ const handleChangeRowsPerPage = (event) => {
           <TableRow  >
             <TablePagination 
               rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-              colSpan={3}
+              colSpan={7}
               count={rows.length}
               rowsPerPage={rowsPerPage}
               page={page}
@@ -450,47 +464,27 @@ const handleChangeRowsPerPage = (event) => {
 
       <TableHead>
           <TableRow  >
+          <TableCell> <b> </b></TableCell>
+
           <TableCell> <b>Numero bulletins  </b></TableCell>
             <TableCell > <b> Date d'envoie </b></TableCell>
             <TableCell > <b> Specialité medecin</b></TableCell>
             <TableCell ><b> Envoyer par</b> </TableCell>
             <TableCell ><b >  Etat</b> </TableCell>
-            <TableCell ><b> Ajouter commentaire </b> </TableCell>
+            <TableCell ><b>  Envoyer</b> </TableCell>
 
           
           </TableRow>
         </TableHead>
         <TableBody>
+     
           {console.log(rowsMedecin)}
           {(rowsPerPage > 0
             ? rowsMedecin.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             : rowsMedecin
           ).map((row) => (
-            <TableRow key={row.numBull}>
-            
-              <TableCell component="th" scope="row" >
-             
-              { row.numBull}
-           
-              </TableCell>
-              <TableCell component="th" scope="row">
-              {row.date}
-           
-              </TableCell>
-             
-              <TableCell component="th" scope="row">
-                {row.specialite}
-              </TableCell>
-              <TableCell component="th" scope="row">
-                {row.recepteur}
-              </TableCell>
-              <TableCell component="th" scope="row" >
-              <span className="etat shadow p-1"> {row.etat} </span>   
-              </TableCell>
-              <TableCell component="th" scope="row" align="center">
-            <AddCommentOutlinedIcon color="primary" />
-         </TableCell>
-            </TableRow>
+            <BullRecuMed key={row.numBull} row={row} bullMed={getAllBullMed} allBull={bulletinsMed} />
+
           ))}
 
           {emptyRows > 0 && (
@@ -501,10 +495,11 @@ const handleChangeRowsPerPage = (event) => {
         </TableBody>
          
     
-          <TableRow  >
+          <TableRow   >
             <TablePagination 
+         
               rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-              colSpan={3}
+              colSpan={7}
               count={rows.length}
               rowsPerPage={rowsPerPage}
               page={page}
@@ -550,7 +545,7 @@ const handleChangeRowsPerPage = (event) => {
         </Modal.Header>
         <Modal.Body  >
 
-        <h5>   &nbsp; Est-vous sur de supprimer cet utilisateur ?</h5> 
+        <h5>  < FiAlertCircle size={55} color="orange"/>    &nbsp; Est-vous sur de supprimer cet utilisateur ?</h5> 
         </Modal.Body>
          <Modal.Footer>
           <Button style={{backgroundColor: "orange"}} className="text-light border border-muted" onClick={handleDelete}>

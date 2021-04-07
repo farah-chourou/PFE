@@ -7,9 +7,12 @@ import UsersList from "views/Responsable/UsersList.js";
 import Maps from "views/Map.js";
 import UserPage from "views/User.js";
 import UpgradeToPro from "views/Upgrade.js";
-import AddBulletin from "views/AddBulletin.js";
 import BulletinNotif from "views/BulletinNotif";
 import BullMed from "views/Medecin/BullMed";
+import BullValid from "views/Validateur/BullValid";
+import HistoriqueValid from "views/Validateur/HistoriqueValid"
+import HistoriqueResp from "views/Responsable/HistoriqueResp"
+
 var routes = [
   {
     path: "/dashboard",
@@ -52,7 +55,7 @@ var routes = [
   },
   {
     path: "/bulletin",
-    name: " Bulletin ",
+    name: " Bulletin recu ",
     icon: "nc-icon nc-caps-small",
     component: AllBull,
     layout: "/user",
@@ -70,14 +73,15 @@ var routes = [
   },
 
   {
-    path: "/AddBulletin",
-    name: "Add bulletin",
-    icon: "nc-icon nc-spaceship",
-    component: AddBulletin,
+    path: "/bulletinValidateur",
+    name: " Bulletin recu",
+    icon: "nc-icon nc-caps-small",
+    component: BullValid,
     layout: "/user",
-    role:"validateur",
+    role:"validateur"
 
   },
+ 
   {
     path: "/soloBulletin:id",
     name: "bulletin",
@@ -91,8 +95,17 @@ var routes = [
     path: "/historiqueBull",
     name: "historique",
     icon: "nc-icon nc-bell-55",
-    component: Notifications,
+    component: HistoriqueValid,
     layout: "/user",
+    role:"validateur"
+  },
+  {
+    path: "/historiqueBulle",
+    name: "historique",
+    icon: "nc-icon nc-bell-55",
+    component: HistoriqueResp,
+    layout: "/user",
+    role:"responsable"
   },
   {
     path: "/notifications",

@@ -49,17 +49,12 @@ handleSubmit=(e)=> {
           userName:this.state.userName,
   
       }
-  
-  
-   
-      console.log('users =>' + JSON.stringify(user));
+    
 
       axios.post(`http://localhost:8080/login`,user).then(result  => {  
 
-     console.error();
   
-     console.log(result.data.message);
-       
+       console.log(result.data)
   if(result.data.message == "User not exist !"){
       this.error();
 

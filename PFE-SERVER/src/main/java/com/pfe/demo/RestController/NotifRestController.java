@@ -86,4 +86,11 @@ public class NotifRestController {
     }*/
 
 
+    @GetMapping("/getBullfromNotif/{userName}") // lil afichage mta3 suivis bull Med lil validateur
+    public List<Notification> getUserNotif(@PathVariable String userName){
+        List<Notification> notifss = notificationRepo.findByRecepteur(userName);
+        return notifss;
+    }
+
+
 }

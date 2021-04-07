@@ -156,6 +156,39 @@ public class BullMedRestController {
     }
 
 
+    @PutMapping("/ajouterCommentaire/{numBull}/{comment}")
+    public SuivisBullMed addCommentResp( @PathVariable int numBull ,@PathVariable String comment){
+        SuivisBullMed bull = suivisBullMedRepo.findByNumBull(numBull);
 
+        bull.setCommentaireResp(comment);
+        suivisBullMedRepo.save(bull);
+        return bull;
+    }
+    @PutMapping("/envoyer/{numBull}")
+    public SuivisBullMed addCommentResp( @PathVariable int numBull ){
+        SuivisBullMed bull = suivisBullMedRepo.findByNumBull(numBull);
+
+        bull.setEtape(4);
+        suivisBullMedRepo.save(bull);
+
+        SuivisBull bullValid = suivisBullRepo.findByNumBull(numBull);
+
+
+        Notification notif = new Notification();
+        notif.setMessage("un nouveau msg ");
+        notif.setDate(new Date());
+        notif.setExpediteurNotif(bull.getExpediteur());
+        notif.setRecepteur(bullValid.getExpediteur().getUserName());
+        notif.setEtat(false);
+        notif.setVu(false);
+        notif.setSuivisBullMed(bull);
+
+        notificationRepo.save(notif);
+
+        return bull;
+    }
+
+
+ 
 
 }

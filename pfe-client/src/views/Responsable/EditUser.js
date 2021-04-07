@@ -28,7 +28,12 @@ export default class EditUser extends Component {
  
     }
 
-
+    validateurs = () => {
+      this.props.validateurs()
+  }
+  medecins = () => {
+      this.props.medecins()
+  }
 
     componentDidMount(){
         this.getUser();
@@ -88,7 +93,8 @@ export default class EditUser extends Component {
         
               axios.put(`http://localhost:8080/updateUserAdmin/`+ this.state.id,user).then(res => {
         
-        
+                this.validateurs();
+                this.medecins();
               })
         }
 

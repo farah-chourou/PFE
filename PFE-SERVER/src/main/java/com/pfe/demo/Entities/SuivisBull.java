@@ -12,6 +12,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 @Entity
 @Data
@@ -22,7 +23,7 @@ public class SuivisBull {
 
     @Id
     private int numBull;
-    private Date date;
+    private LocalDate date;
     private  String etat;
     private  int etape;
     private String specialiteMed;

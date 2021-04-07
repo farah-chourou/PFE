@@ -24,6 +24,7 @@ import Box from '@material-ui/core/Box';
 import Avatar from '@material-ui/core/Avatar';
 import { deepOrange, deepPurple } from '@material-ui/core/colors';
 
+import {FiAlertCircle} from 'react-icons/fi';
 import { MdDeleteSweep } from 'react-icons/md';
 import NotificationAlert from "react-notification-alert";
 import { Button, Modal,Form} from "react-bootstrap"
@@ -236,7 +237,7 @@ const handleDelete =()=> {
     color="success"
     message ="utilisateur supprimer avec succés"
     icon ="nc-icon nc-check-2"
-     notify("br"); 
+    notify("br"); 
 
     setShow(false)
     setValidateurs(validateurs.filter(user => user.id !== id))
@@ -286,9 +287,8 @@ const handleChangeRowsPerPage = (event) => {
 };
 
   return (
-    <div className="content">
+    <div className="content" component={Paper}>
                      <NotificationAlert ref={notificationAlert} />
-
                      <Row>
   
   <Col md="12">
@@ -313,7 +313,7 @@ const handleChangeRowsPerPage = (event) => {
 
       </CardHeader>
       <CardBody>
-   <div className={classes.root} >
+   <TableContainer className={classes.root} >
       <AppBar position="static" color="default">
         <Tabs
           value={value}
@@ -494,7 +494,7 @@ const handleChangeRowsPerPage = (event) => {
         </TabPanel>
    
       </SwipeableViews>
-    </div>
+    </TableContainer>
     </CardBody>
               </Card>
             </Col>
@@ -520,7 +520,7 @@ const handleChangeRowsPerPage = (event) => {
         </Modal.Header>
         <Modal.Body  >
 
-        <h5>   &nbsp; Est-vous sur de supprimer cet utilisateur ?</h5> 
+        <h5>  < FiAlertCircle size={55} color="orange"/>  &nbsp; Est-vous sur de supprimer cet utilisateur ?</h5> 
         </Modal.Body>
          <Modal.Footer>
           <Button style={{backgroundColor: "orange"}} className="text-light border border-muted" onClick={handleDelete}>
