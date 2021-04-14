@@ -25,6 +25,7 @@ class Header extends React.Component {
     this.dropdownToggle = this.dropdownToggle.bind(this);
     this.getBull =this.getBull.bind(this);
     this.sidebarToggle = React.createRef();
+    this.logout = this.logout.bind(this)
 
   }
 
@@ -115,10 +116,14 @@ class Header extends React.Component {
     this.props.history.push('/user/bulletin'+id)
 
   }
+  logout = () => {
+    sessionStorage.removeItem('user');
+
+  }
 
   render() {
     return (
-      <Navbar
+      <Navbar style={{backgroundColor:"blue",boxShadow:"5px 5px 7px #79797994 " }}
         color={
           this.props.location.pathname.indexOf("full-screen-maps") !== -1
             ? "dark"
@@ -152,7 +157,7 @@ class Header extends React.Component {
 
           <Collapse isOpen={this.state.isOpen} navbar className="justify-content-end">
 
-            <form>
+          {/*  <form>
               <InputGroup className="no-border">
                 <Input placeholder="Search..." />
                 <InputGroupAddon addonType="append">
@@ -161,7 +166,7 @@ class Header extends React.Component {
                   </InputGroupText>
                 </InputGroupAddon>
               </InputGroup>
-            </form>
+          </form>*/}
 
             <Nav navbar>
 
@@ -188,7 +193,7 @@ class Header extends React.Component {
                       </DropdownItem>
                       <hr></hr>
                       <DropdownItem  >  
-                     <RiLogoutBoxRLine size={22}/> <Link to="/login">  se deconnecter</Link> 
+                     <RiLogoutBoxRLine size={22}/> <Link to="/login" onClick={this.logout()}>  se deconnecter</Link> 
                   
                       </DropdownItem>
                 </DropdownMenu>

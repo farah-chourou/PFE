@@ -76,7 +76,7 @@ public class BullRestController {
         SuivisBull bull = suivisBullRepo.save(suivisBulletein);
 
         Notification notif = new Notification();
-        notif.setMessage("un nouveau msg du validateur");
+        notif.setMessage("Vous avez un nouveau bulletin a valider ");
         notif.setDate(new Date());
         notif.setExpediteurNotif(exp);
         notif.setRecepteur(recepteur);
@@ -98,6 +98,22 @@ public class BullRestController {
     List<SuivisBull>  bull = suivisBullRepo.findAll();
     return bull;
     }
+
+
+    @GetMapping("/getAllBullEtape1")
+    public List<SuivisBull> getAlBullEtape1(){
+
+        List<SuivisBull>  bull = suivisBullRepo.findAllByEtape(1);
+        return bull;
+    }
+
+    @GetMapping("/getAllBullEtape2")
+    public List<SuivisBull> getAlBullEtape2(){
+
+        List<SuivisBull>  bull = suivisBullRepo.findAllByEtape(2);
+        return bull;
+    }
+
 
     @GetMapping("/getAllBullUser/{id}")
     public List<SuivisBull> getAlBullUser(@PathVariable Long id ){

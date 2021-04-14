@@ -19,8 +19,7 @@ function App(){
 
     return(
 
-
-        <Router history={hist}>
+        <Router history={hist} >
     <Switch>
       <Route path="/user" render={(props) => <AdminLayout {...props} />} />
       <Route path="/"component={Login} />

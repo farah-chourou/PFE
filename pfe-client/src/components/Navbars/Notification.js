@@ -9,104 +9,98 @@ import { Redirect } from 'react-router-dom';
 import {FaCircle} from "react-icons/fa";
 import PerfectScrollbar from 'perfect-scrollbar';
 import NavbarCollapse from "react-bootstrap/esm/NavbarCollapse";
+import Avatar from '@material-ui/core/Avatar';
+import  { useState, useEffect } from 'react';
+import { useHistory } from "react-router-dom";
+import PropTypes from 'prop-types';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import useScrollTrigger from '@material-ui/core/useScrollTrigger';
+import Box from '@material-ui/core/Box';
+import Container from '@material-ui/core/Container';
+import Slide from '@material-ui/core/Slide';
+
+import moment from 'moment';
+import 'moment/locale/fr';
+
+
 
 var ps;
- class Notification extends Component {
+export default function Notification(props) {
+ 
+  const [isOpen, setIsOpen] = useState(false)
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [color, setColor] = useState("transparent")
+  const [user,setUser] = useState([]);
+  const [notifications,setNotifications] = useState([]);
+  const [notificationsNonLu,setNotificationsNonLu] = useState([]);
+  const [notificationsNonVu,setNotificationsNonVu] = useState([]);
+  const [expediteurNotif,setExpediteurNotif] = useState([]);
+  const [number,setNumber] = useState("");
+  const [showHideNotif,setShowHideNotif] = useState(true);
+  const history = useHistory()
+ const [notifNonlu,setNotifNonlu] = useState()
 
-    constructor(props) {
-        super(props);
-        this.state = {
-          isOpen: false,
-          dropdownOpen: false,
-          color: "transparent",
-          user:[],
-          notifications:[],
-          notificationsNonLu:[],
-          notificationsNonVu:[],
-
-          expediteurNotif:[],
-          number:"",
-          showHideNotif: true,
+ moment.locale('fr');
 
 
-        };
-    
-        this.toggle = this.toggle.bind(this);
-        this.dropdownToggle = this.dropdownToggle.bind(this);
-        this.getBull =this.getBull.bind(this);
-        this.sidebarToggle = React.createRef();
-    
-      }
-    
-     
 
-      toggle() {
-        if (this.state.isOpen) {
-          this.setState({
-            color: "transparent",
-          });
+     const  toggle = () =>  {
+        if (isOpen) {
+          setColor("transparent") 
+       
         } else {
-          this.setState({
-            color: "dark",
-          });
+          setColor("dark") 
+
         }
-    
-        this.setState({
-          isOpen: !this.state.isOpen,
-        });
-        console.log("isOpen: " +this.state.isOpen)
+        setIsOpen(!isOpen)
+     
+        console.log("isOpen: " +isOpen)
     
       }
     
     
-      dropdownToggle(e) {
+   const   dropdownToggle =(e) => {
 
-        this.state.notificationsNonLu.map(n => 
+        notificationsNonLu.map(n => 
           <>
           {axios.put('http://localhost:8080/updateVuNotif/'+ n.id)}
           </>
           )
-
-        this.setState({
-          dropdownOpen: !this.state.dropdownOpen,
-          number: 0
-        });
-        console.log("drop: " + this.state.dropdownOpen)
+    setDropdownOpen(!dropdownOpen)
+    setNumber(0)
+       
+        console.log("drop: " + dropdownOpen)
     
     
       }
    
+
+      useEffect(() => {
+        const local = localStorage.getItem("user");
+        setUser(JSON.parse(local))      
+        getNotification() 
+ 
+       }, [])
  
     
-      componentDidMount() {
-        const local = localStorage.getItem("user");
-        console.log(JSON.parse(local));
-
-     //   const ps = new PerfectScrollbar('#container');
-
-        this.setState({
-          user: JSON.parse(local),
-
-
-        })
-        this.getNotification();
-
-
-      }
-    
+      
    
     
-     getNotification =() =>{
+   const  getNotification =() =>{
+    const local = localStorage.getItem("user");
+
         axios.get('http://localhost:8080/getNotif').then(res => {
           console.log(res.data);
           res.data.map(e => 
             <div key={e.id}>
-            { ( e.recepteur == this.state.user.userName  )? 
+            { ( e.recepteur == JSON.parse(local).userName  )? 
 
-            ( this.state.notifications.push(e),
+             notifications.push(e)
             
-            this.setState({
-            }) )
+          
           
             :false  }
 
@@ -114,11 +108,10 @@ var ps;
             )
             res.data.map(e => 
               <div key={e.id}>
-              { ( e.recepteur == this.state.user.userName && e.etat == false )? 
+              { ( e.recepteur == JSON.parse(local).userName  && e.etat == false )? 
       
-              ( this.state.notificationsNonLu.push(e),
-              this.setState({
-              }) )
+             ( notificationsNonLu.push(e),
+             setNotifNonlu(notificationsNonLu.length))
             
               :false  }
       
@@ -128,12 +121,11 @@ var ps;
 
               res.data.map(e => 
                 <div key={e.id}>
-                { ( e.recepteur == this.state.user.userName  && e.vu== false)? 
+                { ( e.recepteur ==  JSON.parse(local).userName  && e.vu== false)? 
         
-                ( this.state.notificationsNonVu.push(e),
-                this.setState({
-                  number: this.state.notificationsNonVu.length
-                }) )
+                (notificationsNonVu.push(e),
+                setNumber(notificationsNonVu.length))
+              
               
                 :false  }
         
@@ -142,77 +134,117 @@ var ps;
 
             })
 
-
       }
     
-      getBull = (id) => {
-        this.props.history.push('/user/soloBulletin'+id);
+    const  getBull = (id) => {
+        history.push('/user/soloBulletin'+id);
         window.location.reload(false);
 
       }
       
 
-      pushToNotif = ()=>{
-        this.props.history.push('/user/notifications');
+    const  pushToNotif = ()=>{
+       history.push('/user/notifications');
 
       }
- 
-    render() {
+    const lu = () =>{
+      notificationsNonLu.map(n => 
+        <>
+        { axios.put(' http://localhost:8080/updateNotif/' + n.id)}
+        </>
+        )
+        window.location.reload(false);
+
+   
+      }
+
         return (
     
-     <Dropdown nav isOpen={this.state.dropdownOpen} toggle={(e) => this.dropdownToggle(e)}  >
-
+     <Dropdown nav isOpen={dropdownOpen} toggle={(e) => dropdownToggle(e)}   >
           <DropdownToggle caret nav >
             <i className="nc-icon nc-bell-55" />
             <p>
               <span className="d-lg-none d-md-block">Some Actions</span>
             </p>
           </DropdownToggle>
-          {(this.state.number > 0)  ?     
-           <small className="number text-light" > {this.state.number}  </small>  
+          {(number > 0)  ?     
+           <small className="number text-light" > {number}  </small>  
         : false
         } 
          
-          <DropdownMenu right  >
-         <div class="text-center">Notifications   <hr></hr></div>
-     
+          <DropdownMenu right   >
+            
+            <span> 
+         <div class=" text-uppercase py-2 mb-3" style={{borderBottom: "1px solid #E2E2E2" }}><b>  &nbsp;&nbsp; Notifications </b>    </div>
+     {notifNonlu > 0 ? <div><div style={{fontSize:14, paddingLeft: 8,color:"rgb(81, 137, 241)"}} className="my-1 "> &nbsp;  Vous avez <b>{notifNonlu} </b> notification non lu encore <br></br> &nbsp; <Link class="text-secondary" onClick={lu}> Marquer tout comme lu</Link><br></br> </div>  </div> :false } 
         
-
-                {this.state.notifications.length == 0 ?  <div className="text-center small"> No notification avaible  </div>
+       </span>
+                {notifications.length == 0 ?  <div className="text-center small"> No notification avaible  </div>
                  : 
 
+(<div className="scrollbar" id="style-7"> 
+               {notifications.slice().reverse().slice(0,6).map( R => 
 
-                 this.state.notifications.reverse().slice(0,4).map( R => 
+                 <div key={R.id} >
 
-                 <div key={R.id}>
 
-                <Row >  
-                  <Col md={1} className="text-center " > 
+
+
+
+
+           
+
+                 <DropdownItem className="mb-2 px-2 py-1  " onClick={()=> getBull(R.id)}  style={{width:280}} > 
+                 <Row  width="100px" >  
+                 <Col md={1} className=" font-weight-bold text-uppercase" style={{ }}>  
+                 <Avatar style={{backgroundColor:R.expediteurNotif.couleur,width:26,height:26, fontSize:13}} className="shadow">    { R.expediteurNotif.nom.substr(0, 1)+R.expediteurNotif.prenom.substr(0, 1) }  </Avatar>
+                 </Col>
+                 &nbsp;
+                  <Col md={10} className="pb-2  "  style={{borderBottom: "1px solid #E2E2E2"}}>   
+                 <Row className="font-weight-bold text-uppercase">
+                 <Col md={10}> {R.expediteurNotif.nom} {R.expediteurNotif.prenom}</Col>
+                 <Col md={2} className="" > 
                   { R.etat == false ?
-                   <FaCircle className="ml-3" size={12} color="rgb(81, 137, 241)"/> 
-                   :<FaCircle className="ml-3 text-light" size={12} /> }
+                   <FaCircle className="" size={10} color="rgb(81, 137, 241)"/> 
+                   :<FaCircle className=" text-light" size={10} /> }
                    
                    </Col>
-                  <Col md={10}>   
-                 <DropdownItem  className="border border-muted " onClick={()=> this.getBull(R.id)} > 
-                <div className="font-weight-bold text-uppercase"> {R.expediteurNotif.userName} </div>
-                 <div> {R.message}  </div> 
-                 <small className=" text-secondary">  envoyer le  {R.date} </small>   
-                </DropdownItem> </Col> </Row>
+                  </Row>
+                
+                  {(R.suivisBull != null && R.expediteurNotif.role == "validateur") ? <div>  Nouveau bulletin  numero  <b> {R.suivisBull.numBull}</b>  a   <br></br> valider recu du validateur </div>  
+                : (R.suivisBull == null && R.expediteurNotif.role == "medecin") ? <div>  Nouveau bulletin  numero  <b> {R.suivisBullMed.numBull}</b>  a   <br></br> revalider recu du medecin </div>  
+                : (R.suivisBullMed != null && R.expediteurNotif.role == "responsable" && user.role=="validateur") ? <div> Bulletin  numero  <b> {R.suivisBullMed.numBull}</b>   est valider </div>  
+                : (R.suivisBullMed != null && R.expediteurNotif.role == "responsable" && user.role=="medecin") ? <div> Nouveau bulletin  numero  <b> {R.suivisBullMed.numBull}</b><br></br> pour  donner ton avis  </div>  
+
+                : false}
+
+                { (R.etat == false && moment(R.date).fromNow() == "il y a quelques secondes" ) ?   <small  style={{paddingLeft:"50px",color:"rgb(81, 137, 241)"}}>  Envoyer   {moment(R.date).fromNow() } </small>   
+
+                
+               :R.etat == false ?  <small  style={{paddingLeft:"96px",color:"rgb(81, 137, 241)"}}>  envoyer   {moment(R.date).fromNow() } </small>     : 
+                 <small className=" text-secondary " style={{paddingLeft:"96px"}}>  Envoyer   {moment(R.date).fromNow() } </small>     }
+                </Col>   
+                 </Row>
+                </DropdownItem>
+                
+
+                
+                
+             
 
                 </div>
 
 
-          )}   
-             {this.state.notifications.length > 3 ?   
-         <div>  &nbsp; &nbsp; <Link   onClick={()=> this.pushToNotif()}  class=" text-primary pl-4 pt-5">Afficher tout</Link></div>    
+          )}</div>)
+          }   
+             {notifications.length > 3 ?   
+         <div>  &nbsp; &nbsp; <Link   onClick={()=> pushToNotif()}  class=" text-secondary pl-4 pt-5">Afficher tout</Link></div>    
          : false}
 
           </DropdownMenu>
-          
+     
       </Dropdown>
    
         )
-    }
+   
 }
-export default  withRouter(Notification) ;

@@ -51,7 +51,7 @@ class Dashboard extends React.Component {
   render() {
     return (
       <>
-        <div className="content">
+        <div className="content" >
           <Row>
             <Col lg="3" md="6" sm="6">
               <Card className="card-stats">
@@ -100,8 +100,7 @@ class Dashboard extends React.Component {
                 <CardFooter>
                   <hr />
                   <div className="stats">
-                  welcome  {this.state.user.userName} <br></br>
-        this is you role {this.state.user.role}
+    
                     <i className="far fa-calendar" /> Last day
                   </div>
                 </CardFooter>

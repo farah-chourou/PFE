@@ -21,7 +21,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-
+import Tooltip from '@material-ui/core/Tooltip';
 import { MdDeleteSweep } from 'react-icons/md';
 import NotificationAlert from "react-notification-alert";
 import { Button, Modal,Form} from "react-bootstrap"
@@ -197,6 +197,10 @@ useEffect(() => {
 
    getAllBullResp();
    getAllBullMed();
+   setNumberBullMed(
+    bulletinsMed.length
+  
+  )
  
 }, [])
 
@@ -231,19 +235,16 @@ rows.push(createData(d.numBull,d.date, d.expediteur.userName, d.specialiteMed,d.
 })
 
 const getAllBullMed =() =>{
-  axios.get('http://localhost:8080/getAllBullMed').then(res => {
-    const local = localStorage.getItem("user");
-    setUser(JSON.parse(local)) 
-    res.data.map(k => 
-      <div >
-       {(k.expediteur.userName == JSON.parse(local).userName && k.etape == 3) ?  
-      ( bulletinsMed.push(k),
-      setNumberBullMed(
-        bulletinsMed.length
-      ))  
-      : false}
-      </div>
-    )})
+  const local = localStorage.getItem("user");
+  setUser(JSON.parse(local)) 
+  axios.get('http://localhost:8080/getAllBullRespMedEtape3/'+JSON.parse(local).userName ).then(res => {
+
+    setBulletinsMed(res.data)
+ 
+  
+  
+  })
+
 }
 
 var rowsMedecin =[];
@@ -337,7 +338,7 @@ const handleChangeRowsPerPage = (event) => {
           <Col md={9}>
           <CardTitle tag="h4">Liste des bulletins recu</CardTitle>
            <p className="card-category">
-             vous avez <b> {numberBullValid}</b>  bulletins recu des validateurs et <b> {numberBullMed}</b>  bulletins  recu des medecins 
+             vous avez <b> {numberBullValid}</b>  bulletins recu des validateurs et <b> {bulletinsMed.length}</b>  bulletins  recu des medecins 
            </p> 
            </Col>
 
@@ -345,7 +346,7 @@ const handleChangeRowsPerPage = (event) => {
            </Col>
         
          </Row>
-        
+        {console.log(numberBullMed)}
 
 
       </CardHeader>
@@ -420,9 +421,19 @@ const handleChangeRowsPerPage = (event) => {
               <span className="etat shadow p-1"> {row.etat} </span>   
               </TableCell>
               <TableCell component="th" scope="row">
-              <div className="d-inline-block ">
-                   <div className="d-inline-block mr-3">    <MdDeleteSweep size={25} onClick={()=>{setShow(true); setNumBull(row.numBull) }}/></div> &nbsp;&nbsp;</div>   
-                <h4 className="d-inline-block mr-3">      <MdSend  size={20} className="envoyerIcon" onClick={()=> envoyerBull(row.numBull,row.specialite)}/>    </h4>  
+              <div className="d-inline-block "> 
+                <Tooltip title="Supprimer">
+                     <IconButton aria-label="delete">
+                  
+                     <MdDeleteSweep style={{color:"black", border:"none",outline:"none"}} size={25} onClick={()=>{setShow(true); setNumBull(row.numBull) }} />
+                     </IconButton>
+                   </Tooltip>
+                   <Tooltip title="Envoyer">
+                     <IconButton aria-label="delete">
+                  
+                     <MdSend  size={20} className="envoyerIcon" onClick={()=> envoyerBull(row.numBull,row.specialite)}/>                       </IconButton>
+                   </Tooltip>
+                   </div>  
          </TableCell>
             </TableRow>
           ))}

@@ -1,119 +1,467 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
-import Button from '@material-ui/core/Button';
+import PropTypes from 'prop-types';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableFooter from '@material-ui/core/TableFooter';
+import TablePagination from '@material-ui/core/TablePagination';
+import Paper from '@material-ui/core/Paper';
+import IconButton from '@material-ui/core/IconButton';
+import FirstPageIcon from '@material-ui/icons/FirstPage';
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import LastPageIcon from '@material-ui/icons/LastPage';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import SwipeableViews from 'react-swipeable-views';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+import Tooltip from '@material-ui/core/Tooltip';
+import { MdDeleteSweep } from 'react-icons/md';
+import NotificationAlert from "react-notification-alert";
 import  { useState, useEffect } from 'react';
 import axios from "axios";
-const useStyles = makeStyles((theme) => ({
+import {Card,CardHeader,CardBody,CardTitle,Row,Col,} from "reactstrap";
+import {MdSend} from 'react-icons/md';
+import AddCommentOutlinedIcon from '@material-ui/icons/AddCommentOutlined';
+import HistoriqueBullMed from "./HistoriqueBullMed"
+import {FiAlertCircle} from 'react-icons/fi';
+
+
+//pagination
+const useStyles1 = makeStyles((theme) => ({
   root: {
-    width: '100%',
-  },
-  backButton: {
-    marginRight: theme.spacing(1),
-  },
-  instructions: {
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1),
+    flexShrink: 0,
+    marginLeft: theme.spacing(2.5),
   },
 }));
+//tabs
+const useStyles = makeStyles((theme) => ({
+  root: {
+    backgroundColor: theme.palette.background.paper,
+    width: 1000,
 
-function getSteps() {
-  return ["l'Ajoute du bulletin de la part du validateur", 'validation du responsable ', 'Ajouter avis medecin','Revalidation du responsable' ,'consulter Etat'];
+  },
+  table: {
+    minWidth: 500,
+  },
+ 
+}));
+
+//animation
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`full-width-tabpanel-${index}`}
+      aria-labelledby={`full-width-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box p={3}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired,
+};
+//tabs
+function a11yProps(index) {
+  return {
+    id: `full-width-tab-${index}`,
+    'aria-controls': `full-width-tabpanel-${index}`,
+  };
 }
 
 
+//pagination
+function TablePaginationActions(props) {
+  const classes = useStyles1();
+  const theme = useTheme();
+  const { count, page, rowsPerPage, onChangePage } = props;
 
-export default function HorizontalLabelPositionBelowStepper() {
-  const classes = useStyles();
-  const [activeStep, setActiveStep] = React.useState(0);
-  const steps = getSteps();
-  const [user,setUser] = useState([])
-  const [bulletinsEtape1,setBulletinsEtape1] = useState([])
-  const [bulletinsEtape2,setBulletinsEtape2] = useState([])
-
-
-  useEffect(() => {
-    const local = localStorage.getItem("user");
-    setUser(JSON.parse(local)) 
-    getAllBull();
-  }, [])
-
-  const getAllBull = () => {
-
-    axios.get('http://localhost:8080/getAllBull').then( res => {
-        const local = localStorage.getItem("user");
-
-        console.log(res.data)
-        res.data.map(e => 
-            <div key={e.numBull}>
-            { ( e.etape == 1  && e.recepteur.userName ==JSON.parse(local).userName )? 
-    
-            ( bulletinsEtape1.push(e)
-            )
-          
-            :(e.etape == 2)  ?
-            
-            ( bulletinsEtape2.push(e)
-            ) :false
-            
-            
-            }</div>)
-    
-    
-    }
-        
-        
-        
-        )
-  }
-
-
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  const handleFirstPageButtonClick = (event) => {
+    onChangePage(event, 0);
   };
 
+  const handleBackButtonClick = (event) => {
+    onChangePage(event, page - 1);
+  };
 
-  const handleReset = () => {
-    setActiveStep(0);
+  const handleNextButtonClick = (event) => {
+    onChangePage(event, page + 1);
+  };
+
+  const handleLastPageButtonClick = (event) => {
+    onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
   };
 
   return (
-    <div className={classes.root} className="content">
-        {console.log(bulletinsEtape1)}
-        {console.log(bulletinsEtape2)}
-{bulletinsEtape1.map((e) => ( 
-<div key={e.numBull}> 
- {e.numBull}
+    <div className={classes.root} >
+      <IconButton
+        onClick={handleFirstPageButtonClick}
+        disabled={page === 0}
+        aria-label="first page"
+      >
+        {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+      </IconButton>
+      <IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
+        {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+      </IconButton>
+      <IconButton
+        onClick={handleNextButtonClick}
+        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label="next page"
+      >
+        {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+      </IconButton>
+      <IconButton
+        onClick={handleLastPageButtonClick}
+        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label="last page"
+      >
+        {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+      </IconButton>
+    </div>
+  );
+}
 
-   <Stepper activeStep={activeStep} alternativeLabel>
-        {steps.map((label) => (
-          <Step key={label}>
-            <StepLabel>{label}</StepLabel>
-          </Step>
-        ))}
-      </Stepper>
+TablePaginationActions.propTypes = {
+  count: PropTypes.number.isRequired,
+  onChangePage: PropTypes.func.isRequired,
+  page: PropTypes.number.isRequired,
+  rowsPerPage: PropTypes.number.isRequired,
+};
+
+
+
+
+
+
+function createData(numBull, date, expediteur,specialite,etat,recepteur,commentaireMed,commentaireResp) {
+  return { numBull, date ,expediteur,specialite,etat,recepteur, history: [
+    { commentaireMed, commentaireResp , numBull },
+   
+  ],};
+}
+
+
+export default function CustomPaginationActionsTable() {
+  const theme = useTheme();
+  const classes = useStyles();
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [value, setValue] = React.useState(0);
+  
+
+  
+  const [user,setUser] =useState([]);
+  const [bulletinsResp,setBulletinsResp] = useState([]);
+  const [bulletinsMed,setBulletinsMed] = useState([]);
+  const [numberBullMed,setNumberBullValid] = useState([]);
+
+//tabs
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  const handleChangeIndex = (index) => {
+    setValue(index);
+  }; 
+
+useEffect(() => {
+  const local = localStorage.getItem("user");
+  setUser(JSON.parse(local)) 
+
+   getAllBullResp();
+   getAllBullMed();
+ 
+}, [])
+
+
+
+
+const getAllBullResp =() =>{
+  axios.get('http://localhost:8080/getAllBull').then(res => {
+ 
+    const local = localStorage.getItem("user");
+    setUser(JSON.parse(local)) 
+
+    res.data.map(k => 
+      <div >
+       {(k.recepteur.userName == JSON.parse(local).userName && k.etape == 2) ?  
+      ( bulletinsResp.push(k),
+      setNumberBullValid(
+        bulletinsResp.length
+      )
+      )  
+      : false}
       </div>
-))}
-       <div>
-        {activeStep === steps.length ? (
-          <div>
-            <Typography className={classes.instructions}>All steps completed</Typography>
-            <Button onClick={handleReset}>Reset</Button>
-          </div>
-        ) : (
-          <div>
-            <div>
+    )
+ }
+ )
+}
+
+var rows =[];
+bulletinsResp.map((d)=> {
+rows.push(createData(d.numBull,d.date, d.expediteur.userName, d.specialiteMed,d.etat))
+
+})
+
+const getAllBullMed =() =>{
+  const local = localStorage.getItem("user");
+  setUser(JSON.parse(local)) 
+  axios.get('http://localhost:8080/getAllBullRespMedEtape4/'+JSON.parse(local).userName ).then(res => {
+
+    setBulletinsMed(res.data)
+ 
+  
+  
+  })
+
+}
+
+var rowsMedecin =[];
+bulletinsMed.map((d)=> {
+rowsMedecin.push(createData(d.numBull,d.date, d.expediteur.userName, d.specialiteMed,d.etat,d.recepteur,d.commentaireMed,d.commentaireResp))
+
+}) 
+
+
+
+
+
+
+const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+const handleChangePage = (event, newPage) => {
+  setPage(newPage);
+};
+
+const emptyRowsMedecin = rowsPerPage - Math.min(rowsPerPage, rowsMedecin.length - page * rowsPerPage);
+const handleChangePageMedecin = (event, newPage) => {
+  setPage(newPage);
+};
+
+
+const handleChangeRowsPerPage = (event) => {
+  setRowsPerPage(parseInt(event.target.value, 10));
+  setPage(0);
+};
+
+  return (
+    <div className="content" component={Paper}>
+
+  <Row>
+  {console.log(user.userName)}
+  <Col md="12">
+    <Card >
+      <CardHeader className="bg-light">
+        <Row>
+          <Col md={9}>
+          <CardTitle tag="h4">Tout bulletins envoyer</CardTitle>
+          
+           </Col>
+
+           <Col md={3}>  
+           </Col>
+        
+         </Row>
+
+
+      </CardHeader>
+      <CardBody>
+   <div className={classes.root} >
+      <AppBar position="static" color="default">
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          
+          indicatorColor="primary"
+          textColor="primary"
+          
+        //  variant="fullWidth"
+          aria-label="full width tabs example"
+          
+        >
+          <Tab label="Bulettins recu des validateurs" {...a11yProps(0)}  />
+          <Tab label="Bulettins recu des medecins" {...a11yProps(1)} />
+
+        </Tabs>
+      </AppBar>
+      <SwipeableViews
+        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+        index={value}
+        onChangeIndex={handleChangeIndex}
+      >
+       
+
+     {/*tab1*/}
+     <TabPanel value={value} index={0} dir={theme.direction}>
+        <>
+      <Table className={classes.table} aria-label="custom pagination table">
+
+      <TableHead>
+          <TableRow  >
             
-              <Button variant="contained" color="primary" onClick={handleNext}>
-                c
-              </Button>
-            </div>
-          </div>
-        )}
-      </div>
+            <TableCell> <b>Numero bulletins  </b></TableCell>
+            <TableCell > <b> Date d'envoie </b></TableCell>
+            <TableCell > <b> Specialité medecin</b></TableCell>
+            <TableCell ><b> Envoyer par</b> </TableCell>
+            <TableCell ><b >  Etat</b> </TableCell>
+
+          </TableRow>
+        </TableHead>
+
+        <TableBody>
+          {(rowsPerPage > 0
+            ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            : rows
+          ).map((row) => (
+            <TableRow key={row.numBull}>
+            
+              <TableCell component="th" scope="row" >
+             
+              { row.numBull}
+           
+              </TableCell>
+              <TableCell component="th" scope="row">
+              {row.date}
+           
+              </TableCell>
+             
+              <TableCell component="th" scope="row">
+                {row.specialite}
+              </TableCell>
+              <TableCell component="th" scope="row">
+                {row.expediteur}
+              </TableCell>
+              <TableCell component="th" scope="row" >
+              <span className="etat shadow p-1"> {row.etat} </span>   
+              </TableCell>
+           
+            </TableRow>
+          ))}
+
+          {emptyRows > 0 && (
+            <TableRow style={{ height: 53 * emptyRows }}>
+              <TableCell colSpan={6} />
+            </TableRow>
+          )}
+        </TableBody>
+    
+          <TableRow  >
+            <TablePagination 
+              rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+              colSpan={7}
+              count={rows.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              SelectProps={{
+                inputProps: { 'aria-label': 'rows per page' },
+                native: true,
+              }}
+              onChangePage={handleChangePage}
+              onChangeRowsPerPage={handleChangeRowsPerPage}
+              ActionsComponent={TablePaginationActions}
+            />
+          </TableRow>
+    
+      </Table>
+    </>
+    </TabPanel>
+ {/*tab2*/}
+        
+     
+        <TabPanel value={value} index={1} dir={theme.direction}>
+        <>
+
+      <Table className={classes.table} aria-label="custom pagination table">
+
+      <TableHead>
+          <TableRow  >
+          <TableCell> <b> </b></TableCell>
+
+          <TableCell> <b>Numero bulletins  </b></TableCell>
+            <TableCell > <b> Date d'envoie </b></TableCell>
+            <TableCell > <b> Specialité medecin</b></TableCell>
+            <TableCell ><b> Envoyer par</b> </TableCell>
+            <TableCell ><b >  Etat</b> </TableCell>
+
+          
+          </TableRow>
+        </TableHead>
+        <TableBody>
+     
+          {console.log(rowsMedecin)}
+          {(rowsPerPage > 0
+            ? rowsMedecin.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            : rowsMedecin
+          ).map((row) => (
+            <HistoriqueBullMed key={row.numBull} row={row} bullMed={getAllBullMed} allBull={bulletinsMed} />
+
+          ))}
+
+          {emptyRows > 0 && (
+            <TableRow style={{ height: 53 * emptyRows }}>
+              <TableCell colSpan={6} />
+            </TableRow>
+          )}
+        </TableBody>
+         
+    
+          <TableRow   >
+            <TablePagination 
+         
+              rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+              colSpan={7}
+              count={rows.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              SelectProps={{
+                inputProps: { 'aria-label': 'rows per page' },
+                native: true,
+              }}
+              onChangePage={handleChangePageMedecin}
+              onChangeRowsPerPage={handleChangeRowsPerPage}
+              ActionsComponent={TablePaginationActions}
+            />
+          </TableRow>
+    
+      </Table>
+    </>
+
+ </TabPanel>
+   
+      </SwipeableViews>
+    </div>
+    </CardBody>
+              </Card>
+            </Col>
+            
+
+          </Row>
+
+
+
+
+
+
+
+    
     </div>
   );
 }

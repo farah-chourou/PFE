@@ -6,6 +6,7 @@ import com.pfe.demo.DAO.SuivisBullRepository;
 import com.pfe.demo.DAO.UserRepository;
 import com.pfe.demo.Entities.Notification;
 import com.pfe.demo.Entities.SuivisBull;
+import com.pfe.demo.Entities.User;
 import com.pfe.demo.Exception.RessourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -92,5 +93,13 @@ public class NotifRestController {
         return notifss;
     }
 
+
+    @GetMapping("/getNotifByExpediteur/{userName}") // historique admin
+    public List<Notification> getBullFromNotif(@PathVariable String userName){
+        User expediteur = userRepo.findByUserName(userName);
+
+        List<Notification> notifs = notificationRepo.findByExpediteurNotif(expediteur);
+        return notifs;
+    }
 
 }

@@ -4,6 +4,7 @@ import com.pfe.demo.DAO.*;
 import com.pfe.demo.Entities.*;
 import com.pfe.demo.Exception.RessourceNotFoundException;
 import com.pfe.demo.RestController.Util.ApiResponse;
+import com.pfe.demo.RestController.Util.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,7 +61,7 @@ public class BullMedRestController {
 
         SuivisBullMed su = suivisBullMedRepo.findByNumBull(numBull);
 
-        notif.setMessage("un nouveau msg du responsable");
+        notif.setMessage("Vous avez un nouveau bulletin a traiter");
         notif.setDate(new Date());
         notif.setExpediteurNotif(exped);
         notif.setRecepteur(recep.getUserName());
@@ -76,9 +77,35 @@ public class BullMedRestController {
     }
 
 
-    @GetMapping("/getAllBullMed")
-    public List<SuivisBullMed> getAlBull(){
-        List<SuivisBullMed>  bull = suivisBullMedRepo.findAll();
+    @GetMapping("/getAllBullMedEtape2/{userName}") //sprint2 ki tji l bul  lil med // kenit ismha getAllBullMed
+    public List<SuivisBullMed> getAlBull(@PathVariable String userName){
+        List<SuivisBullMed>  bull = suivisBullMedRepo.findAllByRecepteurAndEtape( userName, 2);
+        return bull;
+    }
+    @GetMapping("/getAlBullMedEtape2/{userName}")
+    public List<SuivisBullMed> getAlBullEtape2(@PathVariable String userName){
+        User u = userRepo.findByUserName(userName);
+
+        List<SuivisBullMed>  bull = suivisBullMedRepo.findAllByExpediteurAndEtape( u, 2);
+        return bull;
+    }
+    @GetMapping("/getAllBullRespMedEtape3/{userName}") // ki tarja3 lil resp
+    public List<SuivisBullMed> getAlBullResp(@PathVariable String userName){
+        User u = userRepo.findByUserName(userName);
+        List<SuivisBullMed>  bull = suivisBullMedRepo.findAllByExpediteurAndEtape( u, 3);
+        return bull;
+    }
+
+    @GetMapping("/getAllBullRespMedEtape4/{userName}")
+    public List<SuivisBullMed> getAllBullRespMedEtape4(@PathVariable String userName){
+        User u = userRepo.findByUserName(userName);
+        List<SuivisBullMed>  bull = suivisBullMedRepo.findAllByExpediteurAndEtape( u, 4);
+        return bull;
+    }
+
+    @GetMapping("/getAllBullMed/{userName}") // historique med
+    public List<SuivisBullMed> getAllBullMed(@PathVariable String userName){
+        List<SuivisBullMed>  bull = suivisBullMedRepo.findAllByRecepteur(userName);
         return bull;
     }
 
@@ -110,7 +137,7 @@ public class BullMedRestController {
         String recepteur = bull.getExpediteur().getUserName();
 
         Notification notif = new Notification();
-        notif.setMessage("un nouveau msg du medecin");
+        notif.setMessage("Bulletin numero " + numBull +" est traité");
         notif.setDate(new Date());
         notif.setExpediteurNotif(expediteur);
         notif.setRecepteur(recepteur);
@@ -142,7 +169,7 @@ public class BullMedRestController {
         String recepteur = bull.getExpediteur().getUserName();
 
         Notification notif = new Notification();
-        notif.setMessage("un nouveau msg du medecin");
+        notif.setMessage("Bulletin numero " + numBull +" est traité");
         notif.setDate(new Date());
         notif.setExpediteurNotif(expediteur);
         notif.setRecepteur(recepteur);
@@ -175,7 +202,7 @@ public class BullMedRestController {
 
 
         Notification notif = new Notification();
-        notif.setMessage("un nouveau msg ");
+        notif.setMessage("Bulletin numero "+numBull+" est traité");
         notif.setDate(new Date());
         notif.setExpediteurNotif(bull.getExpediteur());
         notif.setRecepteur(bullValid.getExpediteur().getUserName());

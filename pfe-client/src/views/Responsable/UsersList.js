@@ -33,6 +33,14 @@ import axios from "axios";
 import {Card,CardHeader,CardBody,CardTitle,Row,Col,} from "reactstrap";
 import EditUser from "./EditUser";
 import AddUser from "./AddUser";
+import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Container, InputGroup, InputGroupText, InputGroupAddon, Input,} from "reactstrap";
+import InputBase from '@material-ui/core/InputBase';
+import Divider from '@material-ui/core/Divider';
+import MenuIcon from '@material-ui/icons/Menu';
+import SearchIcon from '@material-ui/icons/Search';
+import Tooltip from '@material-ui/core/Tooltip';
+
+
 
 //pagination
 const useStyles1 = makeStyles((theme) => ({
@@ -59,6 +67,29 @@ const useStyles = makeStyles((theme) => ({
   purple: {
     color: theme.palette.getContrastText(deepPurple[500]),
     backgroundColor: deepPurple[500],
+  },
+  aa: {
+    padding: '1px 2px',
+    display: 'flex',
+    alignItems: 'center',
+    width: 300,
+    "&:hover": {
+      border: "1px solid blue",
+      color: "blue"
+    },
+  },
+
+  input: {
+    marginLeft: theme.spacing(1),
+    flex: 1,
+  },
+  iconButton: {
+    padding: 10,
+    
+  },
+  divider: {
+    height: 28,
+    margin: 4,
   },
 }));
 
@@ -162,8 +193,8 @@ TablePaginationActions.propTypes = {
 
 
 
-function createData(userName, Email, specialite,telephone,id) {
-  return { userName, Email  ,specialite,telephone,id};
+function createData(userName, Email, specialite,telephone,id,couleur,nom,prenom) {
+  return { userName, Email  ,specialite,telephone,id,couleur,nom,prenom};
 }
 
 export default function UsersList() {
@@ -174,7 +205,7 @@ export default function UsersList() {
   const [value, setValue] = React.useState(0);
   const [validateurs,setValidateurs] = useState([]);
   const [medecins,setMedecins] = useState([]);
-
+  const  [searched,setSearched] = useState("")
   const [show,setShow] =useState(false);
   const [id,setId] = useState("");
   var color ="";
@@ -210,13 +241,13 @@ const getMedecins =()=>{
 
 var rows =[];
 validateurs.map((d)=> {
-rows.push(createData(d.userName,d.email, "",d.tel , d.id))
+rows.push(createData(d.userName,d.email, "",d.tel , d.id,d.couleur,d.nom,d.prenom))
 
 })
 
 var rowsMedecin =[];
 medecins.map((d)=> {
-rowsMedecin.push(createData(d.userName,d.email,d.specialite ,d.tel, d.id))
+rowsMedecin.push(createData(d.userName,d.email,d.specialite ,d.tel, d.id,d.couleur,d.nom,d.prenom))
 
 
 }) 
@@ -286,6 +317,13 @@ const handleChangeRowsPerPage = (event) => {
   setPage(0);
 };
 
+
+const requestSearch =
+
+   rows.filter((row) => {
+    return row.userName.toLowerCase().includes(searched.toLowerCase());
+  });
+  
   return (
     <div className="content" component={Paper}>
                      <NotificationAlert ref={notificationAlert} />
@@ -303,10 +341,10 @@ const handleChangeRowsPerPage = (event) => {
            </Col>
 
            <Col md={3}>  
-      <diV className="d-inline-block ">  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
+           <diV className="d-inline-block ">  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
            <AddUser validateurs={getValidateurs} medecins={getMedecins} /></diV>  
            </Col>
-        
+         
          </Row>
         
 
@@ -340,7 +378,25 @@ const handleChangeRowsPerPage = (event) => {
 
      {/*tab1*/}
         <>
+
+        <Paper  className={classes.aa} style={{marginLeft:650, marginBottom:20}}>
+      <IconButton className={classes.iconButton} aria-label="menu">
+        <MenuIcon />
+      </IconButton>
+      <InputBase
+        className={classes.input}
+        placeholder="Rechercher ici ..."
+        inputProps={{ 'aria-label': 'search google maps' }}
+        value={searched}
+        onChange={ e =>setSearched(e.target.value)}
+      />
+      <IconButton  className={classes.iconButton} aria-label="search">
+        <SearchIcon />
+      </IconButton>
+      
+    </Paper>
       <Table className={classes.table} aria-label="custom pagination table">
+ 
 
       <TableHead>
           <TableRow  >
@@ -354,14 +410,15 @@ const handleChangeRowsPerPage = (event) => {
         </TableHead>
 
         <TableBody>
+       {console.log(searched)}
           {(rowsPerPage > 0
-            ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            : rows
+            ? requestSearch.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            : requestSearch
           ).map((row) => (
             <TableRow key={row.id}>
               <TableCell component="th" scope="row" >
              
-                <Avatar className={classes.orange}>    { row.userName.substr(0, 1) }</Avatar>
+                <Avatar style={{backgroundColor : row.couleur,fontSize:17}} className="text-uppercase shadow">    { row.nom.substr(0, 1) +row.prenom.substr(0, 1) }</Avatar>
            
               </TableCell>
               <TableCell component="th" scope="row">
@@ -376,8 +433,16 @@ const handleChangeRowsPerPage = (event) => {
               </TableCell>
               <TableCell component="th" scope="row">
               <div className="d-inline-block ">
-                   <div className="d-inline-block mr-3">    <EditUser id={row.id} validateurs={getValidateurs} medecins={getMedecins}  /> </div> &nbsp;&nbsp;</div>   
-                <h4 className="d-inline-block mr-3">   <MdDeleteSweep  onClick={()=>{ setShow(true) ;setId(row.id) }}/>     </h4>  
+                   <div className="d-inline-block mr-3">    <EditUser id={row.id} validateurs={getValidateurs} medecins={getMedecins}  /> </div> </div>   
+                <div className="d-inline-block "> 
+                <Tooltip title="Supprimer">
+                     <IconButton aria-label="delete">
+                  
+                     <MdDeleteSweep  style={{color:"black"}} onClick={()=>{ setShow(true) ;setId(row.id) }}/>
+                     </IconButton>
+                   </Tooltip>
+          
+                   </div>  
          </TableCell>
             </TableRow>
           ))}
@@ -391,13 +456,13 @@ const handleChangeRowsPerPage = (event) => {
     
           <TableRow  >
             <TablePagination 
-              rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+              rowsPerPageOptions={[5, 10, 25, { label: 'Tout', value: -1 }]}
               colSpan={3}
               count={rows.length}
               rowsPerPage={rowsPerPage}
               page={page}
               SelectProps={{
-                inputProps: { 'aria-label': 'rows per page' },
+                inputProps: { 'aria-label': 'Par page' },
                 native: true,
               }}
               onChangePage={handleChangePage}
@@ -436,7 +501,7 @@ const handleChangeRowsPerPage = (event) => {
           ).map((row) => (
             <TableRow key={row.id}>
               <TableCell component="th" scope="row">
-              <Avatar className={classes.orange}>    { row.userName.substr(0, 1) }</Avatar>
+              <Avatar style={{backgroundColor : row.couleur,fontSize:17}} className="text-uppercase shadow">    { row.nom.substr(0, 1) +row.prenom.substr(0, 1) }</Avatar>
 
               </TableCell>
               <TableCell component="th" scope="row">
@@ -454,8 +519,16 @@ const handleChangeRowsPerPage = (event) => {
               </TableCell>
               <TableCell component="th" scope="row">
               <div className="d-inline-block ">
-                   <div className="d-inline-block mr-3">    <EditUser id={row.id}  validateurs={getValidateurs} medecins={getMedecins} /> </div> &nbsp;&nbsp;</div>   
-                <h4 className="d-inline-block mr-3">   <MdDeleteSweep  onClick={()=>{setShow(true); setId(row.id) }}/>     </h4>  
+                   <div className="d-inline-block mr-3">    <EditUser id={row.id} validateurs={getValidateurs} medecins={getMedecins}  /> </div> </div>   
+                <div className="d-inline-block "> 
+                <Tooltip title="Supprimer">
+                     <IconButton aria-label="delete">
+                  
+                     <MdDeleteSweep  style={{color:"black"}} onClick={()=>{ setShow(true) ;setId(row.id) }}/>
+                     </IconButton>
+                   </Tooltip>
+          
+                   </div>  
          </TableCell>
             </TableRow>
           ))}
@@ -469,13 +542,13 @@ const handleChangeRowsPerPage = (event) => {
     
           <TableRow  >
             <TablePagination 
-              rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+              rowsPerPageOptions={[5, 10, 25, { label: 'Tout', value: -1 }]}
               colSpan={3}
               count={rows.length}
               rowsPerPage={rowsPerPage}
               page={page}
               SelectProps={{
-                inputProps: { 'aria-label': 'rows per page' },
+                inputProps: { 'aria-label': 'Par page' },
                 native: true,
               }}
               onChangePage={handleChangePageMedecin}

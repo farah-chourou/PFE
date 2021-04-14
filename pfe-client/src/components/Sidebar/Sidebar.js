@@ -71,7 +71,7 @@ class Sidebar extends React.Component {
             className="simple-text "
           >
             <div className="logo-img w-75" >
-         &nbsp;&nbsp;&nbsp;     <img src={logo} alt="react-logo" />
+         &nbsp;&nbsp;&nbsp;     <img src={logo} alt="MUTUAL-BY-CODWAY-logo" />
             </div>
           </a>
         

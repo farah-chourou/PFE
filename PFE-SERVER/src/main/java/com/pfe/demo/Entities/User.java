@@ -10,6 +10,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
 import javax.persistence.*;
+import java.util.Date;
+import java.util.Random;
 import java.util.Set;
 
 
@@ -32,6 +34,8 @@ public class User {
     private String userName;
     private String role;
     private String specialite;
+    private String couleur;
+    private Date membreDepuis;
 
 
     @JsonIgnore
@@ -57,6 +61,13 @@ public class User {
      suivisBull.setExpediteur(this);
  }
 
+public String RandomColor(){
+    String[] arr={"#4d004d", "#ff00ff", "#ff3300", "#0033cc", "#ffaa00","#009999","#666699","#ff8080","#3399ff","#b30000"};
+    Random r=new Random();
+    int randomNumber=r.nextInt(arr.length);
 
+    return (arr[randomNumber]);
+
+}
 
 }

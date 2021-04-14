@@ -32,11 +32,11 @@ const useRowStyles = makeStyles({
     },
   });
   
-export default function BullRecuMed(props) {
+export default function HistoriqueBullMed(props) {
     const { row } = props;
     const [open, setOpen] = React.useState(false);
     const classes = useRowStyles();
-    const [comment,setComment] = useState("")
+    const [comment,setComment] = useState()
 
     const [rowsMedecin,setRowsMedecin]=useState(props.rowsMedecin)
     var color ="";
@@ -128,16 +128,7 @@ export default function BullRecuMed(props) {
               <TableCell component="th" scope="row" >
               <span className="etat shadow p-1"> {row.etat} </span>   
               </TableCell>
-              <TableCell component="th" scope="row" align="center">
-
-              <Tooltip title="Envoyer">
-              <IconButton aria-label="delete" className={classes.margin} onClick={() => envoyer()}>
-                      <MdSend  size={20} className="envoyerIcon" />
-                </IconButton>  
-                   </Tooltip>
-
-                    
-              </TableCell>
+          
                </TableRow>
        
 
@@ -170,33 +161,26 @@ export default function BullRecuMed(props) {
                         <Col md={6}>
                         <Form.Group>
                           <label>Commentaire Medecin</label>
-                          <Form.Control  as="textarea" defaultValue={historyRow.commentaireMed} disabled placeholder="Company" type="text" ></Form.Control>
+                          {historyRow.commentaireMed == null ? 
+                          <Form.Control  as="textarea" defaultValue="Aucun commentaire trouver" disabled type="text" ></Form.Control>
+ 
+                         : <Form.Control  as="textarea" defaultValue={historyRow.commentaireMed} disabled type="text" ></Form.Control>}
                         </Form.Group>
                           
                            </Col> 
 
                         <Col md={5}>
                         <Form.Group>
-                          <label>Ajouter votre commentaire ici</label>
-                          <Form.Control name="comment" value={comment} defaultValue={historyRow.commentaireResp} onChange={handleChange} as="textarea"  placeholder="" type="text" ></Form.Control>
+                          <label>Votre commentaire</label>
+                          {historyRow.commentaireResp == null ? 
+                           <Form.Control name="comment" value={comment} defaultValue="Aucun commentaire trouver" disabled  as="textarea"  type="text" ></Form.Control> 
+ 
+                         : <Form.Control name="comment" value={comment} defaultValue={historyRow.commentaireResp} disabled  as="textarea"  type="text" ></Form.Control> }
                         </Form.Group>
                           
                            </Col> 
-                           <Col md={10}> 
-                       </Col>
-                           <Col md={2}> 
-                      &nbsp;&nbsp;  
-                         <Button
-                           variant="outlined" 
-                          
-                           size="small"
-                           className={classes.button}
-                           startIcon={<SaveIcon />}
-                           type="submit" 
-                           onClick={updateBull}
-                         >
-                           Save
-                         </Button></Col> 
+                       
+                      
                       </Row>
                   
                         
@@ -212,7 +196,7 @@ export default function BullRecuMed(props) {
     );
   }
   
-  BullRecuMed.propTypes = {
+  HistoriqueBullMed.propTypes = {
     row: PropTypes.shape({
       calories: PropTypes.number.isRequired,
       carbs: PropTypes.number.isRequired,

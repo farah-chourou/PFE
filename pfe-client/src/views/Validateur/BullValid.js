@@ -27,10 +27,10 @@ import { deepOrange, deepPurple } from '@material-ui/core/colors';
 import {FiAlertCircle} from 'react-icons/fi';
 import { MdDeleteSweep } from 'react-icons/md';
 import NotificationAlert from "react-notification-alert";
-import {  Modal,Form} from "react-bootstrap"
+import {  Modal,Form,Card} from "react-bootstrap"
 import  { useState, useEffect } from 'react';
 import axios from "axios";
-import {Card,CardHeader,CardBody,CardTitle,Row,Col,} from "reactstrap";
+import {CardHeader,CardBody,CardTitle,Row,Col,} from "reactstrap";
 import Button from '@material-ui/core/Button';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 
@@ -38,6 +38,10 @@ import Accordion from '@material-ui/core/Accordion';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import moment from 'moment';
+import 'moment/locale/fr';
+import logo from "logo.png";
+
 //pagination
 const useStyles1 = makeStyles((theme) => ({
   root: {
@@ -158,15 +162,11 @@ export default function UsersList() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [value, setValue] = React.useState(0);
-
-
   const [user,setUser] = useState([])
-
-
   const [expanded, setExpanded] = React.useState(false);
   const [num, setNum] = React.useState("");
-
   const [bulletins,setBulletins] =useState([])
+  moment.locale('fr');
 
 
 
@@ -264,38 +264,70 @@ const handleChangeRowsPerPage = (event) => {
             <TableRow  key={row.numBull}>
            
    
-              <TableCell style={{ width: 140 }} alignt="center">
+              <TableCell style={{ width: 150 ,fontSize:"16px"}} alignt="center">
              Bulletin numero  <b> {row.numBull}</b> 
               </TableCell> 
 
               <TableCell style={{ width: 500 }} >
               <Accordion  onChange={handleChange('panel1')}>
         <AccordionSummary
+        className="bg-light"
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1bh-content"
           id="panel1bh-header"
         >
-          <Typography className={classes.heading}> Etat: &nbsp; <span  className="etat shadow p-1">{row.etat} </span></Typography>
-          <Typography className={classes.secondaryHeading}>I am an accordion</Typography>
+          <Typography className={classes.heading }  > <span className="text-primary "> &nbsp;&nbsp;&nbsp;&nbsp; <b> Etat:</b>  {row.etat} </span>   </Typography>
+          <Typography className={classes.secondaryHeading}> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rembourssement accepter</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
-           <Row>
-           <Col md={6}>
-            Date d'envoie: {row.date}
-           </Col>
-           <Col md={6}>
-            Envoyer par: {row.recepteur}
-           </Col>
+       
+          <Row >
+          <Row className="mx-3 " style={{borderBottom:"1px dotted grey"}}>
+             <Col md={4} className="text-center">  <br></br> <img src={logo} alt="MUTUAL-BY-CODWAY-logo" width="150px"  style={{ /* border:"0.5px solid #c7c7c7 " , borderRadius:"20px"*/}} /> </Col>
+             <Col md={6} className="ml-4" > 
+             <div class="d-flex flex-column">
+               <div class="p-1"><b>Medecin:</b> Docteur {row.recepteur } saadi</div>
+               <div class="p-1"><b>Spécialité:</b>  {row.specialite}</div>
+               <div class="p-1"><b>Date d'envoie:</b> {moment(row.date).format("dddd, MMMM Do YYYY, h:mm:ss a")}</div>
+             </div>
+              </Col>
+            
+
            </Row>
-           <Row>
-           <Col md={6}>
-            commentaire medecin: {row.commentaireMed}
-           </Col>
-           <Col md={6}>
-           commentaire responsable: {row.commentaireResp}
-           </Col>
-           </Row>
+
+
+          <Row  className="mx-3 mt-3" > 
+          <Col md={12} ><b>Avis medical:</b>  {row.etat} </Col>
+          </Row>
+
+          <Row  className=" mx-3"> 
+          <Col md={12} ><b>Commentaire du medecin:</b> <br></br>
+ 
+          <Card>
+            <Card.Body>{row.commentaireMed}</Card.Body>
+          </Card>    
+          </Col>
+    
+          <Col md={12} ><b>Commenatire du responsable:</b><br></br>
+          <Card>
+            <Card.Body> {row.commentaireResp==null? "Pas de commentaire" : row.commentaireResp}</Card.Body>
+          </Card>            
+             </Col>
+
+          </Row>
+
+          <Row  className="m1-3 mx-3"> 
+       <small style={{paddingLeft:"480px"}}>  Envoyer par {row.expediteur} </small> 
+
+          </Row>
+
+          </Row>
+
+
+
+
+
           </Typography>
         </AccordionDetails>
       </Accordion>

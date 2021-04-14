@@ -4,6 +4,8 @@ import {Tabs, Tab, Button, Modal,Form} from "react-bootstrap";
 import {Card,CardHeader,CardBody,CardTitle,Table,Row,Col,} from "reactstrap";
 import ModalModifyUser from "../Modal/ModalModifyUser";
 import axios from "axios";
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
 
 export default class EditUser extends Component {
     constructor(props) {
@@ -115,9 +117,14 @@ export default class EditUser extends Component {
     render() {
         return (
             <div>
-              <h4>  <FaUserEdit className="" onClick={()=>this.handleShowUpdate()} />  </h4>     
+        
 
-
+              <Tooltip title="Modifier">
+                     <IconButton aria-label="delete">
+                     <FaUserEdit style={{color:"black"}}lassName="" onClick={()=>this.handleShowUpdate()} />
+                     </IconButton>
+                   </Tooltip>
+          
 
 
                    

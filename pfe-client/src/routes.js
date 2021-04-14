@@ -12,6 +12,7 @@ import BullMed from "views/Medecin/BullMed";
 import BullValid from "views/Validateur/BullValid";
 import HistoriqueValid from "views/Validateur/HistoriqueValid"
 import HistoriqueResp from "views/Responsable/HistoriqueResp"
+import HistoriqueMed from "views/Medecin/HistoriqueMed"
 
 var routes = [
   {
@@ -20,15 +21,18 @@ var routes = [
     icon: "nc-icon nc-bank",
     component: Dashboard,
     layout: "/user",
-    role: "responsable"
+    role: "responsable",
+    dropdown :false
+
   },
-  /*{
+  {
     path: "/icons",
     name: "Icons",
     icon: "nc-icon nc-diamond",
     component: Icons,
     layout: "/user",
-  },
+    role:"responsable"
+  },/*
   {
     path: "/maps",
     name: "Maps",
@@ -43,14 +47,18 @@ var routes = [
     icon: "nc-icon nc-single-02",
     component: UserPage,
     layout: "/user",
+    dropdown :false
+
   },
   {
-    path: "/tables",
+    path: "/ListesUtilisateurs",
     name: "users List",
     icon: "nc-icon nc-tile-56",
     component: UsersList,
     layout: "/user",
-    role:"responsable"
+    role:"responsable",
+    dropdown :false
+
 
   },
   {
@@ -59,7 +67,8 @@ var routes = [
     icon: "nc-icon nc-caps-small",
     component: AllBull,
     layout: "/user",
-    role:"responsable"
+    role:"responsable",
+    dropdown :true
 
   },
   {
@@ -68,7 +77,9 @@ var routes = [
     icon: "nc-icon nc-caps-small",
     component: BullMed,
     layout: "/user",
-    role:"medecin"
+    role:"medecin",
+    dropdown :false
+
 
   },
 
@@ -78,7 +89,8 @@ var routes = [
     icon: "nc-icon nc-caps-small",
     component: BullValid,
     layout: "/user",
-    role:"validateur"
+    role:"validateur",
+    dropdown :false
 
   },
  
@@ -97,7 +109,18 @@ var routes = [
     icon: "nc-icon nc-bell-55",
     component: HistoriqueValid,
     layout: "/user",
-    role:"validateur"
+    role:"validateur",
+    dropdown :false
+
+  },
+  {
+    path: "/historiqueBullMed",
+    name: "historique",
+    icon: "nc-icon nc-bell-55",
+    component: HistoriqueMed,
+    layout: "/user",
+    role:"medecin",
+
   },
   {
     path: "/historiqueBulle",
@@ -105,7 +128,9 @@ var routes = [
     icon: "nc-icon nc-bell-55",
     component: HistoriqueResp,
     layout: "/user",
-    role:"responsable"
+    role:"responsable",
+    dropdown :false
+
   },
   {
     path: "/notifications",
@@ -113,6 +138,8 @@ var routes = [
     icon: "nc-icon nc-bell-55",
     component: Notifications,
     layout: "/user",
+    dropdown :false
+
   },
 
  /* {

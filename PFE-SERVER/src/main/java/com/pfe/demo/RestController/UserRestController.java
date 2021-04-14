@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -56,7 +57,9 @@ public class UserRestController {
                    HttpStatus.ALREADY_REPORTED);
        }
 
+        user.setMembreDepuis(new Date());
 
+        user.setCouleur(  user.RandomColor());
         User u = userRepo.save(user);
         return ResponseEntity.ok(u);}
 

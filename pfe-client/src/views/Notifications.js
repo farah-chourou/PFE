@@ -1,136 +1,243 @@
 
-import React from "react";
+import React,{Component} from "react";
+import {  withRouter, Link } from "react-router-dom";
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem,} from "reactstrap";
+import {Toast,Row,Col} from "react-bootstrap";
 import axios from "axios";
-import {  Link } from "react-router-dom";
+import "assets/css/style.css";
+import { Redirect } from 'react-router-dom';
+import {FaCircle} from "react-icons/fa";
+import PerfectScrollbar from 'perfect-scrollbar';
+import NavbarCollapse from "react-bootstrap/esm/NavbarCollapse";
+import Avatar from '@material-ui/core/Avatar';
+import  { useState, useEffect } from 'react';
+import { useHistory } from "react-router-dom";
+import PropTypes from 'prop-types';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import useScrollTrigger from '@material-ui/core/useScrollTrigger';
+import Box from '@material-ui/core/Box';
+import Container from '@material-ui/core/Container';
+import Slide from '@material-ui/core/Slide';
+import moment from 'moment';
+import 'moment/locale/fr';
 
 
-class Notifications extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
+
+
+var ps;
+export default function Notification(props) {
+ 
+  const [isOpen, setIsOpen] = useState(false)
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [color, setColor] = useState("transparent")
+  const [user,setUser] = useState([]);
+  const [notificationsLu,setNotificationsLu] = useState([]);
+  const [notificationsNonLu,setNotificationsNonLu] = useState([]);
+  const [notificationsNonVu,setNotificationsNonVu] = useState([]);
+  const [notifications,setNotifications] = useState([])
+  const [expediteurNotif,setExpediteurNotif] = useState([]);
+  const [number,setNumber] = useState("");
+  const [showHideNotif,setShowHideNotif] = useState(true);
+  const history = useHistory()
+  const [notifNonlu,setNotifNonlu] = useState()
+  const [notif,setNotif]=useState([])
+
+
+  
+ moment.locale('fr');
     
-      user:[],
-      notificationsNonLu:[],
-      notificationsLu:[],
+    
+   const   dropdownToggle =(e) => {
 
-      expediteurNotif:[],
-      number:"",
-      showHideNotif: true,
-
-
-    };
-
-   
-    this.getBull =this.getBull.bind(this);
-   
-
-  }
-
-  componentDidMount() {
-    const local = localStorage.getItem("user");
-    console.log(JSON.parse(local));
-
-
-    this.setState({
-      user: JSON.parse(local),
-
-
-    })
-    this.getNotification();
-
-
-  }
-
-
-
- getNotification =() =>{
-    axios.get('http://localhost:8080/getNotif').then(res => {
-      console.log(res.data);
-      res.data.map(e => 
-        <div key={e.id}>
-        { ( e.recepteur == this.state.user.userName && e.etat == false )? 
-
-        ( this.state.notificationsNonLu.push(e),
-        this.setState({
-          number: this.state.notificationsNonLu.length
-        }) )
-      
-        :false  }
-
-        </div>
-        )
-      
-      
-        res.data.map(e => 
-          <div key={e.id}>
-          { ( e.recepteur == this.state.user.userName && e.etat == true )? 
-  
-          ( this.state.notificationsLu.push(e),
-          this.setState({
-          }) )
-        
-          :false  }
-  
-          </div>
+        notificationsNonLu.map(n => 
+          <>
+          {axios.put('http://localhost:8080/updateVuNotif/'+ n.id)}
+          </>
           )
-      
-      
-      })
-
+    setDropdownOpen(!dropdownOpen)
+    setNumber(0)
+       
+        console.log("drop: " + dropdownOpen)
+    
+    
+      }
    
 
-  }
-
-  getBull = (id) => {
-    this.props.history.push('/user/soloBulletin'+id);
-    window.location.reload(false);
-
-  }
-
-
-
-
-  render() {
-    return (
-      <>
-        <div className="content">
-<div> 
-  <b> Non Lu</b>
-        {this.state.notificationsNonLu.length == 0 ?  <div className="text-center small"> No notification avaible  </div>
-         : this.state.notificationsNonLu.map( R => 
-
-        <div  className="border border-muted " onClick={()=> this.getBull(R.id)} key={R.id}> 
+      useEffect(() => {
+        const local = localStorage.getItem("user");
+        setUser(JSON.parse(local))      
+        getNotification() 
+ 
+       }, [])
+ 
+    
       
-        <div className="font-weight-bold text-uppercase"> {R.expediteurNotif.userName} </div>
-         <div> {R.message}  </div> 
-         <small className=" text-secondary">  envoyer le  {R.date} </small>  
-        </div>
-        )}
+   
+    
+   const  getNotification =() =>{
+    const local = localStorage.getItem("user");
 
-</div>
+        axios.get('http://localhost:8080/getNotif').then(res => {
+          console.log(res.data);
+          res.data.map(e => 
+            <div key={e.id}>
+            { ( e.recepteur == JSON.parse(local).userName   && e.etat == true  )? 
 
-<div> 
-      <b> Lu</b>
-         { this.state.notificationsLu.map( R => 
+             notificationsLu.push(e)
+            
+          
+          
+            :false  }
 
-        <div  className="border border-muted " onClick={()=> this.getBull(R.id)} key={R.id}> 
+            </div>
+            )
+            res.data.map(e => 
+              <div key={e.id}>
+              { ( e.recepteur == JSON.parse(local).userName  && e.etat == false )? 
       
-        <div className="font-weight-bold text-uppercase"> {R.expediteurNotif.userName} </div>
-         <div> {R.message}  </div> 
-         <small className=" text-secondary">  envoyer le  {R.date} </small>  
-        </div>
-        )}
-
-</div>
-
-
+             ( notificationsNonLu.push(e),
+             setNotifNonlu(notificationsNonLu.length))
+            
+              :false  }
+      
+              </div>
+              )
 
 
+              res.data.map(e => 
+                <div key={e.id}>
+                { ( e.recepteur ==  JSON.parse(local).userName  && e.vu== false)? 
+        
+                (notificationsNonVu.push(e),
+                setNumber(notificationsNonVu.length))
+              
+              
+                :false  }
+        
+                </div>
+                )
+                res.data.map(e => 
+                  <div key={e.id}>
+                  { ( e.recepteur == JSON.parse(local).userName     )? 
+      
+                 notifications.push(e)
+                  
+                
+                
+                  :false  }
+      
+                  </div>
+                  )
+            setNotif(notifications)
+            })
+       
+      }
+    
+    const  getBull = (id) => {
+        history.push('/user/soloBulletin'+id);
+        window.location.reload(false);
 
-        </div>
-      </>
-    );
-  }
+      }
+      
+
+
+    const lu = () =>{
+      notificationsNonLu.map(n => 
+        <>
+        { axios.put(' http://localhost:8080/updateNotif/' + n.id)}
+        </>
+        )
+        window.location.reload(false);
+
+   
+      }
+      
+    const Nonlu = () =>{
+      
+     setNotif(notificationsNonLu)
+
+   
+      }
+
+
+          
+    const afficherTout = () =>{
+      
+      setNotif(notifications)
+ 
+    
+       }
+        return (
+    
+
+          <Row  className="justify-content-md-center mb-5" style={{marginTop: 100 }} >
+           
+            <Col md={6}> {console.log(notifications)}
+          
+            <span> 
+         <div class=" text-uppercase  mb-3" style={{borderBottom: "1px solid #E2E2E2",fontSize:"20px" }}><b> Notifications </b>    </div>
+     {notifNonlu > 0 ? <div><div style={{fontSize:14,color:"red"}} className="my-1 ">   Vous avez <b>{notifNonlu} </b> notification non lu encore <br></br> &nbsp; <br></br> </div>  </div> :false } 
+        
+       </span>
+       <Row  style={{fontSize:14, marginBottom: "25px"}} > 
+                <Col md={4}> <Link class="text-primary" onClick={Nonlu}> Filtrer par non lu</Link>  </Col>
+                <Col md={5}> <Link class="text-primary" onClick={lu}> Marquer tout comme lu</Link>  </Col>
+                <Col md={3}><Link class="text-primary" onClick={afficherTout}>Afficher tout</Link>  </Col>
+
+                 </Row>
+                {notif.length == 0 ?  <div className="text-center small"> Pas de notification non lu  </div>
+                 : 
+
+
+               notif.slice().reverse().map( R => 
+
+                 <div key={R.id} >
+
+                 <Row  width="90px"  className="mb-3 p py-1  " onClick={()=> getBull(R.id)}  style={{border:"1px solid #E2E2E2",borderRadius: "20px" , backgroundColor:"white",boxShadow:"5px 5px 5px gray"}}>  
+                 
+                 <Col md={1} className=" font-weight-bold text-uppercase">  
+                 <Avatar style={{backgroundColor:R.expediteurNotif.couleur,width:31,height:31, fontSize:15}} className="shadow">    { R.expediteurNotif.nom.substr(0, 1)+R.expediteurNotif.prenom.substr(0, 1) }  </Avatar>
+                 </Col>
+                 &nbsp;
+                  <Col md={10} className=" pb-2 "  >   
+                 <Row className="font-weight-bold text-uppercase">
+                 <Col md={10}> {R.expediteurNotif.nom} {R.expediteurNotif.prenom}</Col>
+                 <Col md={2} className="" > 
+               
+                   
+                   </Col>
+                  </Row>
+                
+                  {(R.suivisBull != null && R.expediteurNotif.role == "validateur") ? <div>  Nouveau bulletin  numero  <b> {R.suivisBull.numBull}</b>  a valider recu du validateur </div>  
+                : (R.suivisBull == null && R.expediteurNotif.role == "medecin") ? <div>  Nouveau bulletin  numero  <b> {R.suivisBullMed.numBull}</b>  a  revalider recu du medecin </div>  
+                : (R.suivisBullMed != null && R.expediteurNotif.role == "responsable" && user.role=="validateur") ? <div> Bulletin  numero  <b> {R.suivisBullMed.numBull}</b>   est valider </div>  
+                : (R.suivisBullMed != null && R.expediteurNotif.role == "responsable" && user.role=="medecin") ? <div> Nouveau bulletin  numero  <b> {R.suivisBullMed.numBull}</b> pour  donner ton avis  </div>  
+
+                : false}
+                 <small className=" text-secondary " style={{paddingLeft:"260px"}}>  envoyer   {moment(R.date).fromNow() } </small>     
+                </Col>   
+                 </Row>
+           
+                
+
+                
+                
+             
+
+                </div>
+
+
+          )
+          }   
+      
+      </Col>
+          </Row>
+     
+
+   
+        )
+   
 }
-
-export default Notifications;
