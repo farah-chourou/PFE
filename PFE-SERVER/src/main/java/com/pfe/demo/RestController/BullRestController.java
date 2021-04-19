@@ -134,11 +134,19 @@ public class BullRestController {
     public SuivisBull updateEtatBull(@PathVariable int numBull){
         SuivisBull bull = suivisBullRepo.findByNumBull(numBull);
         bull.setEtape(2);
+        bull.setDate(LocalDate.now());
         suivisBullRepo.save(bull);
         return bull;
 
     }
 
+    @GetMapping("/getAlBullEtape1Byrecep/{userName}") // dashbord
+    public List<SuivisBull> getAlBullEtape1Byrecep(@PathVariable String userName){
+        User u = userRepo.findByUserName(userName);
+
+        List<SuivisBull>  bull = suivisBullRepo.findAllByRecepteurAndEtape(u, 1 );
+        return bull;
+    }
 
 
 }

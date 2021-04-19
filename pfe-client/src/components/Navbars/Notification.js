@@ -97,11 +97,7 @@ export default function Notification(props) {
           res.data.map(e => 
             <div key={e.id}>
             { ( e.recepteur == JSON.parse(local).userName  )? 
-
              notifications.push(e)
-            
-          
-          
             :false  }
 
             </div>

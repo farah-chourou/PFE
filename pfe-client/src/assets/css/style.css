@@ -80,7 +80,7 @@ top: -1px;
   
   #style-7::-webkit-scrollbar
   {
-    width: 8px;
+    width: 7px;
     background-color: #F5F5F5;
   }
   
@@ -98,6 +98,15 @@ top: -1px;
  
   
   height: 400px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+
+}
+.scrollbar2
+{
+ 
+  
+  height: 250px;
   overflow-y: scroll;
   overflow-x: hidden;
 

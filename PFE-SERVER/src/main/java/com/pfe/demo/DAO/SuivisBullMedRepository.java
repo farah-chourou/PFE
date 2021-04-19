@@ -18,5 +18,7 @@ public interface SuivisBullMedRepository extends JpaRepository<SuivisBullMed, In
     List<SuivisBullMed> findAllByRecepteurAndEtape(String user, int etape);
     List<SuivisBullMed> findAllByExpediteurAndEtape(User u, int etape);
     List<SuivisBullMed> findAllByRecepteur(String userName);
+    List<SuivisBullMed> findAllByExpediteur(User user);
+    List<SuivisBullMed> findAllByEtape(int etape);
 
 }

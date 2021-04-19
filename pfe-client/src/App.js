@@ -18,7 +18,7 @@ const hist = createBrowserHistory();
 function App(){
 
     return(
-
+<div style={{   fontFamily: "'Open Sans', sans-serif"}}> 
         <Router history={hist} >
     <Switch>
       <Route path="/user" render={(props) => <AdminLayout {...props} />} />
@@ -27,7 +27,7 @@ function App(){
       <Route path="/login"component={Login} />
 
     </Switch>
-  </Router>
+  </Router></div>
     );
 }
 export default App;

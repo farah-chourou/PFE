@@ -15,6 +15,8 @@ public interface SuivisBullRepository extends JpaRepository<SuivisBull,Integer> 
   List<SuivisBull> findByEtat( String etat);
   List<SuivisBull> findByExpediteur( User user);
   List<SuivisBull> findAllByEtape(int etape);
+  List<SuivisBull> findAllByRecepteurAndEtape(User u ,int etape);
+
   @Transactional
   void deleteByNumBull(int numBull);
 }

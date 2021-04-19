@@ -15,9 +15,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
-import Pie from './Responsable/Dashbord/Pie.js';
-import BarChart from './Responsable/Dashbord/BarChart.js';
-import UserBehavior from './Responsable/Dashbord/UserBehavior.js';
+import {  CardHeader, CardBody, CardFooter, CardTitle,} from "reactstrap";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     width: 200,
-    height:'35px'
+    height:'35px',
    }
 
 }));
@@ -51,7 +49,7 @@ function getSteps() {
 
 
 
-export default function HorizontalLabelPositionBelowStepper() {
+export default function Stepperr() {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
   const steps = getSteps();
@@ -63,44 +61,8 @@ export default function HorizontalLabelPositionBelowStepper() {
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const  [searched,setSearched] = useState("")
+
   
-  const[accepter,setAccepter] =useState([])
-  const[numAccepter,setNumAccepter] =useState([])
-
-  const[rejeter,setRejeter] = useState([])
-  const[numRejeter,setNumRejeter] = useState([])
-
-  const [visite,setVisite] = useState([])
-  const [numVisite,setNumVisite] = useState([])
-
-  const [autre,setAutre] = useState([])
-  const [numAutre,setNumAutre] = useState([])
-
-
-  const state = {
-    labels: ['Accepté', 'Rejeter', 'Contre visite',
-             'Autre'],
-    datasets: [
-      {
-        label: 'Rainfall',
-        backgroundColor: [
-          '#B21F00',
-          '#C9DE00',
-          '#2FDE00',
-          '#00A6B4',
-          '#6800B4'
-        ],
-        hoverBackgroundColor: [
-        '#501800',
-        '#4B5000',
-        '#175000',
-        '#003350',
-        '#35014F'
-        ],
-        data: [numAccepter, numRejeter, numVisite, numAutre]
-      }
-    ]
-  }
   
 
 
@@ -127,7 +89,6 @@ export default function HorizontalLabelPositionBelowStepper() {
     const local = localStorage.getItem("user");
     setUser(JSON.parse(local)) 
     getAllBull();
-    getEtatBull();
   }, [])
 
   const getAllBull = () => {
@@ -136,12 +97,12 @@ export default function HorizontalLabelPositionBelowStepper() {
     axios.get('http://localhost:8080/getAllBullDashbord/'+JSON.parse(local).userName).then( res => {
 
       res.data.map(e => 
-        bulletins.push(e),
+        setBulletins(prevState => [...prevState, e])
       )
   } )
     axios.get('http://localhost:8080/getAlBullEtape1Byrecep/'+ JSON.parse(local).userName).then( result => {
         result.data.map(e => 
-         ( bulletins.push(e),setNumberBull(bulletins.lenght))
+         (   setBulletins(prevState => [...prevState, e]))
         )
 
     
@@ -161,47 +122,25 @@ const requestSearch =
     return r.numBull.toString().includes(searched);
   })
 
- const getEtatBull = () =>{
-  const local = localStorage.getItem("user");
-
-  axios.get('http://localhost:8080/getAllBullRespMedEtape4/'+JSON.parse(local).userName).then( res => {
-    res.data.map(e => 
-      <div key={e.numBull}>
-      {e.avis.avis == "Accepter" ? (accepter.push(e),setNumAccepter(accepter.length)): 
-       e.avis.avis == "Rejeter" ?  ( rejeter.push(e),setNumRejeter(rejeter.length)):
-       e.avis.avis == "Contre visite" ? (visite.push(e),setNumVisite(visite.length)):
-       (autre.push(e),setNumAutre(autre.length))
-
-    }</div>
-    )
-}
-
-)
-
- }
-
+ 
 
   return (
-    <div className="content">
-      <UserBehavior/>
+  <Card  style={{borderRadius:"10px",boxShadow:" rgba(0, 0, 0, 0.35) 0px 5px 15px"}} >
+  <CardHeader className="bg-dark " style={{borderTopLeftRadius:"10px" ,borderTopRightRadius:"10px" /*,       backgroundImage: `url("https://via.placeholder.com/500")` */
+}}>
+                  <CardTitle tag="h5" className="text-light">Consulter l'etape actuelle de chaque bulletin</CardTitle>
+                  <span className="card-category text-light">Rechercher ici par numero </span>
+                  <Paper  className={classes.aa} style={{marginBottom:"10px"}}>
+                   <IconButton className={classes.iconButton} aria-label="menu">
+                   </IconButton>
+                   <InputBase className={classes.input} placeholder="Rechercher ici ..."  value={searched} onChange={ e =>setSearched(e.target.value)}/>
+                   <IconButton  className={classes.iconButton} aria-label="search">
+                     <SearchIcon />
+                   </IconButton>
+                 </Paper> 
+                </CardHeader>
 
-  <Card border="info" style={{ width: '20rem' }}  >
-    <Card.Header style={{color:"white",fontSize:"17px"}} className="bg-info text-uppercase">
-      <b> Consulter les etapes des bulletins</b>
-    <br></br>
- 
-    <Paper  className={classes.aa} style={{marginLeft:"90px",marginBottom:"20px"}}>
-      <IconButton className={classes.iconButton} aria-label="menu">
-      </IconButton>
-      <InputBase className={classes.input} placeholder="Rechercher ici ..."  value={searched} onChange={ e =>setSearched(e.target.value)}/>
-      <IconButton  className={classes.iconButton} aria-label="search">
-        <SearchIcon />
-      </IconButton>
-    </Paper>
-
-    
-    </Card.Header>
-    <Card.Body className="scrollbar2" id="style-7">
+    <Card.Body className="scrollbar2" id="style-7"style={{height:"297px"}}>
       <Card.Text >
    
          {requestSearch.map(b => (
@@ -240,11 +179,8 @@ const requestSearch =
       </Card.Text>
     </Card.Body>
   </Card>
-<Row> <Col md={8}> 
-<Pie />
 
-</Col></Row>
-<BarChart />
-    </div>
+
+ 
   );
 }

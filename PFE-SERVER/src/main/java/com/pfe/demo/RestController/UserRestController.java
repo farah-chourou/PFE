@@ -130,6 +130,33 @@ public class UserRestController {
         userRepo.save(user);
         return user;
     }
+    @PutMapping("/lastConnect/{userName}/{date}") //dashbord
+    public User lastConnect(@PathVariable String userName, @PathVariable Date date ){
+        User user = userRepo.findByUserName(userName);
+        user.setLastConnect(date);
+        userRepo.save(user);
+        return user;
+    }
 
+    @PutMapping("/deconnecte/{userName}") //dashbord
+    public User decconnecte(@PathVariable String userName ){
+        User user = userRepo.findByUserName(userName);
+        user.setConnecte(false);
+        userRepo.save(user);
+        return user;
+    }
+      @PutMapping("/connecte/{userName}") //dashbord
+    public User connecte(@PathVariable String userName ){
+        User user = userRepo.findByUserName(userName);
+        user.setConnecte(true);
+        userRepo.save(user);
+        return user;
+    }
+
+    @GetMapping("/getAllUsers") // dashbord tableau user
+    public List<User> getAllUsers(){
+
+        return  userRepo.findAll();
+    }
 
 }

@@ -82,13 +82,28 @@ public class BullMedRestController {
         List<SuivisBullMed>  bull = suivisBullMedRepo.findAllByRecepteurAndEtape( userName, 2);
         return bull;
     }
+
+    @GetMapping("/getBullMedEtape3/{userName}") //sprint 3 fi  dashbord
+    public List<SuivisBullMed> getBullMedEtape3(@PathVariable String userName){
+        List<SuivisBullMed>  bull = suivisBullMedRepo.findAllByRecepteurAndEtape( userName, 3);
+        return bull;
+    }
+
+    @GetMapping("/getBullMedEtape4/{userName}") //sprint 3 fi  dashbord
+    public List<SuivisBullMed> getBullMedEtape4(@PathVariable String userName){
+        List<SuivisBullMed>  bull = suivisBullMedRepo.findAllByRecepteurAndEtape( userName, 4);
+        return bull;
+    }
+
+    /*
     @GetMapping("/getAlBullMedEtape2/{userName}")
     public List<SuivisBullMed> getAlBullEtape2(@PathVariable String userName){
         User u = userRepo.findByUserName(userName);
 
         List<SuivisBullMed>  bull = suivisBullMedRepo.findAllByExpediteurAndEtape( u, 2);
         return bull;
-    }
+    }*/
+
     @GetMapping("/getAllBullRespMedEtape3/{userName}") // ki tarja3 lil resp
     public List<SuivisBullMed> getAlBullResp(@PathVariable String userName){
         User u = userRepo.findByUserName(userName);
@@ -96,16 +111,27 @@ public class BullMedRestController {
         return bull;
     }
 
-    @GetMapping("/getAllBullRespMedEtape4/{userName}")
+    @GetMapping("/getAllBullRespMedEtape4/{userName}") // ki tarja3 lil valid  //fi dashbord
     public List<SuivisBullMed> getAllBullRespMedEtape4(@PathVariable String userName){
         User u = userRepo.findByUserName(userName);
         List<SuivisBullMed>  bull = suivisBullMedRepo.findAllByExpediteurAndEtape( u, 4);
         return bull;
     }
+    @GetMapping("/getBullValiderEtape4")   //fi dashbord
+    public List<SuivisBullMed> getBullValiderEtape4(){
 
+        List<SuivisBullMed>  bull = suivisBullMedRepo.findAllByEtape(4);
+        return bull;
+    }
     @GetMapping("/getAllBullMed/{userName}") // historique med
     public List<SuivisBullMed> getAllBullMed(@PathVariable String userName){
         List<SuivisBullMed>  bull = suivisBullMedRepo.findAllByRecepteur(userName);
+        return bull;
+    }
+    @GetMapping("/getAllBullDashbord/{userName}")
+    public List<SuivisBullMed> getAllBullDashbord(@PathVariable String userName){
+        User u = userRepo.findByUserName(userName);
+        List<SuivisBullMed>  bull = suivisBullMedRepo.findAllByExpediteur(u);
         return bull;
     }
 
@@ -131,6 +157,7 @@ public class BullMedRestController {
         bull.setCommentaireMed(bullMed.getCommentaireMed());
         bull.setEtape(3);
         bull.setEtat(a.getAvis());
+        bull.setDate(new Date());
         suivisBullMedRepo.save(bull);
 
         User expediteur = userRepo.findByUserName(bull.getRecepteur());
@@ -162,6 +189,8 @@ public class BullMedRestController {
         bull.setCommentaireMed(bullMed.getCommentaireMed());
         bull.setEtape(3);
         bull.setEtat(a.getAvis());
+        bull.setDate(new Date());
+
         suivisBullMedRepo.save(bull);
 
 
@@ -217,5 +246,6 @@ public class BullMedRestController {
 
 
  
+
 
 }

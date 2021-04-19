@@ -60,7 +60,7 @@ handleSubmit=(e)=> {
 
   
   }else {
- 
+
      localStorage.setItem("user", JSON.stringify(result.data));
      if(result.data.role == "medecin"){ 
       this.props.history.push('/user');}
@@ -69,6 +69,7 @@ handleSubmit=(e)=> {
       if(result.data.role == "validateur"){ 
         this.props.history.push('/user');}   
      
+        axios.put('http://localhost:8080/connecte/'+this.state.userName)
 
      this.setState({
       isLogin:true

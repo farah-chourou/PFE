@@ -36,6 +36,8 @@ public class User {
     private String specialite;
     private String couleur;
     private Date membreDepuis;
+    private Date lastConnect;
+    private Boolean connecte;
 
 
     @JsonIgnore

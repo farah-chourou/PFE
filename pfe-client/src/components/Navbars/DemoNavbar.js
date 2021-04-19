@@ -25,7 +25,7 @@ class Header extends React.Component {
     this.dropdownToggle = this.dropdownToggle.bind(this);
     this.getBull =this.getBull.bind(this);
     this.sidebarToggle = React.createRef();
-    this.logout = this.logout.bind(this)
+    this.logout =this.logout.bind(this);
 
   }
 
@@ -94,7 +94,11 @@ class Header extends React.Component {
     this.setState({
       user: JSON.parse(local),
     })
- 
+  window.onunload = () => {
+      // Clear the local storage
+      axios.put('http://localhost:8080/lastConnect/'+ this.state.user.userName + "/" + new Date())
+      axios.put('http://localhost:8080/deconnecte/'+ this.state.user.userName )   }
+
   }
 
 
@@ -107,20 +111,31 @@ class Header extends React.Component {
       document.documentElement.classList.toggle("nav-open");
       this.sidebarToggle.current.classList.toggle("toggled");
     }
+   window.onbeforeunload = () => {
+
+      axios.put('http://localhost:8080/lastConnect/'+ this.state.user.userName + "/" + new Date())
+      axios.put('http://localhost:8080/deconnecte/'+ this.state.user.userName )}
+
   }
 
 
 
+  
 
   getBull = (id) => {
     this.props.history.push('/user/bulletin'+id)
 
   }
-  logout = () => {
-    sessionStorage.removeItem('user');
+  logout(){
+  
+    axios.put('http://localhost:8080/deconnecte/'+ this.state.user.userName );
+    axios.put('http://localhost:8080/lastConnect/'+ this.state.user.userName + "/" + new Date());
+
+    localStorage.removeItem("user");
+   
 
   }
-
+  
   render() {
     return (
       <Navbar style={{backgroundColor:"blue",boxShadow:"5px 5px 7px #79797994 " }}
@@ -137,6 +152,7 @@ class Header extends React.Component {
               (this.state.color === "transparent" ? "navbar-transparent " : "")
         }>
         <Container fluid >
+
           <div className="navbar-wrapper">
             <div className="navbar-toggle">
               <button type="button" ref={this.sidebarToggle} className="navbar-toggler" onClick={() => this.openSidebar()}>
@@ -193,7 +209,7 @@ class Header extends React.Component {
                       </DropdownItem>
                       <hr></hr>
                       <DropdownItem  >  
-                     <RiLogoutBoxRLine size={22}/> <Link to="/login" onClick={this.logout()}>  se deconnecter</Link> 
+                     <RiLogoutBoxRLine size={22}/> <Link to="/login" onClick={  ()=>this.logout()  }>  se deconnecter</Link> 
                   
                       </DropdownItem>
                 </DropdownMenu>

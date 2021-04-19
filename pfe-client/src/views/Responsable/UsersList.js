@@ -319,7 +319,6 @@ const handleChangeRowsPerPage = (event) => {
 
 
 const requestSearch =
-
    rows.filter((row) => {
     return row.userName.toLowerCase().includes(searched.toLowerCase());
   });
@@ -415,7 +414,7 @@ const requestSearch =
             ? requestSearch.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             : requestSearch
           ).map((row) => (
-            <TableRow key={row.id}>
+            <TableRow key={row.id} hover>
               <TableCell component="th" scope="row" >
              
                 <Avatar style={{backgroundColor : row.couleur,fontSize:17}} className="text-uppercase shadow">    { row.nom.substr(0, 1) +row.prenom.substr(0, 1) }</Avatar>
