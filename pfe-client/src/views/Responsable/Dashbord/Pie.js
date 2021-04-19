@@ -85,8 +85,8 @@ export default function Piee() {
   axios.get('http://localhost:8080/getAllBullRespMedEtape4/'+JSON.parse(local).userName).then( res => {
     res.data.map(e => 
       <div key={e.numBull}>
-      {e.avis.avis == "Accepter" ? (accepter.push(e),setNumAccepter(accepter.length)): 
-       e.avis.avis == "Rejeter" ?  ( rejeter.push(e),setNumRejeter(rejeter.length)):
+      {e.avis.avis == "Accepté" ? (accepter.push(e),setNumAccepter(accepter.length)): 
+       e.avis.avis == "Rejeté" ?  ( rejeter.push(e),setNumRejeter(rejeter.length)):
        e.avis.avis == "Contre visite" ? (visite.push(e),setNumVisite(visite.length)):
        (autre.push(e),setNumAutre(autre.length))
 
