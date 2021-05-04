@@ -5,6 +5,7 @@ import com.pfe.demo.DAO.SuivisBullMedRepository;
 import com.pfe.demo.DAO.SuivisBullRepository;
 import com.pfe.demo.DAO.UserRepository;
 import com.pfe.demo.Entities.Notification;
+import com.pfe.demo.Entities.SuivisBullMed;
 import com.pfe.demo.Entities.User;
 import com.pfe.demo.Exception.RessourceNotFoundException;
 import com.pfe.demo.RestController.Util.ApiResponse;
@@ -14,6 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -74,7 +78,50 @@ public class UserRestController {
             return new ResponseEntity(new ApiResponse(false, "User not exist !"),
                     HttpStatus.ALREADY_REPORTED);
         }
-        return  ResponseEntity.ok(loginUser);
+
+       // if(loginUser.getRole().equals("medecin")){
+            LocalDate aujourdhui = LocalDate.now();
+
+            LocalDate daysAgo = LocalDate.now().minusDays(1);
+        // System.out.println(aujourdhui.with(DayOfWeek.SUNDAY));
+         System.out.println(aujourdhui);
+
+            List<SuivisBullMed>  bull = suivisBullMedRepo.findAllByRecepteurAndEtape(loginUser.getUserName(), 2);
+
+
+
+
+            for (SuivisBullMed bullMed : bull) {
+              if(bullMed.getDate().isAfter(daysAgo)==false && bullMed.getDate().isBefore(aujourdhui)==true) {
+              Notification rappel =   notificationRepo.findByRecepteurAndSuivisBullMed(loginUser.getUserName(),bullMed);
+              Notification notif = new Notification();
+
+                  if(rappel == null){
+                    notif.setMessage("Rappel: vous avez un ancien bulletin a traiter");
+                    notif.setDate(new Date());
+                    notif.setRecepteur(loginUser.getUserName());
+                    notif.setEtat(false);
+                    notif.setVu(false);
+                    notif.setSuivisBullMed(bullMed);
+                    notificationRepo.save(notif);}
+              else {
+                  notif.setMessage("Rappel: vous avez un ancien bulletin a traiter");
+                  notif.setDate(new Date());
+                  notif.setRecepteur(loginUser.getUserName());
+                  notif.setEtat(false);
+                  notif.setVu(false);
+                  notif.setSuivisBullMed(bullMed);
+                  notificationRepo.save(notif);
+                  notificationRepo.deleteById(rappel.getId());
+
+
+                  }
+               }
+            }
+
+
+
+         return  ResponseEntity.ok(loginUser);
     }
 
 
@@ -130,6 +177,8 @@ public class UserRestController {
         userRepo.save(user);
         return user;
     }
+
+
     @PutMapping("/lastConnect/{userName}/{date}") //dashbord
     public User lastConnect(@PathVariable String userName, @PathVariable Date date ){
         User user = userRepo.findByUserName(userName);
@@ -146,7 +195,7 @@ public class UserRestController {
         return user;
     }
       @PutMapping("/connecte/{userName}") //dashbord
-    public User connecte(@PathVariable String userName ){
+        public User connecte(@PathVariable String userName ){
         User user = userRepo.findByUserName(userName);
         user.setConnecte(true);
         userRepo.save(user);
@@ -158,5 +207,30 @@ public class UserRestController {
 
         return  userRepo.findAll();
     }
+
+    @PutMapping("/updateProfileUser/{userName}")
+    public User updateUserProfile(@PathVariable String userName, @RequestBody User newUser){
+        User user = userRepo.findByUserName(userName);
+        user.setAdresse(newUser.getAdresse());
+        user.setNom(newUser.getNom());
+        user.setPrenom(newUser.getPrenom());
+        user.setTel(newUser.getTel());
+        user.setSpecialite((newUser.getSpecialite()));
+        userRepo.save(user);
+        return user;
+    }
+
+    @PutMapping("/updateUserPassword/{userName}")
+    public User updateUserPassword(@PathVariable String userName, @RequestBody User newUser){
+        User user = userRepo.findByUserName(userName);
+        user.setPassword(newUser.getPassword());
+        userRepo.save(user);
+        return user;
+    }
+    @GetMapping("/getAllUsersConected") // dashbord tableau user
+    public List<User> getAllUsersConnected(){
+        return  userRepo.findAllByConnecte(true);
+    }
+
 
 }

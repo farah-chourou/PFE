@@ -22,7 +22,7 @@ public interface UserRepository extends JpaRepository <User,Long> {
  List<User> findByRole(String Role);
 
 
-
+ List<User> findAllByConnecte(boolean connecte);
  void deleteById(Long id);
 
 

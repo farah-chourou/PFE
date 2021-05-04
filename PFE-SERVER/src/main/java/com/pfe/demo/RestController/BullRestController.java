@@ -9,6 +9,7 @@ import com.pfe.demo.Entities.SuivisBull;
 import com.pfe.demo.Entities.User;
 import com.pfe.demo.Exception.RessourceNotFoundException;
 import com.pfe.demo.RestController.Util.ApiResponse;
+import com.pfe.demo.Service.BullService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,56 +41,19 @@ public class BullRestController {
     @Autowired
     private JavaMailSender emailSender;
 
-    public void sendSimpleMessage(
-         String to, String subject, String text) {
+    @Autowired
+    BullService bullService;
 
-
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("noreply@baeldung.com");
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(text);
-        emailSender.send(message);
-
-
-    }
    @PostMapping("/addBull/{id}/{recepteur}")
     public ResponseEntity<SuivisBull> addBull(@RequestBody SuivisBull suivisBulletein, @PathVariable Long id, @PathVariable String recepteur){
 
-      if(suivisBullRepo.findByNumBull(suivisBulletein.getNumBull()) != null){
+      if(bullService.ajouterBulletin(suivisBulletein,id,recepteur)== null){
           return  new ResponseEntity(new ApiResponse(false, "Bull already exist !"),
                   HttpStatus.ALREADY_REPORTED);
       }
 
-        User recep= userRepo.findByUserName(recepteur);
-        suivisBulletein.setRecepteur(recep);
 
-
-        User exp= userRepo.findById(id).orElseThrow(()-> new RessourceNotFoundException("mafamech"));
-       // expediteur.addS(suivisBulletein);
-        suivisBulletein.setExpediteur(exp);
-
-        suivisBulletein.setDate(LocalDate.now());
-        suivisBulletein.setEtape(1);
-        suivisBulletein.setEtat("en cours");
-
-        SuivisBull bull = suivisBullRepo.save(suivisBulletein);
-
-        Notification notif = new Notification();
-        notif.setMessage("Vous avez un nouveau bulletin a valider ");
-        notif.setDate(new Date());
-        notif.setExpediteurNotif(exp);
-        notif.setRecepteur(recepteur);
-        notif.setEtat(false);
-        notif.setVu(false);
-
-        SuivisBull s = suivisBullRepo.findByNumBull(suivisBulletein.getNumBull());
-        notif.setSuivisBull(s);
-
-        notificationRepo.save(notif);
-       /* String expediteur=exp.getUserName();
-        sendSimpleMessage(recep.getEmail(),"Nouvelle notification (MUTUAL by CODWAY)","Bonjour, \nvous avez une nouvelle notification de la part " + expediteur + " . \nBien recu a vous.");*/
-        return ResponseEntity.ok(bull);
+        else return ResponseEntity.ok(bullService.ajouterBulletin(suivisBulletein,id,recepteur));
     }
 
     @GetMapping("/getAllBull")
@@ -147,6 +111,10 @@ public class BullRestController {
         List<SuivisBull>  bull = suivisBullRepo.findAllByRecepteurAndEtape(u, 1 );
         return bull;
     }
+    @GetMapping("/getPerfermantValid") // dashbord
+    public User getPerfermant(){
 
+        return bullService.getPerfermantValid();
+    }
 
 }

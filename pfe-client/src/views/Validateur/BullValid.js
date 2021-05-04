@@ -289,7 +289,7 @@ const handleChangeRowsPerPage = (event) => {
              <div class="d-flex flex-column">
                <div class="p-1"><b>Medecin:</b> Docteur {row.recepteur } saadi</div>
                <div class="p-1"><b>Spécialité:</b>  {row.specialite}</div>
-               <div class="p-1"><b>Date d'envoie:</b> {moment(row.date).format("dddd, MMMM Do YYYY, h:mm:ss a")}</div>
+               <div class="p-1"><b>Date d'envoie:</b> {moment(row.date).format("dddd, Do  MMMM YYYY  , h:mm:ss a")}</div>
              </div>
               </Col>
             

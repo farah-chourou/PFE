@@ -31,7 +31,20 @@ import {MdSend} from 'react-icons/md';
 import AddCommentOutlinedIcon from '@material-ui/icons/AddCommentOutlined';
 import HistoriqueBullMed from "./HistoriqueBullMed"
 import {FiAlertCircle} from 'react-icons/fi';
-
+import { RiRestaurantLine } from 'react-icons/ri';
+import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import InputBase from '@material-ui/core/InputBase';
+import SearchIcon from '@material-ui/icons/Search';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import Chip from '@material-ui/core/Chip';
+import moment from 'moment';
+import 'moment/locale/fr';
+import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
 
 //pagination
 const useStyles1 = makeStyles((theme) => ({
@@ -50,6 +63,34 @@ const useStyles = makeStyles((theme) => ({
   table: {
     minWidth: 500,
   },
+  aa: {
+    padding: '1px 2px',
+    display: 'flex',
+    alignItems: 'center',
+    width: 300,
+   /* "&:hover": {
+      border: "1px solid blue",
+      color: "blue"
+    },*/
+  },
+
+
+  iconButton: {
+    padding: 10,
+    
+  },
+  divider: {
+    height: 28,
+    margin: 4,
+  },
+  input: {
+    height: 30,
+    color : '#3d5afe',
+    borderWidth: '1px',
+    borderColor: 'green !important'
+  },
+  
+  
  
 }));
 
@@ -174,6 +215,15 @@ export default function CustomPaginationActionsTable() {
   const [bulletinsMed,setBulletinsMed] = useState([]);
   const [numberBullMed,setNumberBullValid] = useState([]);
 
+  const [EnAttente,setEnAttente]=useState([]);
+  const [Accepter, setAccepter] = useState([]);
+  const [Rejeter, setRejeter] = useState([]);
+  const [Visite, setVisite] = useState([]);
+ 
+  const[annee,setAnnee]=useState(moment().format("YYYY"))
+  const [bullAnnee,setBullAnnee]=useState([])
+  const [bull,setBull]=useState([])
+
 //tabs
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -189,7 +239,17 @@ useEffect(() => {
 
    getAllBullResp();
    getAllBullMed();
- 
+   
+  axios.get('http://localhost:8080/getAllBullDashbord/'+JSON.parse(local).userName ).then(result => {
+    result.data.map(e => 
+      <div key={e.numBull}>
+      {((e.etape==2|| e.etape==4))?
+          (    setBull(prevState => [...prevState, e]))
+         
+      :false}
+      </div>
+      ); 
+  })
 }, [])
 
 
@@ -225,25 +285,98 @@ rows.push(createData(d.numBull,d.date, d.expediteur.userName, d.specialiteMed,d.
 const getAllBullMed =() =>{
   const local = localStorage.getItem("user");
   setUser(JSON.parse(local)) 
-  axios.get('http://localhost:8080/getAllBullRespMedEtape4/'+JSON.parse(local).userName ).then(res => {
-
-    setBulletinsMed(res.data)
  
-  
-  
+
+  axios.get('http://localhost:8080/getAllBullDashbord/'+JSON.parse(local).userName ).then(result => {
+    result.data.map(e => 
+      <div key={e.numBull}>
+      {((e.etape==2|| e.etape==4)&&moment(e.date).format("YYYY") == annee)?
+          (    setBulletinsMed(prevState => [...prevState, e]))
+         
+      :false}
+      </div>
+      ); 
   })
+  
+  axios.get('http://localhost:8080/getAllBullDashbord/'+JSON.parse(local).userName ).then(result => {
+    result.data.map(e => 
+      <div key={e.numBull}>
+      {(e.etat == "Accepté"&& e.etape==4)?
+          (    setAccepter(prevState => [...prevState, e]))
+      :(e.etat =="Rejeté"&& e.etape==4)?
+      (    setRejeter(prevState => [...prevState, e]))
+      :(e.etat == "Contre visite"&& e.etape==4)?
+      (    setVisite(prevState => [...prevState, e]))
+      :(e.etat == "En attente"&& e.etape==2)?
+      (    setEnAttente(prevState => [...prevState, e]))
+
+      :false
+      }</div>
+      )
+  })
+
 
 }
 
+
+
+
+
+
+// filter 
+const  [searched,setSearched] = useState("")
+ 
+const [dropdownOpen, setOpen] = useState(false);
+const [filter,setFilter]=useState("Nom d'utilisateur")
+
+
+
+
+const rejeter =()=>{
+
+  Rejeter.map(b=>
+    setBulletinsMed(Rejeter.filter(bull => moment(bull.date).format("YYYY") == annee)))
+}
+const accepter =()=>{
+  
+  Accepter.map(b=>
+    setBulletinsMed(Accepter.filter(bull => moment(bull.date).format("YYYY") == annee)))
+}
+const visite =()=>{
+  Visite.map(b=>
+    setBulletinsMed(Visite.filter(bull => moment(bull.date).format("YYYY") == annee)))
+}
+const enAttente =()=>{
+  EnAttente.map(b=>
+    setBulletinsMed(EnAttente.filter(bull => moment(bull.date).format("YYYY") == annee)))
+}
+
+const changeSubstract=()=>{
+ console.log(annee)
+
+ bull.map(b=>
+  setBulletinsMed(bull.filter(bull => moment(bull.date).format("YYYY") == annee-1)))
+  console.log(annee)
+
+}
+const changeAdd=()=>{
+ if (annee != moment().format("YYYY")) {
+ ( setAnnee((annee+1)) ) 
+}
+
+
+  bull.map(b=>
+    setBulletinsMed(bull.filter(bull => moment(bull.date).format("YYYY") == annee+1)))
+  
+}
+
+
+//pagination
 var rowsMedecin =[];
 bulletinsMed.map((d)=> {
 rowsMedecin.push(createData(d.numBull,d.date, d.expediteur.userName, d.specialiteMed,d.etat,d.recepteur,d.commentaireMed,d.commentaireResp))
 
 }) 
-
-
-
-
 
 
 const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
@@ -261,18 +394,22 @@ const handleChangeRowsPerPage = (event) => {
   setRowsPerPage(parseInt(event.target.value, 10));
   setPage(0);
 };
+var requestSearch =(
 
+  rowsMedecin.filter((row) => {
+  return row.numBull.toString().includes(searched);
+  }));
+  
   return (
     <div className="content" component={Paper}>
-
+{console.log(Rejeter)}
   <Row>
-  {console.log(user.userName)}
   <Col md="12">
     <Card >
       <CardHeader className="bg-light">
         <Row>
           <Col md={9}>
-          <CardTitle tag="h4">Tout bulletins envoyer</CardTitle>
+          <CardTitle tag="h4">Bulletin récemment envoyé</CardTitle>
           
            </Col>
 
@@ -284,113 +421,92 @@ const handleChangeRowsPerPage = (event) => {
 
       </CardHeader>
       <CardBody>
-   <div className={classes.root} >
-      <AppBar position="static" color="default">
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          
-          indicatorColor="primary"
-          textColor="primary"
-          
-        //  variant="fullWidth"
-          aria-label="full width tabs example"
-          
-        >
-          <Tab label="Bulettins recu des validateurs" {...a11yProps(0)}  />
-          <Tab label="Bulettins recu des medecins" {...a11yProps(1)} />
+   <TableContainer style={{ overflow: "hidden"}} >
+     <Row> 
+       <Col md={3}></Col>
+     <Col md={9} className=" align-self-end ">
+   <ButtonGroup  size="small" aria-label=" small  outlined primary button group" >
+        <Button style={{outline:"none"}} onClick={enAttente}>En attente</Button>
+        <Button style={{outline:"none"}} onClick={accepter} >Accepté</Button>
+        <Button style={{outline:"none"}} onClick={rejeter}> Rejeté</Button>
+        <Button style={{outline:"none"}}onClick={visite}>Contre visite</Button>
 
-        </Tabs>
-      </AppBar>
-      <SwipeableViews
-        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-        index={value}
-        onChangeIndex={handleChangeIndex}
-      >
+      </ButtonGroup>
+&nbsp;&nbsp;
+&nbsp;
+      <ButtonGroup  size="small" aria-label=" small  outlined primary button group" style={{position:"relative" , bottom:-6}}>
+        <Button style={{outline:"none"}} onClick={()=>{changeAdd()}}><ArrowBackIosIcon fontSize="small"/></Button>
+        <Button style={{outline:"none"}} >{annee}</Button>
+        <Button style={{outline:"none"}} onClick={()=>{  setAnnee(annee-1);changeSubstract();}}> <ArrowForwardIosIcon fontSize="small"/></Button>
+
+      </ButtonGroup>
+      
+      &nbsp;&nbsp;&nbsp;
        
-
-     {/*tab1*/}
-     <TabPanel value={value} index={0} dir={theme.direction}>
-        <>
-      <Table className={classes.table} aria-label="custom pagination table">
-
-      <TableHead>
-          <TableRow  >
-            
-            <TableCell> <b>Numero bulletins  </b></TableCell>
-            <TableCell > <b> Date d'envoie </b></TableCell>
-            <TableCell > <b> Specialité medecin</b></TableCell>
-            <TableCell ><b> Envoyer par</b> </TableCell>
-            <TableCell ><b >  Etat</b> </TableCell>
-
-          </TableRow>
-        </TableHead>
-
-        <TableBody>
-          {(rowsPerPage > 0
-            ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            : rows
-          ).map((row) => (
-            <TableRow key={row.numBull}>
-            
-              <TableCell component="th" scope="row" >
-             
-              { row.numBull}
-           
-              </TableCell>
-              <TableCell component="th" scope="row">
-              {row.date}
-           
-              </TableCell>
-             
-              <TableCell component="th" scope="row">
-                {row.specialite}
-              </TableCell>
-              <TableCell component="th" scope="row">
-                {row.expediteur}
-              </TableCell>
-              <TableCell component="th" scope="row" >
-              <span className="etat shadow p-1"> {row.etat} </span>   
-              </TableCell>
-           
-            </TableRow>
-          ))}
-
-          {emptyRows > 0 && (
-            <TableRow style={{ height: 53 * emptyRows }}>
-              <TableCell colSpan={6} />
-            </TableRow>
-          )}
-        </TableBody>
-    
-          <TableRow  >
-            <TablePagination 
-              rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-              colSpan={7}
-              count={rows.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              SelectProps={{
-                inputProps: { 'aria-label': 'rows per page' },
-                native: true,
-              }}
-              onChangePage={handleChangePage}
-              onChangeRowsPerPage={handleChangeRowsPerPage}
-              ActionsComponent={TablePaginationActions}
+      <ButtonGroup color="primary" size="small" aria-label=" small   primary button group" style={{position:"relative",bottom:-8,width:180 }}>
+      <TextField id="standard-search" label="Rechercher par N° bulletin" type="search"
+       InputLabelProps={{className:classes.cssLabel}}
+       InputProps={{
+              className: classes.input,
+              startAdornment: (
+                <InputAdornment position="start">
+                <SearchIcon  aria-label="toggle password visibility" />           
+                </InputAdornment>
+              ),
+            }} 
+         
+            value={searched}
+            onChange={ e =>setSearched(e.target.value)}
             />
-          </TableRow>
-    
-      </Table>
+      
+
+      </ButtonGroup>
+
+{/*  
+<div  className={classes.aa} style={{width:300}}className="d-inline-block">
+      <ButtonDropdown isOpen={dropdownOpen} toggle={ () => setOpen(!dropdownOpen)} >
+  <DropdownToggle split color="light" style={{outline:"none",fontSize:20}} />
+  <DropdownMenu>
+      <>
+    <DropdownItem header>FILTRER PAR</DropdownItem>
+    <DropdownItem onClick={()=>{setFilter("Nom d'utilisateur")}}>Nom d'utilisateur</DropdownItem>
+    <DropdownItem onClick={()=>{setFilter("Email")}}>Email</DropdownItem>
     </>
-    </TabPanel>
- {/*tab2*/}
-        
-     
-        <TabPanel value={value} index={1} dir={theme.direction}>
-        <>
+  </DropdownMenu>
+</ButtonDropdown>
+&nbsp;
+{filter !=null ?
+      <Chip
+      variant="outlined"
+        size="small"
+        label={filter}
+        onDelete={()=>setFilter(null)}
+color="primary"
+        />
+      
+      :false}
+      <InputBase
+      
+        className={classes.input}
+        placeholder="Rechercher ici ..."
+        inputProps={{ 'aria-label': 'search google maps' }}
+        value={searched}
+        onChange={ e =>setSearched(e.target.value)}
+      />
+      
+      {searched == "" ?
+      <IconButton  className={classes.iconButton} aria-label="search"style={{outline:"none"}}  >
+        <SearchIcon  />
+      </IconButton>
+      :   
+      <IconButton  className={classes.iconButton} aria-label="search" style={{outline:"none"}}>
+      <HighlightOffIcon onClick={()=>setSearched("")}/>
+    </IconButton>}
+    </div>*/}
 
+      </Col></Row>
       <Table className={classes.table} aria-label="custom pagination table">
-
+  
       <TableHead>
           <TableRow  >
           <TableCell> <b> </b></TableCell>
@@ -406,10 +522,9 @@ const handleChangeRowsPerPage = (event) => {
         </TableHead>
         <TableBody>
      
-          {console.log(rowsMedecin)}
           {(rowsPerPage > 0
-            ? rowsMedecin.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            : rowsMedecin
+            ? requestSearch.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            : requestSearch
           ).map((row) => (
             <HistoriqueBullMed key={row.numBull} row={row} bullMed={getAllBullMed} allBull={bulletinsMed} />
 
@@ -442,12 +557,8 @@ const handleChangeRowsPerPage = (event) => {
           </TableRow>
     
       </Table>
-    </>
 
- </TabPanel>
-   
-      </SwipeableViews>
-    </div>
+    </TableContainer>
     </CardBody>
               </Card>
             </Col>

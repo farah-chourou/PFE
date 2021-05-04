@@ -23,19 +23,50 @@ import  { useState, useEffect } from 'react';
 import {MdSend} from 'react-icons/md';
 import NotificationAlert from "react-notification-alert";
 import Tooltip from '@material-ui/core/Tooltip';
-
+import clsx from 'clsx';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { green } from '@material-ui/core/colors';
+import Fab from '@material-ui/core/Fab';
+import CheckIcon from '@material-ui/icons/Check';
 const useRowStyles = makeStyles({
     root: {
       '& > *': {
         borderBottom: 'unset',
       },
     },
+
   });
   
+
+  const useStyles = makeStyles((theme) => ({
+    root: {
+      display: 'flex',
+      alignItems: 'center',
+    },
+    wrapper: {
+      margin: theme.spacing(1),
+      position: 'relative',
+    },
+    buttonSuccess: {
+      backgroundColor: green[500],
+      '&:hover': {
+        backgroundColor: green[700],
+      },
+    },
+    fabProgress: {
+      color: "blue",
+      position: 'absolute',
+      top: -0,
+      left: -6,
+      zIndex: 1,
+    },
+  
+  })); 
 export default function BullRecuMed(props) {
     const { row } = props;
     const [open, setOpen] = React.useState(false);
     const classes = useRowStyles();
+    const classe = useStyles();
     const [comment,setComment] = useState("")
 
     const [rowsMedecin,setRowsMedecin]=useState(props.rowsMedecin)
@@ -44,11 +75,30 @@ export default function BullRecuMed(props) {
     var message="";
     var icon ="";
 
-    const [allBullMed,setAllBullMed]=useState(props.allBullMed) 
-
-   const bullMedecin = () => {
-      props.bullMed()
-  }
+    const [loading, setLoading] = React.useState(false);
+    const [success, setSuccess] = React.useState(false);
+    const timer = React.useRef();
+  
+    const buttonClassname = clsx({
+      [classes.buttonSuccess]: success,
+    });
+  
+    React.useEffect(() => {
+      return () => {
+        clearTimeout(timer.current);
+      };
+    }, []);
+  
+    const handleButtonClick = () => {
+      if (!loading) {
+        setSuccess(false);
+        setLoading(true);
+        timer.current = window.setTimeout(() => {
+          setSuccess(true);
+          setLoading(false);
+        }, 2000);
+      }
+    };
    const updateBull =() =>{
 
     
@@ -64,15 +114,14 @@ export default function BullRecuMed(props) {
    }
 
    const envoyer =() =>{
-     
+    props.onFilter(row.numBull)
+     props.onNotif()
 
    axios.put('http://localhost:8080/envoyer/'+ row.numBull).then(res => {
 
    })
+  
    
-  // bullMedecin();
-
-   //setAllBullMed( allBullMed.filter( bulletins => bulletins.numBull !==row.numBull))
    }
 
 
@@ -105,7 +154,7 @@ export default function BullRecuMed(props) {
 
 <TableRow  className={classes.root}>
            <TableCell>
-            <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
+            <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)} style={{outline:"none"}}>
               {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
             </IconButton>
           </TableCell>
@@ -129,9 +178,10 @@ export default function BullRecuMed(props) {
               <span className="etat shadow p-1"> {row.etat} </span>   
               </TableCell>
               <TableCell component="th" scope="row" align="center">
-
-              <Tooltip title="Envoyer">
-              <IconButton aria-label="delete" className={classes.margin} onClick={() => envoyer()}>
+             
+                <Tooltip title="Envoyer">
+                
+              <IconButton aria-label="delete" className={classes.margin} onClick={() => envoyer()} style={{outline:"none"}}> 
                       <MdSend  size={20} className="envoyerIcon" />
                 </IconButton>  
                    </Tooltip>
@@ -186,17 +236,37 @@ export default function BullRecuMed(props) {
                        </Col>
                            <Col md={2}> 
                       &nbsp;&nbsp;  
-                         <Button
-                           variant="outlined" 
+                  
+
+                         
+                                <div className={classe.wrapper} style={{marginLeft:50}}>
+                         
                           
-                           size="small"
-                           className={classes.button}
-                           startIcon={<SaveIcon />}
-                           type="submit" 
-                           onClick={updateBull}
-                         >
-                           Save
-                         </Button></Col> 
+                              {success ?  
+                               <Fab
+                            size="small"
+                              aria-label="save"
+                              color="#648dae"
+                              onClick={handleButtonClick}
+                              style={{outline:"none",backgroundColor:"#4caf50"}}
+                            ><CheckIcon style={{color:"white"}} onClick={updateBull}/> 
+                            </Fab>
+                            :    <Fab
+                            size="small"
+                              aria-label="save"
+                              color="gray"
+                              className={buttonClassname}
+                              onClick={handleButtonClick}
+                              style={{outline:"none"}}
+                            ><SaveIcon />
+                            </Fab>
+                            
+                            
+                            
+                            }
+                            {loading && <CircularProgress size={48} className={classe.fabProgress} style={{marginLeft:2,marginBottom:3}}/>}
+                          </div>
+                      </Col> 
                       </Row>
                   
                         

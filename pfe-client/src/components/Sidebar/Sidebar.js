@@ -3,6 +3,7 @@ import React from "react";
 import { NavLink, Link } from "react-router-dom";
 import { Nav } from "reactstrap";
 import {Row, Col, Container} from "react-bootstrap";
+import backgroundImage from "fond1.png";
 
 import PerfectScrollbar from "perfect-scrollbar";
 
@@ -64,6 +65,7 @@ class Sidebar extends React.Component {
         className="sidebar"
         data-color={this.props.bgColor}
         data-active-color={this.props.activeColor}
+     style={{ backgroundImage: `url(${backgroundImage})`,backgroundColor:"blue",backgroundSize: "100%"}}
       >
         <div className="logo">
           <a

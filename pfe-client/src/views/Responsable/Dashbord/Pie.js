@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import  { useState, useEffect } from 'react';
 import axios from "axios";
 import { Line, Pie } from "react-chartjs-2";
+import moment from 'moment';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -83,12 +84,17 @@ export default function Piee() {
   const local = localStorage.getItem("user");
 
   axios.get('http://localhost:8080/getAllBullRespMedEtape4/'+JSON.parse(local).userName).then( res => {
+
+    const start =  moment().startOf('month');
+    const end= moment().endOf('month');
     res.data.map(e => 
       <div key={e.numBull}>
-      {e.avis.avis == "Accepté" ? (accepter.push(e),setNumAccepter(accepter.length)): 
-       e.avis.avis == "Rejeté" ?  ( rejeter.push(e),setNumRejeter(rejeter.length)):
-       e.avis.avis == "Contre visite" ? (visite.push(e),setNumVisite(visite.length)):
-       (autre.push(e),setNumAutre(autre.length))
+      {(e.avis.avis == "Accepté"&& moment(e.date).isBetween(  start, end) == true) ? (accepter.push(e),setNumAccepter(accepter.length)): 
+       (e.avis.avis == "Rejeté" && moment(e.date).isBetween(  start, end) == true)?  ( rejeter.push(e),setNumRejeter(rejeter.length)):
+      ( e.avis.avis == "Contre visite"&& moment(e.date).isBetween(  start, end) == true) ? (visite.push(e),setNumVisite(visite.length)):
+      
+       ( moment(e.date).isBetween(  start, end) == true) ? (autre.push(e),setNumAutre(autre.length))
+       :false
 
     }</div>
     )

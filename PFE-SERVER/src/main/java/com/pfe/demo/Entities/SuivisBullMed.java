@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Set;
 
@@ -18,13 +19,15 @@ public class SuivisBullMed {
 
     @Id
     private int numBull;
-    private Date date;
+    private LocalDate date;
     private  String etat;
     private  int etape;
     private String recepteur;
     private String specialiteMed;
     private String commentaireMed;
     private String commentaireResp;
+    private LocalDate dateEtape3;
+
 
 
     @ManyToOne

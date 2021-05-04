@@ -278,14 +278,21 @@ const envoyerBull = (numBull,specialiteMed) => {
   })
 
   setBulletinsResp(bulletinsResp.filter( bulletins => bulletins.numBull !== numBull))
+onNotif();
+}
+
+const onFilter=(numBull)=>{
+  setBulletinsMed(bulletinsMed.filter( bulletins => bulletins.numBull !== numBull))
+
+}
+
+const onNotif = ()=>{
   color ="success";
   title ="Succés!";
   message="Bulletin envoyer avec succés"
   icon ="nc-icon nc-simple-remove"
   notify("br"); 
- 
 }
-
 const notificationAlert = React.createRef();
 const notify =(place) => {
 
@@ -336,7 +343,7 @@ const handleChangeRowsPerPage = (event) => {
       <CardHeader className="bg-light">
         <Row>
           <Col md={9}>
-          <CardTitle tag="h4">Liste des bulletins recu</CardTitle>
+          <CardTitle tag="h4"> Bulletin nouvellement recu</CardTitle>
            <p className="card-category">
              vous avez <b> {numberBullValid}</b>  bulletins recu des validateurs et <b> {bulletinsMed.length}</b>  bulletins  recu des medecins 
            </p> 
@@ -351,7 +358,7 @@ const handleChangeRowsPerPage = (event) => {
 
       </CardHeader>
       <CardBody>
-   <div className={classes.root} >
+   <TableContainer >
       <AppBar position="static" color="default">
         <Tabs
           value={value}
@@ -364,8 +371,8 @@ const handleChangeRowsPerPage = (event) => {
           aria-label="full width tabs example"
           
         >
-          <Tab label="Bulettins recu des validateurs" {...a11yProps(0)}  />
-          <Tab label="Bulettins recu des medecins" {...a11yProps(1)} />
+          <Tab label="Bulettins recu des validateurs" {...a11yProps(0)}   style={{outline: 'none'}}/>
+          <Tab label="Bulettins recu des medecins" {...a11yProps(1)} style={{outline: 'none'}} />
 
         </Tabs>
       </AppBar>
@@ -423,15 +430,15 @@ const handleChangeRowsPerPage = (event) => {
               <TableCell component="th" scope="row">
               <div className="d-inline-block "> 
                 <Tooltip title="Supprimer">
-                     <IconButton aria-label="delete">
+                     <IconButton aria-label="delete" style={{outline: 'none'}}>
                   
                      <MdDeleteSweep style={{color:"black", border:"none",outline:"none"}} size={25} onClick={()=>{setShow(true); setNumBull(row.numBull) }} />
                      </IconButton>
                    </Tooltip>
                    <Tooltip title="Envoyer">
-                     <IconButton aria-label="delete">
+                     <IconButton aria-label="delete" style={{outline: 'none'}}>
                   
-                     <MdSend  size={20} className="envoyerIcon" onClick={()=> envoyerBull(row.numBull,row.specialite)}/>                       </IconButton>
+                     <MdSend  size={20} className="envoyerIcon" onClick={()=>{ envoyerBull(row.numBull,row.specialite);setNumberBullValid(numberBullValid - 1)}}/>                       </IconButton>
                    </Tooltip>
                    </div>  
          </TableCell>
@@ -494,7 +501,7 @@ const handleChangeRowsPerPage = (event) => {
             ? rowsMedecin.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             : rowsMedecin
           ).map((row) => (
-            <BullRecuMed key={row.numBull} row={row} bullMed={getAllBullMed} allBull={bulletinsMed} />
+            <BullRecuMed key={row.numBull} row={row} onFilter={onFilter} onNotif={onNotif} />
 
           ))}
 
@@ -530,7 +537,7 @@ const handleChangeRowsPerPage = (event) => {
  </TabPanel>
    
       </SwipeableViews>
-    </div>
+    </TableContainer>
     </CardBody>
               </Card>
             </Col>

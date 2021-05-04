@@ -2,6 +2,7 @@ package com.pfe.demo.DAO;
 
 import com.pfe.demo.Entities.Avis;
 import com.pfe.demo.Entities.Notification;
+import com.pfe.demo.Entities.SuivisBullMed;
 import com.pfe.demo.Entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -18,7 +19,7 @@ public interface NotificationRepository extends JpaRepository<Notification,Long>
    List <Notification> findByRecepteur(String username);
    List <Notification> findByExpediteurNotif(User user);
 
-
+   Notification findByRecepteurAndSuivisBullMed(String recepteur, SuivisBullMed suivisBullMed);
 
 }
 

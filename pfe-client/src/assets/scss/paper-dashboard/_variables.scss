@@ -1,7 +1,7 @@
 //== Buttons
 //
 //## For each of Bootstrap's buttons, define text, background and border color.
-
+//brand color
 $font-color:                 #66615b !default;
 $fill-font-color:            rgba(255, 255, 255, 0.8);
 $font-family-sans-serif:     'Montserrat', "Helvetica", Arial, sans-serif;
@@ -12,7 +12,7 @@ $none:                       0   !default;
 $border-thin:                1px !default;
 $border-thick:               2px !default;
 
-$white-color:                #FFFFFF !default;
+$white-color:                #ffffff !default;
 $white-bg:                   #FFFFFF !default;
 $orange-bg:                  #e95e38 !default;
 
@@ -128,7 +128,7 @@ $brand-danger:               $danger-color !default;
 $brand-inverse:              $black-color !default;
 
 $link-disabled-color:        #666666 !default;
-$dark-color:                 #212120 !default;
+$dark-color:                 #2e2e2ed5 !default;
 //     light colors
 $light-blue:                 rgba($primary-color, .2);
 $light-azure:                rgba($info-color, .2);

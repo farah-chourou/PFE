@@ -1,5 +1,5 @@
 
-import Dashboard from "views/Dashboard.js";
+import Dashboard from "views/Responsable/Dashbord/Dashboard.js";
 import Notifications from "views/Notifications.js";
 import Icons from "views/Icons.js";
 import AllBull from "views/Responsable/AllBull.js";
@@ -24,15 +24,15 @@ var routes = [
     role: "responsable",
     dropdown :false
 
-  },
+  },/*
   {
     path: "/icons",
     name: "Icons",
     icon: "nc-icon nc-diamond",
     component: Icons,
     layout: "/user",
-    role:"responsable"
-  },/*
+    
+  },*//*
   {
     path: "/maps",
     name: "Maps",
@@ -95,7 +95,7 @@ var routes = [
   },
  
   {
-    path: "/soloBulletin:id",
+    path: "/soloBulletin/:id",
     name: "bulletin",
     icon: "nc-icon nc-spaceship",
     component: BulletinNotif,

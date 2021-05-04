@@ -16,6 +16,8 @@ import SearchIcon from '@material-ui/icons/Search';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import {  CardHeader, CardBody, CardFooter, CardTitle,} from "reactstrap";
+import {Table,Overlay} from "react-bootstrap"
+import backgroundImage from "fond1.png";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -126,10 +128,9 @@ const requestSearch =
 
   return (
   <Card  style={{borderRadius:"10px",boxShadow:" rgba(0, 0, 0, 0.35) 0px 5px 15px"}} >
-  <CardHeader className="bg-dark " style={{borderTopLeftRadius:"10px" ,borderTopRightRadius:"10px" /*,       backgroundImage: `url("https://via.placeholder.com/500")` */
+  <CardHeader className="" style={{borderTopLeftRadius:"10px" ,borderTopRightRadius:"10px" , backgroundColor:"#185fad"  ,/*    backgroundImage: `url(${backgroundImage})`*/
 }}>
-                  <CardTitle tag="h5" className="text-light">Consulter l'etape actuelle de chaque bulletin</CardTitle>
-                  <span className="card-category text-light">Rechercher ici par numero </span>
+                  <CardTitle tag="h5" className="text-light">Flux des bulletins</CardTitle>
                   <Paper  className={classes.aa} style={{marginBottom:"10px"}}>
                    <IconButton className={classes.iconButton} aria-label="menu">
                    </IconButton>
@@ -142,14 +143,33 @@ const requestSearch =
 
     <Card.Body className="scrollbar2" id="style-7"style={{height:"297px"}}>
       <Card.Text >
-   
+      <Table  hover className="bg-white text-center  ">
+  <thead>
+    <tr style={{color:"#185fad"}}> 
+     <th> num bull</th>
+    </tr>
+  </thead>
          {requestSearch.map(b => (
-          <div key={b.numBull} style={{ marginBottom:"4px",paddingBottom:"3px"}}>
+          <div key={b.numBull} >
 
-      <Typography  aria-owns={open ? 'mouse-over-popover' : undefined} aria-haspopup="true" onMouseEnter={(event)=>handlePopoverOpen(event,b.etape)} onMouseLeave={handlePopoverClose}>
+  <tbody>
 
-    <Button  variant="outline-info" style={{width:"250px",border:"none"}}>  <b>#{b.numBull}  </b>   </Button>
-     </Typography>
+
+    <tr> 
+   
+    <td>
+    <Typography  aria-owns={open ? 'mouse-over-popover' : undefined} aria-haspopup="true" onMouseEnter={(event)=>handlePopoverOpen(event,b.etape)} onMouseLeave={handlePopoverClose} style={{width:180}}>
+
+<div  variant="outline-info" >  <b>{b.numBull}  </b>   </div>
+ </Typography>
+    
+     
+      </td>
+    </tr>
+
+  </tbody>
+
+   
       <Popover id="mouse-over-popover" className={classes.popover} classes={{   paper: classes.paper, }} open={open} anchorEl={anchorEl} anchorOrigin={{   vertical: 'top',   horizontal: 'right', }} transformOrigin={{   vertical: 'top',   horizontal: 'left', }} onClose={handlePopoverClose} disableRestoreFocus >
         <Typography>
   
@@ -174,7 +194,8 @@ const requestSearch =
      
           )}
 
-       
+</Table>
+
 
       </Card.Text>
     </Card.Body>

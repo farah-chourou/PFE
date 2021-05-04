@@ -27,19 +27,20 @@ import { deepOrange, deepPurple } from '@material-ui/core/colors';
 import {FiAlertCircle} from 'react-icons/fi';
 import { MdDeleteSweep } from 'react-icons/md';
 import NotificationAlert from "react-notification-alert";
-import { Button, Modal,Form} from "react-bootstrap"
+import { Button, Modal,Form, DropdownButton} from "react-bootstrap"
 import  { useState, useEffect } from 'react';
 import axios from "axios";
 import {Card,CardHeader,CardBody,CardTitle,Row,Col,} from "reactstrap";
 import EditUser from "./EditUser";
 import AddUser from "./AddUser";
-import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Container, InputGroup, InputGroupText, InputGroupAddon, Input,} from "reactstrap";
+import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import InputBase from '@material-ui/core/InputBase';
 import Divider from '@material-ui/core/Divider';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import Tooltip from '@material-ui/core/Tooltip';
-
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import Chip from '@material-ui/core/Chip';
 
 
 //pagination
@@ -73,10 +74,10 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     width: 300,
-    "&:hover": {
+   /* "&:hover": {
       border: "1px solid blue",
       color: "blue"
-    },
+    },*/
   },
 
   input: {
@@ -212,8 +213,8 @@ export default function UsersList() {
   var title=""
   var message="";
   var icon ="";
-  
-
+  const [dropdownOpen, setOpen] = useState(false);
+const [filter,setFilter]=useState("Nom d'utilisateur")
 
 //tabs
   const handleChange = (event, newValue) => {
@@ -317,71 +318,72 @@ const handleChangeRowsPerPage = (event) => {
   setPage(0);
 };
 
+var requestSearch =(
 
-const requestSearch =
-   rows.filter((row) => {
-    return row.userName.toLowerCase().includes(searched.toLowerCase());
-  });
-  
+  filter=="Email" ?
+  rows.filter((row) => {
+   return row.Email.toLowerCase().includes(searched.toLowerCase());
+})
+:filter=="Nom d'utilisateur" ?
+rows.filter((row) => {
+ return row.userName.toLowerCase().includes(searched.toLowerCase());
+})
+:rows.filter((row) => {
+  return row.userName.toLowerCase().includes(searched.toLowerCase());
+ }));
+
+
+ var requestSearchMed =(
+
+  filter=="Email" ?
+  rowsMedecin.filter((row) => {
+   return row.Email.toLowerCase().includes(searched.toLowerCase());
+})
+:filter=="Nom d'utilisateur" ?
+rowsMedecin.filter((row) => {
+ return row.userName.toLowerCase().includes(searched.toLowerCase());
+})
+:rowsMedecin.filter((row) => {
+  return row.userName.toLowerCase().includes(searched.toLowerCase());
+ }));
+
+
   return (
     <div className="content" component={Paper}>
-                     <NotificationAlert ref={notificationAlert} />
-                     <Row>
+  <NotificationAlert ref={notificationAlert} />
+  <Row>
   
   <Col md="12">
-    <Card >
-      <CardHeader className="bg-light">
+    <Card style={{borderRadius:"10px",boxShadow:" rgba(0, 0, 0, 0.35) 0px 5px 15px"}}>
+      <CardHeader style={ {}}>
         <Row>
           <Col md={9}>
-          <CardTitle tag="h4">Liste des utilisateurs</CardTitle>
+          <CardTitle tag="h4">Les utilisateurs de la  platform</CardTitle>
            <p className="card-category">
-            Here is a subtitle for this table
            </p> 
-           </Col>
-
-           <Col md={3}>  
-           <diV className="d-inline-block ">  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
-           <AddUser validateurs={getValidateurs} medecins={getMedecins} /></diV>  
-           </Col>
-         
-         </Row>
-        
-
-
-      </CardHeader>
-      <CardBody>
-   <TableContainer className={classes.root} >
-      <AppBar position="static" color="default">
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          
-          indicatorColor="primary"
-          textColor="primary"
-          
-        //  variant="fullWidth"
-          aria-label="full width tabs example"
-          
-        >
-          <Tab label="Validateurs" {...a11yProps(0)}  />
-          <Tab label="Medecins" {...a11yProps(1)} />
-
-        </Tabs>
-      </AppBar>
-      <SwipeableViews
-        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-        index={value}
-        onChangeIndex={handleChangeIndex}
-      >
-        <TabPanel value={value} index={0} dir={theme.direction}>
-
-     {/*tab1*/}
-        <>
-
-        <Paper  className={classes.aa} style={{marginLeft:650, marginBottom:20}}>
-      <IconButton className={classes.iconButton} aria-label="menu">
-        <MenuIcon />
-      </IconButton>
+           
+        <Paper  className={classes.aa} style={{marginLeft:1, marginBottom:20}}>
+      <ButtonDropdown isOpen={dropdownOpen} toggle={ () => setOpen(!dropdownOpen)} >
+  <DropdownToggle split color="light" style={{outline:"none",fontSize:20}} />
+  <DropdownMenu>
+      <>
+    <DropdownItem header>FILTRER PAR</DropdownItem>
+    <DropdownItem onClick={()=>{setFilter("Nom d'utilisateur")}}>Nom d'utilisateur</DropdownItem>
+    <DropdownItem onClick={()=>{setFilter("Email")}}>Email</DropdownItem>
+    </>
+  </DropdownMenu>
+</ButtonDropdown>
+&nbsp;
+{filter !=null ?
+      <Chip
+      variant="outlined"
+        size="small"
+        label={filter}
+        onDelete={()=>setFilter(null)}
+color="primary"
+        />
+      
+      :false}
       <InputBase
         className={classes.input}
         placeholder="Rechercher ici ..."
@@ -389,11 +391,43 @@ const requestSearch =
         value={searched}
         onChange={ e =>setSearched(e.target.value)}
       />
-      <IconButton  className={classes.iconButton} aria-label="search">
-        <SearchIcon />
-      </IconButton>
       
+      {searched == "" ?
+      <IconButton  className={classes.iconButton} style={{outline:"none"}}  >
+        <SearchIcon  />
+      </IconButton>
+      :   
+      <IconButton  className={classes.iconButton} style={{outline:"none"}}>
+      <HighlightOffIcon onClick={()=>setSearched("")}/>
+    </IconButton>}
     </Paper>
+
+           </Col>
+
+           <Col md={3}>  
+           <diV className="d-inline-block ">  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
+           <AddUser validateurs={getValidateurs} medecins={getMedecins} /></diV>  
+           
+           </Col>
+         </Row>
+      </CardHeader>
+      <CardBody>
+
+   <TableContainer >
+      <AppBar position="static" color="default">
+        <Tabs    value={value}    onChange={handleChange}   indicatorColor="primary"    textColor="primary"     aria-label="full width tabs example">
+          <Tab label="Validateurs" {...a11yProps(0)}  style={{outline: 'none'}} />
+          <Tab label="Medecins" {...a11yProps(1)}  style={{outline: 'none'}}/>
+        </Tabs>
+      </AppBar>
+      <SwipeableViews axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'} index={value} onChangeIndex={handleChangeIndex} >
+        <TabPanel value={value} index={0} dir={theme.direction}>
+
+     {/*tab1*/}
+        <>
+
+
+
       <Table className={classes.table} aria-label="custom pagination table">
  
 
@@ -435,7 +469,7 @@ const requestSearch =
                    <div className="d-inline-block mr-3">    <EditUser id={row.id} validateurs={getValidateurs} medecins={getMedecins}  /> </div> </div>   
                 <div className="d-inline-block "> 
                 <Tooltip title="Supprimer">
-                     <IconButton aria-label="delete">
+                     <IconButton aria-label="delete"  style={{outline: 'none'}}>
                   
                      <MdDeleteSweep  style={{color:"black"}} onClick={()=>{ setShow(true) ;setId(row.id) }}/>
                      </IconButton>
@@ -453,15 +487,16 @@ const requestSearch =
           )}
         </TableBody>
     
-          <TableRow  >
+        <TableRow   >
             <TablePagination 
-              rowsPerPageOptions={[5, 10, 25, { label: 'Tout', value: -1 }]}
-              colSpan={3}
+         
+              rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+              colSpan={7}
               count={rows.length}
               rowsPerPage={rowsPerPage}
               page={page}
               SelectProps={{
-                inputProps: { 'aria-label': 'Par page' },
+                inputProps: { 'aria-label': 'rows per page' },
                 native: true,
               }}
               onChangePage={handleChangePage}
@@ -495,8 +530,8 @@ const requestSearch =
 
         <TableBody>
           {(rowsPerPage > 0
-            ? rowsMedecin.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            : rowsMedecin
+            ? requestSearchMed.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            : requestSearchMed
           ).map((row) => (
             <TableRow key={row.id}>
               <TableCell component="th" scope="row">
@@ -539,15 +574,16 @@ const requestSearch =
           )}
         </TableBody>
     
-          <TableRow  >
+        <TableRow   >
             <TablePagination 
-              rowsPerPageOptions={[5, 10, 25, { label: 'Tout', value: -1 }]}
-              colSpan={3}
+         
+              rowsPerPageOptions={[5, 10, 25, { label: 'Tous', value: -1 }]}
+              colSpan={7}
               count={rows.length}
               rowsPerPage={rowsPerPage}
               page={page}
               SelectProps={{
-                inputProps: { 'aria-label': 'Par page' },
+                inputProps: { 'aria-label': 'rows per page' },
                 native: true,
               }}
               onChangePage={handleChangePageMedecin}
@@ -555,7 +591,6 @@ const requestSearch =
               ActionsComponent={TablePaginationActions}
             />
           </TableRow>
-    
       </Table>
     </>
 

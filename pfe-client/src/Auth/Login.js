@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { Route , withRouter} from 'react-router-dom';
+import moment from 'moment';
 
 import  {Button ,Form,Col,InputGroup,Group,Container,Row}  from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -39,7 +40,22 @@ handleSubmit=(e)=> {
   
     }
 
-
+    getAllBullMed =() =>{
+  /*    axios.get('http://localhost:8080/getAllBullMedEtape2/'+ this.state.userName).then(res => {
+         res.data.map(e => 
+            <div key={e.numBull}>  
+           { moment(e.date).isBetween(  moment().subtract(1, 'days'), moment()) == false? 
+      
+      
+            axios.post('http://localhost:8080/rappelMed/'+ this.state.userName+"/"+e.numBull).then(res => {
+            
+            })
+      
+               :false}</div>
+      )
+      
+        })*/
+      }
 
   login =()=>{
 
@@ -60,12 +76,13 @@ handleSubmit=(e)=> {
 
   
   }else {
+    this.getAllBullMed();
 
      localStorage.setItem("user", JSON.stringify(result.data));
      if(result.data.role == "medecin"){ 
       this.props.history.push('/user');}
       if(result.data.role== "responsable"){ 
-         this.props.history.push('/user');}
+         this.props.history.push('/user/dashboard');}
       if(result.data.role == "validateur"){ 
         this.props.history.push('/user');}   
      
@@ -86,6 +103,8 @@ handleChange = (event) => {
       [event.target.name]:value
   })
 }
+
+
 
 
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import  { useState, useEffect,useRef } from 'react';
-import {Table,Popover,Overlay,Button} from "react-bootstrap"
+import {Table,Popover,Overlay} from "react-bootstrap"
 import axios from "axios";
 import moment from 'moment';
 import UsersList from 'views/Medecin/BullMed';
@@ -9,6 +9,8 @@ import 'moment/locale/fr';
 import { Link } from "react-router-dom";
 import {Doughnut} from 'react-chartjs-2';
 import Avatar from '@material-ui/core/Avatar';
+import CountUp from 'react-countup';
+import Button from '@material-ui/core/Button';
 
 
 
@@ -50,10 +52,16 @@ export default function UserBehavior() {
   const [bullValide,setBullValide]=useState([])
   const [bullNonValide,setBullNonValide]=useState([])
   const[bullValide2,setBullValide2]= useState([])
-  const[bullValideEtape4,setBullValideEtape4]= useState([])
   const [role,setRole] = useState([])
-  const[numNonValide,setNumNonValide]=useState(0)
   const ref = useRef(null);
+  const [bullValidateur,setBullValidateur]=useState([])
+  const [perfermantMed,setPerfermantMed] =useState([])
+  const [perfermantValid,setPerfermantValid] =useState()
+const[num,setNum]=useState()
+  const [userBullValide,setUserBullValide]=useState([])
+  const [userBullNonValide,setUserBullNonValide]=useState([])
+  const[userBullValide2,setUserBullValide2]= useState([])
+  const[perfermantBullMed,setPerfermantBullMed]=useState(0)
 
   const medecin = {
     labels: [
@@ -78,7 +86,7 @@ export default function UserBehavior() {
   };
   const validateur = {
     labels: [
-      'En attente',
+      'nombre de bulletin envoyer',
       'Terminer',
       
     ],
@@ -100,7 +108,7 @@ export default function UserBehavior() {
   const handleClick = (event,user,role) => {
     setUserName(user);
      getInfo(user,role);
-
+     getInfoValid(user);
     console.log(bullValide)
      setTarget(event.target);
      setShow(!show);
@@ -112,21 +120,83 @@ export default function UserBehavior() {
     const local = localStorage.getItem("user");
     setUser(JSON.parse(local)) 
     getAllUsers();
-setBullValide(bullValide)
+  //  setBullValide(bullValide)
+  //  getPerfermantMed();
   }, [])
 
+
+
+
+ const getPerfermantMed=()=>{
+  setPerfermantBullMed(userBullValide.length);
+          axios.get('http://localhost:8080/getAllUsers').then( res => {
+            res.data.map(e => 
+              <div key={e.id}>
+              {e.role == "medecin" ? 
+      
+     /*   axios.get('http://localhost:8080/getAllBullMedEtape2/' + e.userName).then( res => {
+          setBullNonValide([])
+          res.data.map(e => 
+            <div key={e.numBull}>
+            {moment(e.date).isBetween(  moment().startOf('week'), moment().endOf('week')) == true? 
+                (    setBullNonValide(prevState => [...prevState, e]))
+        
+            :false}</div>
+          )
+        })
+        ,*/
+        axios.get('http://localhost:8080/getBullMedEtape4/' + e.userName).then( result => {
+         result.data.map(e => 
+            <div key={e.numBull}>  
+           { moment(e.date).isBetween( moment().startOf('week'), moment().endOf('week')) == true? 
+                (    setUserBullValide(prevState => [...prevState, e],setNum(userBullValide.length))
+                )
+               :false}</div>
+        )
+        }
+        )
+      
+        /* 
+          ,
+          
+          axios.get('http://localhost:8080/getBullMedEtape3/' + e.userName).then( result => {
+          
+          result.data.map(e => 
+            <div key={e.numBull}>  
+            { moment(e.date).isBetween( moment().startOf('week'), moment().endOf('week')) == true? 
+                 (    setUserBullValide2(prevState => [...prevState, e]))
+                :false}</div>
+          )})
+       (  userBullValide.length+userBullValide2.length > perfermantBullMed ?    
+          ( setPerfermantBullMed(userBullValide.length+userBullValide2.length),  setPerfermantMed(e.userName))
+
+          :false )
+          ,*/
+          
+          
+      
+          
+          
+
+    : false}
+
+      </div>
+    )} 
+    )
+
+  }
 
   const getAllUsers = () =>{
     const local = localStorage.getItem("user");
   
     axios.get('http://localhost:8080/getAllUsers').then( res => {
-      console.log(res.data)
       res.data.map(e => 
         <div key={e.id}>
         {e.role != "responsable" ? 
       ( UsersList.push(e), setNumberUsers(UsersList.length) ): false}
         </div>
-      )}) }
+      )}) 
+    }
 
 
 
@@ -138,7 +208,7 @@ setBullValide(bullValide)
           setBullNonValide([])
           res.data.map(e => 
             <div key={e.numBull}>
-            {moment(e.date).isBetween(  moment().subtract(7, 'days'), moment()) == true? 
+            {moment(e.date).isBetween(  moment().startOf('week'), moment().endOf('week')) == true? 
                 (    setBullNonValide(prevState => [...prevState, e]))
 
             :false}</div>
@@ -149,7 +219,7 @@ setBullValide(bullValide)
          setBullValide([]);
          result.data.map(e => 
             <div key={e.numBull}>  
-           { moment(e.date).isBetween(  moment().subtract(10, 'days'), moment()) == true? 
+           { moment(e.date).isBetween( moment().startOf('week'), moment().endOf('week')) == true? 
                 (    setBullValide(prevState => [...prevState, e]))
                :false}</div>
   )
@@ -161,7 +231,7 @@ setBullValide(bullValide)
 
         result.data.map(e => 
           <div key={e.numBull}>  
-          { moment(e.date).isBetween(  moment().subtract(10, 'days'), moment()) == true? 
+          { moment(e.date).isBetween( moment().startOf('week'), moment().endOf('week')) == true? 
                (    setBullValide2(prevState => [...prevState, e]))
               :false}</div>
         )
@@ -169,13 +239,44 @@ setBullValide(bullValide)
     })
 
     }
+//validateur
+
+const getInfoValid = (u) =>{
+  setBullValidateur([]);
+
+  const local = localStorage.getItem("user");
+  axios.get('http://localhost:8080/getAllBullEtape1' ).then( res => {
+    res.data.map(e => 
+      <div key={e.numBull}>
+      {(moment(e.date).isBetween( moment().startOf('week'), moment().endOf('week')) == true && e.expediteur.userName ==u) ? 
+          (    setBullValidateur(prevState => [...prevState, e]))
+
+      :false}</div>
+      ) }) 
+    
+    
+      axios.get('http://localhost:8080/getAllBullEtape2' ).then( res => {
+    res.data.map(e => 
+      <div key={e.numBull}>
+      {(moment(e.date).isBetween( moment().startOf('week'), moment().endOf('week')) == true && e.expediteur.userName ==u) ? 
+          (    setBullValidateur(prevState => [...prevState, e]))
+
+      :false}</div>
+      ) }) 
+    
+    
+    
+    }
+
+
 
 
   return (
-    <div className="" ref={ref}>
-<Table responsive hover className="bg-white  p-5  ">
+    <div className="table-wrapper-scroll-y my-custom-scrollbar "  ref={ref}style={{zIndex: 5,}}>
+{console.log(perfermantMed)}
+<Table  hover className="bg-white  ">
   <thead>
-    <tr>
+    <tr style={{color:"#185fad"}}> 
       <th scope="col">#</th>
      
         <th >Nom d'utilisateur</th>
@@ -192,7 +293,7 @@ setBullValide(bullValide)
     <tr> 
       <td>  <Avatar style={{backgroundColor : u.couleur,fontSize:13,width:"27px",height:"27px"}} className="text-uppercase shadow">    { u.nom.substr(0, 1) +u.prenom.substr(0, 1) }</Avatar></td>
    
-        <td>{u.userName} </td>
+        <td>{u.userName}</td>
 
         <td>{u.role} </td>
 
@@ -204,9 +305,11 @@ setBullValide(bullValide)
         <td>Hors ligne </td> :
         <td>Hors ligne  <small>(il y'a {moment(u.lastConnect).fromNow()}) </small>  </td>
         }
-        <td> <Button onClick={(event) =>{   
-; handleClick(event,u.userName,u.role)}}
-> Cliquer ici </Button> </td>
+        <td> 
+         <Button size="small" variant="outlined"  color="primary" style={{outline:"none"}} onClick={(event) =>{   ; handleClick(event,u.userName,u.role)}}>
+          Cliquer ici 
+        </Button>
+        </td>
      
     </tr>)}
 
@@ -229,13 +332,18 @@ setBullValide(bullValide)
           <Popover.Content>
            
             <Doughnut data={medecin} />
-            <small> les bulletins encore en attente</small>
+      <p className="pl-4">    {bullNonValide.length!=0 ?
+        <small> Les bulletins encore en attente</small>
+
+          :false
+          }
       {bullNonValide.map(b =>
       <span key={b.numBull}>
-        <li>  {b.numBull} </li>
+
+   <small>  <li className="text-secondary">  {b.numBull} </li> </small>     
         
          </span>
-        )}
+        )}</p>
           </Popover.Content>
         </Popover>
       </Overlay> :
@@ -251,9 +359,8 @@ setBullValide(bullValide)
         <Popover id="popover-contained">
           <Popover.Title as="h3">Perfermonce du travail dans cette semmaine</Popover.Title>
           <Popover.Content>
-           
-            <Doughnut data={validateur} />
-     
+           nombre de  bulletin ajouter  &nbsp;
+        <b>  <CountUp end={bullValidateur.length} /></b> 
           </Popover.Content>
         </Popover>
       </Overlay>

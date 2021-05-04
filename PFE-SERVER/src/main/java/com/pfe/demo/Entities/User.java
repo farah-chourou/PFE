@@ -38,7 +38,7 @@ public class User {
     private Date membreDepuis;
     private Date lastConnect;
     private Boolean connecte;
-
+    private String sex;
 
     @JsonIgnore
     @OneToMany(mappedBy = "expediteur", cascade = CascadeType.ALL,fetch=FetchType.LAZY )

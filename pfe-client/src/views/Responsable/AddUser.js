@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import {FaUserEdit} from "react-icons/fa";
-import {Tabs, Tab, Button, Modal,Form} from "react-bootstrap";
+import {Tabs, Tab, Modal,Form} from "react-bootstrap";
 import {Card,CardHeader,CardBody,CardTitle,Table,Row,Col,} from "reactstrap";
 import {IoIosAddCircle} from 'react-icons/io';
 import axios from "axios";
 import NotificationAlert from "react-notification-alert";
+import Button from '@material-ui/core/Button';
+import AddBoxIcon from '@material-ui/icons/AddBox';
+
 
 export default class EditUser extends Component {
     constructor(props) {
@@ -25,6 +28,7 @@ export default class EditUser extends Component {
             passwordError:'',
             showSpec:false,
             specialite:'',
+            sex:''
              
         }
         this.handleChange=this.handleChange.bind(this);
@@ -59,6 +63,7 @@ export default class EditUser extends Component {
               userName:this.state.userName,
               role:this.state.role,
               specialite:this.state.specialite,
+              sex:this.state.sex
           }
 
           
@@ -106,6 +111,7 @@ export default class EditUser extends Component {
               confirmPassword:'',
               userName:'',
               specialite:'',
+              sex:''
           
             })
               
@@ -213,9 +219,15 @@ export default class EditUser extends Component {
         return (
             <div>          
                    <NotificationAlert ref={this.notificationAlert} />
-
-       <Button onClick={()=>this.handleShowUpdate()} style={{backgroundColor:"#2b2b2b" }}> <IoIosAddCircle className="icon" />  Ajouter un utilisateur</Button> 
-
+       <Button
+        variant="contained"
+        color="primary"
+        startIcon={<AddBoxIcon />}
+        onClick={()=>this.handleShowUpdate()}
+        style={{outline:"none"}}
+      >
+        Ajouter utilisateur
+      </Button>
 
 
 
@@ -233,15 +245,9 @@ export default class EditUser extends Component {
 
         <Modal.Body  >
 
-                     <Row>
-                      <Col className="pr-1" md="5">
-                        <Form.Group>
-                          <label>Company (disabled)</label>
-                          <Form.Control defaultValue="CODWAY"disabled placeholder="Company" type="text" ></Form.Control>
-                        </Form.Group>
-                      </Col>
-                      
-                      <Col className="px-1" md="3">
+                    
+                      <Row>
+                      <Col className="pr-1" md="6">
                         <Form.Group>
                           <label>Username</label>
                           <Form.Control placeholder="Enter Username.."type="text" name="userName" required value={this.state.userName} onChange={this.handleChange}/>
@@ -249,7 +255,7 @@ export default class EditUser extends Component {
                         <div> {this.state.nameError} </div>
 
                       </Col>
-                      <Col className="pl-1" md="4">
+                      <Col className="pl-1" md="6">
                         <Form.Group>
                           <label htmlFor="exampleInputEmail1">
                             Email address
@@ -262,17 +268,29 @@ export default class EditUser extends Component {
                     </Row>
   
                     <Row>
-                      <Col className="pr-1" md="6">
+                      <Col className="pr-1" md="4">
                         <Form.Group>
                           <label>First Name</label>
                           <Form.Control placeholder="Company"type="text" name="nom" required value={this.state.nom} onChange={this.handleChange}/>
                         </Form.Group>
                       </Col>
-                      <Col className="pl-1" md="6">
+                      <Col className="px-1" md="4">
                         <Form.Group>
                           <label>Last Name</label>
                           <Form.Control  placeholder="Last Name"  type="text" required name="prenom" value={this.state.prenom} onChange={this.handleChange}/>
                         </Form.Group>
+                      </Col>
+
+                      <Col className="pl-1" md="4">
+                      <Form.Group controlId="formGridState">
+                          <Form.Label>Sex</Form.Label>
+                          <Form.Control as="select" defaultValue="Choose..."name="sex" required value={this.state.sex} onChange={this.handleChange}  >
+                          <option > Choisir</option>
+                            <option value="homme"> Homme</option>
+                            <option value="femme"> Femme</option>
+                    
+                           </Form.Control>
+                     </Form.Group>
                       </Col>
                     </Row>
   
@@ -285,7 +303,7 @@ export default class EditUser extends Component {
                         </Form.Group>
                       </Col>
                       <Col className="pl-1" md="6">
-                      <Form.Group as={Col} controlId="formGridState">
+                      <Form.Group controlId="formGridState">
                           <Form.Label>Role</Form.Label>
                           <Form.Control as="select" defaultValue="Choose..."name="role" required value={this.state.role} onChange={this.handleChange} onClick={()=> {this.show(this.state.role)}} >
                             <option>Choose...</option>

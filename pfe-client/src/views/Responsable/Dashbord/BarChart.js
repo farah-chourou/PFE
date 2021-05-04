@@ -27,7 +27,7 @@ const options = {
         responsive: true,
           legend: {
             display: true,
-            position: 'right',
+            position: 'bottom',
             labels: {
               fontColor: '#91929b',
               padding: 20
@@ -102,7 +102,6 @@ export default function BarChart() {
     setLasttttWeek(moment().subtract(28, 'days').format('L'))
 
     getEtatBull();
-    console.log(accepterLastWeek)
   }, [])
 
 
@@ -111,28 +110,33 @@ export default function BarChart() {
     const local = localStorage.getItem("user");
   //moment(e.date).format('L').isBetween( lastWeek, moment().format('L')) 
     axios.get('http://localhost:8080/getAllBullRespMedEtape4/'+JSON.parse(local).userName).then( res => {
-      res.data.map(e => 
+      const week1=  moment().startOf('month').add(7,'days');
+      const week2=  moment().startOf('month').add(14,'days');
+      const week3=  moment().startOf('month').add(21,'days');
+      const start =  moment().startOf('month');
+      const end= moment().endOf('month');
+    res.data.map(e => 
         <div key={e.numBull}>
-            {console.log( moment().format('L'))}
-        {(e.avis.avis == "Accepté" && moment(e.date).isBetween(  moment().subtract(7, 'days'), moment()) == true)? (accepterLastWeek.push(e),setNumAccepter(accepterLastWeek.length)): 
-        (e.avis.avis == "Accepté" && moment(e.date).isBetween(  moment().subtract(14, 'days'), moment()) == true)? (accepterLasttWeek.push(e),setNumAccepter(accepterLastWeek.length)): 
-        (e.avis.avis == "Accepté" && moment(e.date).isBetween(  moment().subtract(21, 'days'), moment()) == true)? (accepterLastttWeek.push(e),setNumAccepter(accepterLastWeek.length)): 
-        (e.avis.avis == "Accepté" && moment(e.date).isBetween(  moment().subtract(28, 'days'), moment()) == true)? (accepterLasttttWeek.push(e),setNumAccepter(accepterLastWeek.length)): 
+            
+       {(e.avis.avis == "Accepté" && moment(e.date).isBetween(  week3, end) == true)? (accepterLastWeek.push(e),setNumAccepter(accepterLastWeek.length)): 
+        (e.avis.avis == "Accepté" && moment(e.date).isBetween(  week2, week3) == true)? (accepterLasttWeek.push(e),setNumAccepter(accepterLastWeek.length)): 
+        (e.avis.avis == "Accepté" && moment(e.date).isBetween( week1,week2) == true)? (accepterLastttWeek.push(e),setNumAccepter(accepterLastWeek.length)): 
+        (e.avis.avis == "Accepté" && moment(e.date).isBetween(start, week1) == true)? (accepterLasttttWeek.push(e),setNumAccepter(accepterLastWeek.length)): 
 
-        (e.avis.avis == "Rejeté" && moment(e.date).isBetween(  moment().subtract(7, 'days'), moment()) == true)? (rejeterLastWeek.push(e),setNumRejeter(rejeterLastWeek.length)): 
-        (e.avis.avis == "Rejeté" && moment(e.date).isBetween(  moment().subtract(14, 'days'), moment()) == true)? (rejeterLasttWeek.push(e),setNumRejeter(rejeterLastWeek.length)): 
-        (e.avis.avis == "Rejeté" && moment(e.date).isBetween(  moment().subtract(21, 'days'), moment()) == true)? (rejeterLastttWeek.push(e),setNumRejeter(rejeterLastWeek.length)): 
-        (e.avis.avis == "Rejeté" && moment(e.date).isBetween(  moment().subtract(28, 'days'), moment()) == true)? (rejeterLasttttWeek.push(e),setNumRejeter(rejeterLastWeek.length)): 
+        (e.avis.avis == "Rejeté" && moment(e.date).isBetween( week3, end) == true)? (rejeterLastWeek.push(e),setNumRejeter(rejeterLastWeek.length)): 
+        (e.avis.avis == "Rejeté" && moment(e.date).isBetween(   week2, week3) == true)? (rejeterLasttWeek.push(e),setNumRejeter(rejeterLastWeek.length)): 
+        (e.avis.avis == "Rejeté" && moment(e.date).isBetween(   week1,week2) == true)? (rejeterLastttWeek.push(e),setNumRejeter(rejeterLastWeek.length)): 
+        (e.avis.avis == "Rejeté" && moment(e.date).isBetween( start, week1) == true)? (rejeterLasttttWeek.push(e),setNumRejeter(rejeterLastWeek.length)): 
 
-        (e.avis.avis == "Contre visite" && moment(e.date).isBetween(  moment().subtract(7, 'days'), moment()) == true)? (visiteLastWeek.push(e),setNumVisite(rejeterLastWeek.length)): 
-        (e.avis.avis == "Contre visite" && moment(e.date).isBetween(  moment().subtract(14, 'days'), moment()) == true)? (visiteLastWeek.push(e),setNumVisite(rejeterLasttWeek.length)): 
-        (e.avis.avis == "Contre visite" && moment(e.date).isBetween(  moment().subtract(21, 'days'), moment()) == true)? (visiteLastWeek.push(e),setNumVisite(rejeterLastttWeek.length)): 
-        (e.avis.avis == "Contre visite" && moment(e.date).isBetween(  moment().subtract(28, 'days'), moment()) == true)? (visiteLastWeek.push(e),setNumVisite(rejeterLasttttWeek.length)): 
+        (e.avis.avis == "Contre visite" && moment(e.date).isBetween( week3, end) == true)? (visiteLastWeek.push(e),setNumVisite(rejeterLastWeek.length)): 
+        (e.avis.avis == "Contre visite" && moment(e.date).isBetween(  week2, week3) == true)? (visiteLastWeek.push(e),setNumVisite(rejeterLasttWeek.length)): 
+        (e.avis.avis == "Contre visite" && moment(e.date).isBetween( week1,week2) == true)? (visiteLastWeek.push(e),setNumVisite(rejeterLastttWeek.length)): 
+        (e.avis.avis == "Contre visite" && moment(e.date).isBetween( start, week1)  == true)? (visiteLastWeek.push(e),setNumVisite(rejeterLasttttWeek.length)): 
 
-         moment(e.date).isBetween(  moment().subtract(7, 'days'), moment()) == true? (autreLastWeek.push(e),setNumAutre(autreLastWeek.length)): 
-        ( moment(e.date).isBetween(  moment().subtract(14, 'days'), moment()) == true)? (autreLasttWeek.push(e),setNumAutre(autreLasttWeek.length)): 
-        ( moment(e.date).isBetween(  moment().subtract(21, 'days'), moment()) == true)? (autreLastttWeek.push(e),setNumAutre(autreLastttWeek.length)): 
-        ( moment(e.date).isBetween(  moment().subtract(28, 'days'), moment()) == true)? (autreLasttttWeek.push(e),setNumAutre(autreLasttttWeek.length)):
+         moment(e.date).isBetween(week3, end) == true? (autreLastWeek.push(e),setNumAutre(autreLastWeek.length)): 
+        ( moment(e.date).isBetween( week2, week3) == true)? (autreLasttWeek.push(e),setNumAutre(autreLasttWeek.length)): 
+        ( moment(e.date).isBetween(week1,week2) == true)? (autreLastttWeek.push(e),setNumAutre(autreLastttWeek.length)): 
+        ( moment(e.date).isBetween( start, week1) == true)? (autreLasttttWeek.push(e),setNumAutre(autreLasttttWeek.length)):
         false
 
      
@@ -146,7 +150,7 @@ export default function BarChart() {
    }
 
   const chartData = {
-    labels: [lasttttWeek+"-"+lastttWeek, lastttWeek+"-"+lasttWeek, lasttWeek+"-"+lastWeek, lastWeek+"-"+moment().format('L')],
+    labels: ["1ére semaine" ,"2éme semaine", "3éme semaine", "4éme semaine"],
     datasets: [{
         label: 'Accepté',
         data: [accepterLasttttWeek.length, accepterLastttWeek.length, accepterLasttWeek.length, accepterLastWeek.length],
@@ -182,7 +186,6 @@ export default function BarChart() {
 
   return (
     <div className="content">
-      {console.log(autreLastWeek)}
 <Bar 
         data={chartData}
         options={options}

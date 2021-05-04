@@ -404,22 +404,19 @@ const handleChangeRowsPerPage = (event) => {
 
 
 
-          <Modal
+        <Modal
         show={show}
         onHide={() =>setShow(false)}
         backdrop="static"
         keyboard={false}
-      >
+       > 
         <Modal.Header closeButton>
           <Modal.Title> Ajouter votre avis <br></br> <small> Buuletin numero <b> {numBull}</b></small> </Modal.Title>
 
         </Modal.Header>
         <Form  onSubmit={handleSubmit}>
 
-        <Modal.Body  >
-
-            
-                 
+        <Modal.Body>
                     <Row>
                       <Col  className="pl-2" md={9}> 
                     <Form.Group as={Col} controlId="formGridState">

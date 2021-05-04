@@ -126,7 +126,7 @@ class Header extends React.Component {
     this.props.history.push('/user/bulletin'+id)
 
   }
-  logout(){
+  logout=()=>{
   
     axios.put('http://localhost:8080/deconnecte/'+ this.state.user.userName );
     axios.put('http://localhost:8080/lastConnect/'+ this.state.user.userName + "/" + new Date());

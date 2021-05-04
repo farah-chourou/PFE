@@ -126,7 +126,17 @@ export default function HistoriqueBullMed(props) {
                 {row.recepteur}
               </TableCell>
               <TableCell component="th" scope="row" >
-              <span className="etat shadow p-1"> {row.etat} </span>   
+                {row.etat=="Accepté"? 
+                <span className="etatAccepter shadow p-1 px-2 "> {row.etat} </span>   
+                :row.etat=="Rejeté"?
+                <span className="etatRejeter shadow p-1 px-2 "> {row.etat} </span>   
+                 :row.etat=="Contre visite"?
+                 <span className="etatVisite shadow p-1 px-2 "> {row.etat} </span>   
+                 :row.etat=="en cours"?
+                 <span className="etatAttente shadow p-1 px-2 "> {row.etat} </span>   
+                :                <span className="etatAutre shadow p-1 px-2 "> {row.etat} </span>   
+
+              } 
               </TableCell>
           
                </TableRow>
