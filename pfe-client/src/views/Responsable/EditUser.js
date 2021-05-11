@@ -121,7 +121,7 @@ export default class EditUser extends Component {
 
               <Tooltip title="Modifier">
                      <IconButton aria-label="delete"  style={{outline: 'none'}}>
-                     <FaUserEdit style={{color:"black"}}lassName="" onClick={()=>this.handleShowUpdate()} />
+                     <FaUserEdit style={{color:"#2b2b2b"}}lassName="" onClick={()=>this.handleShowUpdate()} />
                      </IconButton>
                    </Tooltip>
           

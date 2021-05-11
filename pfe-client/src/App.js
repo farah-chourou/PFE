@@ -17,7 +17,7 @@ import Login from "Auth/Login.js";
 const hist = createBrowserHistory();
 const theme = createMuiTheme({
   palette: {
-    primary: { main: '#1976d2' },
+    primary: { main: '#1565c0' }, //  //1976d2
   },
 }, frFR);
 function App(){

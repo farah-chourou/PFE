@@ -55,7 +55,7 @@ public class BullMedService {
         bullMed.setNumBull(numBull);
         bullMed.setDate(LocalDate.now());
         bullMed.setEtape(2);
-        bullMed.setEtat("en cours");
+        bullMed.setEtat("En attente");
 
         SuivisBullMed bull =  suivisBullMedRepo.save(bullMed);
 

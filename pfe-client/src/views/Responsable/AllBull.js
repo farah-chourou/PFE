@@ -32,6 +32,7 @@ import {MdSend} from 'react-icons/md';
 import AddCommentOutlinedIcon from '@material-ui/icons/AddCommentOutlined';
 import BullRecuMed from "./BullRecuMed"
 import {FiAlertCircle} from 'react-icons/fi';
+import backgroundImage from "fond8.png";
 
 
 //pagination
@@ -340,11 +341,11 @@ const handleChangeRowsPerPage = (event) => {
   {console.log(user.userName)}
   <Col md="12">
     <Card >
-      <CardHeader className="bg-light">
+      <CardHeader className="bg-light" style={{backgroundImage: `linear-gradient(#fffbfbb0, #fffbfbb0),url(${backgroundImage})`,backgroundSize:"100%",paddingBottom:15}}>
         <Row>
           <Col md={9}>
-          <CardTitle tag="h4"> Bulletin nouvellement recu</CardTitle>
-           <p className="card-category">
+          <CardTitle tag="h4"> Bulletin  Dernièrement Récu</CardTitle>
+           <p className="card-category"style={{color:"#545455"}}>
              vous avez <b> {numberBullValid}</b>  bulletins recu des validateurs et <b> {bulletinsMed.length}</b>  bulletins  recu des medecins 
            </p> 
            </Col>
@@ -357,9 +358,9 @@ const handleChangeRowsPerPage = (event) => {
 
 
       </CardHeader>
-      <CardBody>
+      <CardBody style={{position:"relative",top:-15}}>
    <TableContainer >
-      <AppBar position="static" color="default">
+      <AppBar position="static" color="">
         <Tabs
           value={value}
           onChange={handleChange}
@@ -394,7 +395,7 @@ const handleChangeRowsPerPage = (event) => {
             <TableCell> <b>Numero bulletins  </b></TableCell>
             <TableCell > <b> Date d'envoie </b></TableCell>
             <TableCell > <b> Specialité medecin</b></TableCell>
-            <TableCell ><b> Envoyer par</b> </TableCell>
+            <TableCell ><b> Expéditeur</b> </TableCell>
             <TableCell ><b >  Etat</b> </TableCell>
             <TableCell ><b>  Autre</b> </TableCell>
 
@@ -425,7 +426,7 @@ const handleChangeRowsPerPage = (event) => {
                 {row.expediteur}
               </TableCell>
               <TableCell component="th" scope="row" >
-              <span className="etat shadow p-1"> {row.etat} </span>   
+              <span className="etatAttente  p-1 px-2 "> {row.etat} </span>   
               </TableCell>
               <TableCell component="th" scope="row">
               <div className="d-inline-block "> 
@@ -487,7 +488,7 @@ const handleChangeRowsPerPage = (event) => {
           <TableCell> <b>Numero bulletins  </b></TableCell>
             <TableCell > <b> Date d'envoie </b></TableCell>
             <TableCell > <b> Specialité medecin</b></TableCell>
-            <TableCell ><b> Envoyer par</b> </TableCell>
+            <TableCell ><b> Expéditeur</b> </TableCell>
             <TableCell ><b >  Etat</b> </TableCell>
             <TableCell ><b>  Envoyer</b> </TableCell>
 

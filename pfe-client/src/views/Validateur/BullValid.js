@@ -41,6 +41,17 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import moment from 'moment';
 import 'moment/locale/fr';
 import logo from "logo.png";
+import backgroundImage from "fond8.png";
+
+
+import Chip from '@material-ui/core/Chip';
+import SearchIcon from '@material-ui/icons/Search';
+import ClearIcon from '@material-ui/icons/Clear';
+import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';;
 
 //pagination
 const useStyles1 = makeStyles((theme) => ({
@@ -147,6 +158,22 @@ const useStyles = makeStyles((theme) => ({
     fontSize: theme.typography.pxToRem(15),
     color: theme.palette.text.secondary,
   },
+  
+  iconButton: {
+    padding: 10,
+    
+  },
+  divider: {
+    height: 28,
+    margin: 4,
+  },
+  input: {
+    height: 30,
+    color : '#3d5afe',
+    borderWidth: '1px',
+    borderColor: 'green !important'
+  },
+  
 }));
 
 
@@ -169,6 +196,13 @@ export default function UsersList() {
   moment.locale('fr');
 
 
+  const [Autre,setAutre]=useState([]);
+  const [Accepter, setAccepter] = useState([]);
+  const [Rejeter, setRejeter] = useState([]);
+  const [Visite, setVisite] = useState([]);
+ 
+  const[annee,setAnnee]=useState(moment().format("YYYY"))
+  const [bull,setBull]=useState([])
 
 
 
@@ -179,6 +213,7 @@ useEffect(() => {
   setUser(JSON.parse(local)) 
   getBullMedecin();
 
+
 }, [])
 
 
@@ -187,11 +222,23 @@ const getBullMedecin = ()=>{
   const local = localStorage.getItem("user");
 
   axios.get('http://localhost:8080/getBullfromNotif/'+ JSON.parse(local).userName ).then( res => {
-  
+setBull(res.data)
  setBulletins(res.data)
+ res.data.map(e => 
+  <div key={e.numBull}>
+  {(e.suivisBullMed.etat == "Accepté")?
+      (    setAccepter(prevState => [...prevState, e]))
+  :(e.suivisBullMed.etat =="Rejeté")?
+  (    setRejeter(prevState => [...prevState, e]))
+  :(e.suivisBullMed.etat == "Contre visite")?
+  (    setVisite(prevState => [...prevState, e]))
+  : (setAutre(prevState => [...prevState, e]))
+
+  }</div>
+  )
     
 
-}).catch((err)=>console.log(err));
+})
 
 
 }
@@ -222,23 +269,121 @@ const handleChangeRowsPerPage = (event) => {
 
 
 
+//filter
+
+const  [searched,setSearched] = useState("")
+
+
+
+
+
+const rejeter =()=>{
+
+  Rejeter.map(b=>
+    setBulletins(Rejeter.filter(bull => moment(bull.date).format("YYYY") == annee)))
+}
+const accepter =()=>{
+  
+  Accepter.map(b=>
+    setBulletins(Accepter.filter(bull => moment(bull.date).format("YYYY") == annee)))
+}
+const contreVisite =()=>{
+  Visite.map(b=>
+    setBulletins(Visite.filter(bull => moment(bull.date).format("YYYY") == annee)))
+}
+const autre =()=>{
+  Autre.map(b=>
+    setBulletins(Autre.filter(bull => moment(bull.date).format("YYYY") == annee)))
+}
+
+
+const changeSubstract=()=>{
+  console.log(annee)
+ 
+  bull.map(b=>
+   setBulletins(bull.filter(bull => moment(bull.suivisBullMed.date).format("YYYY") == annee-1)))
+   console.log(annee)
+ 
+ }
+ const changeAdd=()=>{
+  if (annee != moment().format("YYYY")) {
+  ( setAnnee((annee+1)) ) 
+ }
+ 
+ 
+   bull.map(b=>
+     setBulletins(bull.filter(bull => moment(bull.suivisBullMed.date).format("YYYY") == annee+1)))
+   
+ }
+ var rows =[]
+bulletins.map((d)=> {
+rows.push(createData(d.suivisBullMed.numBull,d.suivisBullMed.date, d.suivisBullMed.specialiteMed, d.suivisBullMed.etat,d.suivisBullMed.commentaireResp,d.suivisBullMed.commentaireMed ,
+                     d.suivisBullMed.recepteur,d.suivisBullMed.expediteur.userName))
+
+})
+var requestSearch =(
+
+  rows.filter((row) => {
+  return row.numBull.toString().includes(searched);
+  }));
+
+
   return (
     <div className="content"  component={Paper}>
-
+{console.log(Accepter)}
     <Row>
   <Col md={1}>  </Col>
   <Col md="10">
     <Card >
-      <CardHeader className="bg-light">
+      <CardHeader   style={{backgroundImage: `linear-gradient(#fffbfbb0, #fffbfbb0),url(${backgroundImage})`,backgroundSize:"100%",paddingBottom:30}}>
         <Row>
-          <Col md={9}>
-          <CardTitle tag="h4">Listes des bullletins validées</CardTitle>
+          <Col md={12}>
+          <CardTitle tag="h4">Listes Des Dullletins Validées</CardTitle>
            <p className="card-category">
            </p> 
-           </Col>
 
    
-        
+           <ButtonGroup  size="small" aria-label=" small  outlined primary button group" >
+        <Button style={{outline:"none"}} onClick={autre}>Autre</Button>
+        <Button style={{outline:"none"}} onClick={accepter} >Accepté</Button>
+        <Button style={{outline:"none"}} onClick={rejeter}> Rejeté</Button>
+        <Button style={{outline:"none"}}onClick={contreVisite}>Contre visite</Button>
+
+      </ButtonGroup>
+&nbsp;&nbsp;
+&nbsp;
+      <ButtonGroup  size="small" aria-label=" small  outlined primary button group" style={{position:"relative" , bottom:-6}}>
+        <Button style={{outline:"none"}} onClick={()=>{changeAdd()}}><ArrowLeftIcon fontSize="small"/></Button>
+        <Button style={{outline:"none"}} >{annee}</Button>
+        <Button style={{outline:"none"}} onClick={()=>{  setAnnee(annee-1);changeSubstract();}}> <ArrowRightIcon fontSize="small"/></Button>
+
+      </ButtonGroup>
+      
+      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;
+   
+       
+      <ButtonGroup color="primary" size="small" aria-label=" small   primary button group" style={{position:"relative",bottom:-8,width:180 ,marginLeft:90}}>
+      <TextField id="standard-search" label="Rechercher par N° bulletin" type="search" 
+       InputLabelProps={{className:classes.cssLabel}}
+       InputProps={{
+              className: classes.input,
+              startAdornment: (
+                <InputAdornment position="start">
+                <SearchIcon  aria-label="toggle password visibility" />           
+                </InputAdornment>
+              ),
+            }} 
+         
+            value={searched}
+            onChange={ e =>setSearched(e.target.value)}
+            />
+      
+
+      </ButtonGroup>
+      </Col>
+
          </Row>
         
 
@@ -257,28 +402,64 @@ const handleChangeRowsPerPage = (event) => {
 
         <TableBody>
           {(rowsPerPage > 0
-            ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            : rows
+            ? requestSearch.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            : requestSearch
           ).map((row) => (
             
             <TableRow  key={row.numBull}>
            
    
-              <TableCell style={{ width: 150 ,fontSize:"16px"}} alignt="center">
-             Bulletin numero  <b> {row.numBull}</b> 
+              <TableCell style={{ width: 130 ,fontSize:"16px"}} alignt="center">
+             N° <b> {row.numBull}</b> 
               </TableCell> 
 
-              <TableCell style={{ width: 500 }} >
+              <TableCell style={{ width: 520 }} >
               <Accordion  onChange={handleChange('panel1')}>
+       {row.etat=="Accepté" ? 
         <AccordionSummary
-        className="bg-light"
+        style={{backgroundColor:"#e5eef7"}}
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1bh-content"
           id="panel1bh-header"
         >
-          <Typography className={classes.heading }  > <span className="text-primary "> &nbsp;&nbsp;&nbsp;&nbsp; <b> Etat:</b>  {row.etat} </span>   </Typography>
-          <Typography className={classes.secondaryHeading}> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rembourssement accepter</Typography>
+          <Typography className={classes.heading }  > <span style={{color:"#185fad"}}> &nbsp;&nbsp;&nbsp;&nbsp; <b> Etat:</b>  {row.etat} </span>   </Typography>
+          <Typography style={{color:"#185fad"}}> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rembourssement accepter</Typography>
         </AccordionSummary>
+
+       : row.etat=="Rejeté"?
+
+       <AccordionSummary
+       style={{backgroundColor:"#f8e9e9f8"}}
+         expandIcon={<ExpandMoreIcon />}
+         aria-controls="panel1bh-content"
+         id="panel1bh-header"
+       >
+         <Typography className={classes.heading }  > <span  style={{color:"#d64161"}}> &nbsp;&nbsp;&nbsp;&nbsp; <b> Etat:</b>  {row.etat} </span>   </Typography>
+         <Typography   style={{color:"#d64161"}}> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rembourssement accepter</Typography>
+       </AccordionSummary>
+
+       :row.etat == "Contre visite" ?
+       <AccordionSummary  
+       style={{backgroundColor:"#c5beb2"}}
+         expandIcon={<ExpandMoreIcon />}
+         aria-controls="panel1bh-content"
+         id="panel1bh-header"
+       >
+        
+         <Typography className={classes.heading }  > <span className="text-light "> &nbsp;&nbsp;&nbsp;&nbsp; <b> Etat:</b>  {row.etat} </span>   </Typography>
+         <Typography className={classes.secondaryHeading} className="text-light "> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rembourssement accepter</Typography>
+       </AccordionSummary>
+
+      : <AccordionSummary  
+      className="bg-light"
+        expandIcon={<ExpandMoreIcon />}
+        aria-controls="panel1bh-content"
+        id="panel1bh-header"
+      >
+       
+        <Typography className={classes.heading }  > <span className="text-dark "> &nbsp;&nbsp;&nbsp;&nbsp; <b> Etat:</b>  {row.etat} </span>   </Typography>
+        <Typography className={classes.secondaryHeading} className="text-secondary "> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rembourssement accepter</Typography>
+      </AccordionSummary>}
         <AccordionDetails>
           <Typography>
        

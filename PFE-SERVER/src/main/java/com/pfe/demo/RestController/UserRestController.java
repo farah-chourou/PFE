@@ -10,6 +10,7 @@ import com.pfe.demo.Entities.User;
 import com.pfe.demo.Exception.RessourceNotFoundException;
 import com.pfe.demo.RestController.Util.ApiResponse;
 import com.pfe.demo.RestController.Util.Status;
+import com.pfe.demo.Security.AES256;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,7 +63,7 @@ public class UserRestController {
        }
 
         user.setMembreDepuis(new Date());
-
+        user.setPassword(AES256.encrypt(user.getPassword()));
         user.setCouleur(  user.RandomColor());
         User u = userRepo.save(user);
         return ResponseEntity.ok(u);}
@@ -72,7 +73,7 @@ public class UserRestController {
 
      @PostMapping("/login")
      public ResponseEntity<User> login(@RequestBody User user ) throws  Exception{
-        User loginUser =userRepo.findByUserNameAndPassword(user.getUserName(), user.getPassword());
+        User loginUser =userRepo.findByUserNameAndPassword(user.getUserName(), AES256.encrypt(user.getPassword()));
         if (loginUser == null ){
 
             return new ResponseEntity(new ApiResponse(false, "User not exist !"),

@@ -7,7 +7,7 @@ import backgroundImage from "fond1.png";
 
 import PerfectScrollbar from "perfect-scrollbar";
 
-import logo from "logo.png";
+import logo from "logoo.png";
 
 var ps;
 
@@ -69,7 +69,6 @@ class Sidebar extends React.Component {
       >
         <div className="logo">
           <a
-            href="https://www.creative-tim.com"
             className="simple-text "
           >
             <div className="logo-img w-75" >

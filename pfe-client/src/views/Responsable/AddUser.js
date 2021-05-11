@@ -6,8 +6,7 @@ import {IoIosAddCircle} from 'react-icons/io';
 import axios from "axios";
 import NotificationAlert from "react-notification-alert";
 import Button from '@material-ui/core/Button';
-import AddBoxIcon from '@material-ui/icons/AddBox';
-
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 
 export default class EditUser extends Component {
     constructor(props) {
@@ -218,16 +217,20 @@ export default class EditUser extends Component {
     render() {
         return (
             <div>          
-                   <NotificationAlert ref={this.notificationAlert} />
-       <Button
+  <NotificationAlert ref={this.notificationAlert} />
+  <Button
+      style={{outline:"none"}}
         variant="contained"
         color="primary"
-        startIcon={<AddBoxIcon />}
+        startIcon={<AddCircleOutlineIcon  fontSize="large"/>}
         onClick={()=>this.handleShowUpdate()}
-        style={{outline:"none"}}
       >
-        Ajouter utilisateur
+
+        AJOUTER
       </Button>
+   
+
+      
 
 
 

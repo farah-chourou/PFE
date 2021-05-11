@@ -29,7 +29,7 @@ import{AiFillAlert}from"react-icons/ai";
 
 
 var ps;
-export default function Notification(props) {
+export default function Notifications(props) {
  
   const [isOpen, setIsOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
@@ -198,7 +198,7 @@ export default function Notification(props) {
                  <div key={R.id} >
                  {R.expediteurNotif == null ?
                  
-                 <Row  width="90px"  className="mb-3 p py-1  " onClick={()=> getBull(R.id)}  style={{border:"1px solid #E2E2E2",borderRadius: "20px" , backgroundColor:"white",boxShadow:"5px 5px 5px gray"}}>  
+                 <Row   className="mb-3 p py-1  " onClick={()=> getBull(R.id)}  style={{border:"1px solid #E2E2E2",borderRadius: "5px" , backgroundColor:"white",boxShadow:"5px 5px 5px gray"}}>  
                  
                  <Col md={1} className=" font-weight-bold text-uppercase">  
                  <AiFillAlert size="25px" className="text-danger"/>
@@ -207,20 +207,19 @@ export default function Notification(props) {
                  &nbsp;
                   <Col md={10} className=" pb-2 "  >   
                  <Row className="font-weight-bold text-uppercase">
-                 <Col md={2} className="" > 
-               
-                   
-                   </Col>
+                 { R.etat == false ?
+                   <FaCircle className="" size={10} color="rgb(81, 137, 241)"/> 
+                   :<FaCircle className=" text-light" size={10} /> }
                   </Row>
                 
                   <div>  bulletin numero <b> {R.suivisBullMed.numBull}</b><br></br> est encore en attente de votre avis  </div>  
 
-                 <small className=" text-secondary " style={{paddingLeft:"260px"}}>  envoyer   {moment(R.date).fromNow() } </small>     
+                 <small className=" text-secondary " style={{paddingLeft:"290px",position:"relative",left:50}}>  envoyer   {moment(R.date).fromNow() } </small>     
                 </Col>   
                  </Row>
 
               : 
-                 <Row  width="90px"  className="mb-3 p py-1  " onClick={()=> getBull(R.id)}  style={{border:"1px solid #E2E2E2",borderRadius: "20px" , backgroundColor:"white",boxShadow:"5px 5px 5px gray"}}>  
+                 <Row  width="90px"  className="mb-2 p py-2  " onClick={()=> getBull(R.id)}  style={{border:"1px solid #E2E2E2",borderRadius: "5px" , backgroundColor:"#f5f5f5",boxShadow:"5px 5px 5px gray"}}>  
                  
                  <Col md={1} className=" font-weight-bold text-uppercase">  
 
@@ -231,7 +230,9 @@ export default function Notification(props) {
                  <Row className="font-weight-bold text-uppercase">
                  <Col md={10}> {R.expediteurNotif.nom} {R.expediteurNotif.prenom}</Col>
                  <Col md={2} className="" > 
-               
+                  { R.etat == false ?
+                   <FaCircle style={{position:"relative",left:80}} className="" size={10} color="rgb(81, 137, 241)"/> 
+                   :<FaCircle style={{position:"relative",left:80}} className=" text-light" size={10} /> }
                    
                    </Col>
                   </Row>
@@ -242,8 +243,8 @@ export default function Notification(props) {
                 : (R.suivisBullMed != null && R.expediteurNotif.role == "responsable" && user.role=="medecin") ? <div> Nouveau bulletin  numero  <b> {R.suivisBullMed.numBull}</b> pour  donner ton avis  </div>  
 
                 : false}
-                 <small className=" text-secondary " style={{paddingLeft:"260px"}}>  envoyer   {moment(R.date).fromNow() } </small>     
-                </Col>   
+                 <small className=" text-secondary " style={{paddingLeft:"290px",position:"relative",left:50}}>  envoyer   {moment(R.date).fromNow() } </small>     
+                </Col> 
                  </Row>
            
                 

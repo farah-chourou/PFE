@@ -17,7 +17,7 @@ import HistoriqueMed from "views/Medecin/HistoriqueMed"
 var routes = [
   {
     path: "/dashboard",
-    name: "Dashboard",
+    name: "Tableau de bord",
     icon: "nc-icon nc-bank",
     component: Dashboard,
     layout: "/user",
@@ -43,7 +43,7 @@ var routes = [
 
   {
     path: "/user-page",
-    name: "User Profile",
+    name: "profile utilisateur",
     icon: "nc-icon nc-single-02",
     component: UserPage,
     layout: "/user",
@@ -52,7 +52,7 @@ var routes = [
   },
   {
     path: "/ListesUtilisateurs",
-    name: "users List",
+    name: "liste des utlisateurs",
     icon: "nc-icon nc-tile-56",
     component: UsersList,
     layout: "/user",
@@ -63,7 +63,7 @@ var routes = [
   },
   {
     path: "/bulletin",
-    name: " Bulletin recu ",
+    name: " Bulletin récu ",
     icon: "nc-icon nc-caps-small",
     component: AllBull,
     layout: "/user",
@@ -73,7 +73,7 @@ var routes = [
   },
   {
     path: "/bulletinMedecin",
-    name: " Bulletin recu",
+    name: " Bulletin récu",
     icon: "nc-icon nc-caps-small",
     component: BullMed,
     layout: "/user",
@@ -85,7 +85,7 @@ var routes = [
 
   {
     path: "/bulletinValidateur",
-    name: " Bulletin recu",
+    name: " Bulletin récu",
     icon: "nc-icon nc-caps-small",
     component: BullValid,
     layout: "/user",

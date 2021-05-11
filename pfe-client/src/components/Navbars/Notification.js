@@ -265,7 +265,7 @@ export default function Notification(props) {
           )}</div>)
           }   
              {notifications.length > 3 ?   
-         <div>  &nbsp; &nbsp; <Link   onClick={()=> pushToNotif()}  class=" text-secondary pl-4 pt-5">Afficher tout</Link></div>    
+         <div  style={{backgroundColor:"#f1efef",paddingBottom:5,position:"relative",bottom:-8,borderBottomLeftRadius:5,borderBottomRightRadius:5}}>   &nbsp; &nbsp; <Link  onClick={()=> pushToNotif()}  style={{color:"#1565c0"}}class=" pl-4 pt-5">Afficher tout</Link></div>    
          : false}
 
           </DropdownMenu>

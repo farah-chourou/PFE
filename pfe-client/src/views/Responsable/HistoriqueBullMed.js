@@ -105,8 +105,8 @@ export default function HistoriqueBullMed(props) {
 
 <TableRow  className={classes.root}>
            <TableCell>
-            <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
-              {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}style={{outline:"none"}}>
+              {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon style={{outline:"none"}} />}
             </IconButton>
           </TableCell>
               <TableCell component="th" scope="row" >
@@ -132,7 +132,7 @@ export default function HistoriqueBullMed(props) {
                 <span className="etatRejeter shadow p-1 px-2 "> {row.etat} </span>   
                  :row.etat=="Contre visite"?
                  <span className="etatVisite shadow p-1 px-2 "> {row.etat} </span>   
-                 :row.etat=="en cours"?
+                 :row.etat=="En attente"?
                  <span className="etatAttente shadow p-1 px-2 "> {row.etat} </span>   
                 :                <span className="etatAutre shadow p-1 px-2 "> {row.etat} </span>   
 

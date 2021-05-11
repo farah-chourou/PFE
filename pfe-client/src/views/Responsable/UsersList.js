@@ -42,6 +42,12 @@ import Tooltip from '@material-ui/core/Tooltip';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import Chip from '@material-ui/core/Chip';
 
+import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import ClearIcon from '@material-ui/icons/Clear';
+
+import backgroundImage from "fond8.png";
 
 //pagination
 const useStyles1 = makeStyles((theme) => ({
@@ -81,9 +87,14 @@ const useStyles = makeStyles((theme) => ({
   },
 
   input: {
-    marginLeft: theme.spacing(1),
+    height: 30,
+    width:300,
+    color : '#3d5afe',
+    borderWidth: '1px',
+    borderColor: 'green !important',
     flex: 1,
   },
+  
   iconButton: {
     padding: 10,
     
@@ -354,68 +365,94 @@ rowsMedecin.filter((row) => {
   <Row>
   
   <Col md="12">
-    <Card style={{borderRadius:"10px",boxShadow:" rgba(0, 0, 0, 0.35) 0px 5px 15px"}}>
-      <CardHeader style={ {}}>
-        <Row>
+  <Card style={{borderRadius:"10px",boxShadow:" rgba(0, 0, 0, 0.35) 0px 5px 15px",border:"0.2px solid #69696970"}}>
+      <CardHeader style={ { backgroundImage: `linear-gradient(#fffbfbb0, #fffbfbb0),url(${backgroundImage})`,backgroundSize:"100%",paddingBottom:30}}>
+        <Row >
           <Col md={9}>
-          <CardTitle tag="h4">Les utilisateurs de la  platform</CardTitle>
+          <CardTitle tag="h4" style={{marginLeft:5,color:"black"}}>  Les Utilisateurs De La  Platform</CardTitle>
            <p className="card-category">
            </p> 
            
-        <Paper  className={classes.aa} style={{marginLeft:1, marginBottom:20}}>
-      <ButtonDropdown isOpen={dropdownOpen} toggle={ () => setOpen(!dropdownOpen)} >
-  <DropdownToggle split color="light" style={{outline:"none",fontSize:20}} />
-  <DropdownMenu>
-      <>
-    <DropdownItem header>FILTRER PAR</DropdownItem>
-    <DropdownItem onClick={()=>{setFilter("Nom d'utilisateur")}}>Nom d'utilisateur</DropdownItem>
-    <DropdownItem onClick={()=>{setFilter("Email")}}>Email</DropdownItem>
-    </>
-  </DropdownMenu>
-</ButtonDropdown>
+     
 &nbsp;
-{filter !=null ?
-      <Chip
+
+  {/*filter*/}
+      <ButtonGroup color="primary" size="small" aria-label=" small   primary button group" style={{position:"relative",bottom:-8,width:180 }}>
+      <TextField id="standard-search" label="Rechercher ici " 
+       InputLabelProps={{className:classes.cssLabel}} style={{width:500}}
+       InputProps={{
+              className: classes.input,
+                            startAdornment: (
+                <InputAdornment position="start">
+
+                 <ButtonDropdown isOpen={dropdownOpen} toggle={ () => setOpen(!dropdownOpen)} >
+                   <DropdownToggle split color="white" style={{outline:"none",fontSize:14,backgroundColor:"none"}} />
+                   <DropdownMenu>
+                       <>
+                     <DropdownItem header>FILTRER PAR</DropdownItem>
+                     <DropdownItem onClick={()=>{setFilter("Nom d'utilisateur")}}>Nom d'utilisateur</DropdownItem>
+                     <DropdownItem onClick={()=>{setFilter("Email")}}>Email</DropdownItem>
+                     </>
+                   </DropdownMenu>
+                 </ButtonDropdown>
+
+
+      {(filter !=null && searched == "" )?
+                    <Chip
+                    variant="outlined"
+                      size="small"
+                      label={filter}
+                      onDelete={()=>setFilter(null)}
+        />
+      :    <Chip
       variant="outlined"
         size="small"
         label={filter}
         onDelete={()=>setFilter(null)}
-color="primary"
-        />
+        color="primary"
+/> 
+      }
+                        
+                </InputAdornment>
+              ),            endAdornment: ( 
+              <>
+                {searched == "" ?
+                <IconButton  className={classes.iconButton} style={{outline:"none"}}  >
+                  <SearchIcon  aria-label="toggle password visibility"   />
+                </IconButton>
+                :   
+                <IconButton  className={classes.iconButton} style={{outline:"none"}}>
+                <ClearIcon onClick={()=>setSearched("")} color="primary"/>
+              </IconButton>}
+              </>
+            )
+
+            }} 
+         
+            value={searched}
+            onChange={ e =>setSearched(e.target.value)}
+            />
       
-      :false}
-      <InputBase
-        className={classes.input}
-        placeholder="Rechercher ici ..."
-        inputProps={{ 'aria-label': 'search google maps' }}
-        value={searched}
-        onChange={ e =>setSearched(e.target.value)}
-      />
-      
-      {searched == "" ?
-      <IconButton  className={classes.iconButton} style={{outline:"none"}}  >
-        <SearchIcon  />
-      </IconButton>
-      :   
-      <IconButton  className={classes.iconButton} style={{outline:"none"}}>
-      <HighlightOffIcon onClick={()=>setSearched("")}/>
-    </IconButton>}
-    </Paper>
+
+      </ButtonGroup>
+
+     
+
 
            </Col>
-
-           <Col md={3}>  
-           <diV className="d-inline-block ">  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
-           <AddUser validateurs={getValidateurs} medecins={getMedecins} /></diV>  
+<Col md={1}></Col>
+           <Col md={2}>  
+           <div className="d-inline-block  " style={{marginLeft:2,position:"relative",top:-12}}>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
+           <AddUser validateurs={getValidateurs} medecins={getMedecins}  /></div>  
            
            </Col>
          </Row>
       </CardHeader>
-      <CardBody>
+      <CardBody style={{position:"relative",top:-15}}>
 
    <TableContainer >
-      <AppBar position="static" color="default">
-        <Tabs    value={value}    onChange={handleChange}   indicatorColor="primary"    textColor="primary"     aria-label="full width tabs example">
+      <AppBar position="static" color="white" >
+        <Tabs /* TabColorProps={{style: {background:'white'}}} TabIndicatorProps={{style: {background:'white'}}} */ value={value}    onChange={handleChange}   indicatorColor="primary"    textColor="primary"  color="default"   aria-label="full width tabs example">
           <Tab label="Validateurs" {...a11yProps(0)}  style={{outline: 'none'}} />
           <Tab label="Medecins" {...a11yProps(1)}  style={{outline: 'none'}}/>
         </Tabs>
@@ -431,10 +468,10 @@ color="primary"
       <Table className={classes.table} aria-label="custom pagination table">
  
 
-      <TableHead>
+      <TableHead >
           <TableRow  >
-           <TableCell > <b> &nbsp; &nbsp;# </b></TableCell>
-            <TableCell> <b>Nom d'utilisateur  </b></TableCell>
+           <TableCell> <b> &nbsp; &nbsp;# </b></TableCell>
+            <TableCell > <b>Nom d'utilisateur  </b></TableCell>
             <TableCell > <b> Email </b></TableCell>
             <TableCell > <b> Numero télephone</b></TableCell>
             <TableCell ><b> Autre</b> </TableCell>
@@ -458,7 +495,7 @@ color="primary"
 
               { row.userName}
               </TableCell>
-              <TableCell style={{ width: 160 }} align="right">
+              <TableCell style={{ width: 160 }} >
                 {row.Email}
               </TableCell>
               <TableCell component="th" scope="row">
@@ -471,7 +508,7 @@ color="primary"
                 <Tooltip title="Supprimer">
                      <IconButton aria-label="delete"  style={{outline: 'none'}}>
                   
-                     <MdDeleteSweep  style={{color:"black"}} onClick={()=>{ setShow(true) ;setId(row.id) }}/>
+                     <MdDeleteSweep  style={{color:"2b2b2b"}} onClick={()=>{ setShow(true) ;setId(row.id) }}/>
                      </IconButton>
                    </Tooltip>
           
@@ -558,7 +595,7 @@ color="primary"
                 <Tooltip title="Supprimer">
                      <IconButton aria-label="delete">
                   
-                     <MdDeleteSweep  style={{color:"black"}} onClick={()=>{ setShow(true) ;setId(row.id) }}/>
+                     <MdDeleteSweep  style={{color:"#2b2b2b"}} onClick={()=>{ setShow(true) ;setId(row.id) }}/>
                      </IconButton>
                    </Tooltip>
           

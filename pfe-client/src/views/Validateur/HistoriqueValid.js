@@ -30,9 +30,18 @@ import NotificationAlert from "react-notification-alert";
 import {  Modal,Form} from "react-bootstrap"
 import  { useState, useEffect } from 'react';
 import axios from "axios";
-import {Card,CardHeader,CardBody,CardTitle,Row,Col,} from "reactstrap";
+import {Card,CardHeader,CardBody,CardTitle,Row,Col,ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
 import Button from '@material-ui/core/Button';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import backgroundImage from "fond8.png";
+import Chip from '@material-ui/core/Chip';
+import SearchIcon from '@material-ui/icons/Search';
+import ClearIcon from '@material-ui/icons/Clear';
+import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+
+
 //pagination
 const useStyles1 = makeStyles((theme) => ({
   root: {
@@ -57,6 +66,24 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     margin: theme.spacing(1),
+  },
+  input: {
+    height: 20,
+    width:315,
+    color : '#3d5afe',
+    borderWidth: '1px',
+    borderColor: 'green !important',
+    flex: 1,
+  },
+  
+  iconButton: {
+    padding: 10,
+    
+    
+  },
+  divider: {
+    height: 28,
+    margin: 4,
   },
 }));
 
@@ -172,6 +199,10 @@ export default function UsersList() {
   const [title,setTitle] =useState("")
   const [message,setMessage] =useState("")
 
+  const [filter,setFilter]=useState("Numéro")
+  const  [searched,setSearched] = useState("")
+  const [dropdownOpen, setOpen] = useState(false);
+
   
 
 
@@ -281,6 +312,24 @@ const handleChangeRowsPerPage = (event) => {
 };
 
 
+//filter
+
+var requestSearch =(
+
+  filter=="Numéro" ?
+  rows.filter((row) => {
+   return row.numBull.toString().includes(searched);
+})
+:filter=="Date" ?
+rows.filter((row) => {
+ return row.date.toLowerCase().includes(searched.toLowerCase());
+})
+:rows.filter((row) => {
+  return row.numBull.toString().includes(searched);
+ }));
+
+
+
 
   return (
     <div className="content"  component={Paper}>
@@ -290,16 +339,151 @@ const handleChangeRowsPerPage = (event) => {
   <Col md={1}>  </Col>
   <Col md="10">
     <Card >
-      <CardHeader className="bg-light">
+      <CardHeader className="bg-light" style={{backgroundImage: `linear-gradient(#fffbfbb0, #fffbfbb0),url(${backgroundImage})`,backgroundSize:"100%",paddingBottom:30}}>
         <Row>
-          <Col md={9}>
-          <CardTitle tag="h4">Liste des bulletins deja envoyer</CardTitle>
+          <Col md={8}>
+          <CardTitle tag="h4">Bulletin Récemment Envoyé</CardTitle>
            <p className="card-category">
            </p> 
+
+           <ButtonGroup color="primary" size="small" aria-label=" small   primary button group" style={{position:"relative",bottom:-8,width:180 }}>
+  
+      
+            
+            {filter=="Date" ?
+
+
+          <TextField  id="date" label="Rechercher ici "  type="date" p={0}
+       InputLabelProps={{          shrink: true,       }} style={{width:500}}
+       InputProps={{
+              className: classes.input,
+                            startAdornment: (
+                <InputAdornment position="start">
+
+                 <ButtonDropdown isOpen={dropdownOpen} toggle={ () => setOpen(!dropdownOpen)} style={{outline:"none",position:"relative",right:10}}>
+                   <DropdownToggle split color="white" style={{outline:"none",fontSize:14,backgroundColor:"none"}} />
+                   <DropdownMenu>
+                       <>
+                     <DropdownItem header>FILTRER PAR</DropdownItem>
+                     <DropdownItem onClick={()=>{setFilter("Numéro")}}>Numéro</DropdownItem>
+                     <DropdownItem onClick={()=>{setFilter("Date")}}>Date</DropdownItem>
+                     </>
+                   </DropdownMenu>
+                 </ButtonDropdown>
+
+      {(filter !=null && searched == "" )?
+                    <Chip
+                    style={{position:"relative",right:8}}
+                    variant="outlined"
+                      size="small"
+                      label={filter}
+                      onDelete={()=>setFilter(null)}
+        />
+      : (filter !=null && searched != "" )?  
+       <Chip
+       style={{position:"relative",right:8}}
+
+      variant="outlined"
+        size="small"
+        label={filter}
+        onDelete={()=>setFilter(null)}
+        color="primary"
+      /> :false
+      }
+                        
+                </InputAdornment>
+              ),            endAdornment: ( 
+              <>
+                {searched == "" ?
+                <IconButton  className={classes.iconButton} style={{outline:"none"}}  >
+                  <SearchIcon  aria-label="toggle password visibility"   />
+                </IconButton>
+                :   
+                <IconButton  className={classes.iconButton} style={{outline:"none"}}>
+                <ClearIcon onClick={()=>setSearched("")} color="primary"/>
+              </IconButton>}
+              </>
+            )
+
+            }} 
+         
+            value={searched}
+            onChange={ e =>setSearched(e.target.value)}
+            />    
+            
+
+          :
+          <TextField id="standard-search" label="Rechercher ici " 
+       InputLabelProps={{className:classes.cssLabel}} style={{width:500}}
+       InputProps={{
+              className: classes.input,
+                            startAdornment: (
+                <InputAdornment position="start">
+
+                 <ButtonDropdown isOpen={dropdownOpen} toggle={ () => setOpen(!dropdownOpen)} style={{outline:"none"}} >
+                   <DropdownToggle split color="white" style={{outline:"none",fontSize:14,backgroundColor:"none",position:"relative",right:10}} />
+                   <DropdownMenu>
+                       <>
+                     <DropdownItem header>FILTRER PAR</DropdownItem>
+                     <DropdownItem onClick={()=>{setFilter("Numéro")}}>Numéro</DropdownItem>
+                     <DropdownItem onClick={()=>{setFilter("Date")}}>Date</DropdownItem>
+                     </>
+                   </DropdownMenu>
+                 </ButtonDropdown>
+
+      {(filter !=null && searched == "" )?
+                    <Chip
+                    style={{position:"relative",right:8}}
+
+                    variant="outlined"
+                      size="small"
+                      label={filter}
+                      onDelete={()=>setFilter(null)}
+        />
+      : (filter !=null && searched != "" )?  
+       <Chip
+       style={{position:"relative",right:8}}
+
+      variant="outlined"
+        size="small"
+        label={filter}
+        onDelete={()=>setFilter(null)}
+        color="primary"
+      /> :false
+      }
+                        
+                </InputAdornment>
+              ),            endAdornment: ( 
+              <>
+                {searched == "" ?
+                <IconButton  className={classes.iconButton} style={{outline:"none"}}  >
+                  <SearchIcon  aria-label="toggle password visibility"   />
+                </IconButton>
+                :   
+                <IconButton  className={classes.iconButton} style={{outline:"none"}}>
+                <ClearIcon onClick={()=>setSearched("")} color="primary"/>
+              </IconButton>}
+              </>
+            )
+
+            }} 
+         
+            value={searched}
+            onChange={ e =>setSearched(e.target.value)}
+            />    
+            
+          
+          }
+      
+
+      </ButtonGroup>
+
            </Col>
 
-           <Col md={3}>  
+           <Col md={4}>  
+           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <Button
+      style={{outline:"none"}}
         variant="contained"
         color="primary"
         className={classes.button}
@@ -327,35 +511,35 @@ const handleChangeRowsPerPage = (event) => {
 
       <TableHead>
           <TableRow>
-            <StyledTableCell >  <b> Numero bulletin </b> </StyledTableCell>
-            <StyledTableCell  ><b>Date d'envoi </b></StyledTableCell>
-            <StyledTableCell ><b>Specialité du medecin </b></StyledTableCell>
+            <TableCell style={{color:"#1565c0"}}>  <b> Numero bulletin </b> </TableCell>
+            <TableCell   style={{color:"#1565c0"}}><b>Date d'envoi </b></TableCell>
+            <TableCell  style={{color:"#1565c0"}}><b>Specialité du medecin </b></TableCell>
 
           </TableRow>
         </TableHead>
 
         <TableBody>
           {(rowsPerPage > 0
-            ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            ? requestSearch.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             : rows
           ).map((row) => (
-            <StyledTableRow  key={row.numBull}>
-              <StyledTableCell style={{ width: 160 }}  >
+            <TableRow  key={row.numBull}>
+              <TableCell style={{ width: 160 }}  >
                 {row.numBull}
-              </StyledTableCell>
-              <StyledTableCell style={{ width: 160 }} >
+              </TableCell>
+              <TableCell style={{ width: 160 }} >
                 {row.date}
-              </StyledTableCell>
-              <StyledTableCell style={{ width: 160 }} >
+              </TableCell>
+              <TableCell style={{ width: 160 }} >
                 {row.specialite}
-              </StyledTableCell>
+              </TableCell>
               
-            </StyledTableRow>
+            </TableRow>
           ))}
 
           {emptyRows > 0 && (
             <TableRow style={{ height: 53 * emptyRows }}>
-              <StyledTableCell colSpan={6} />
+              <TableCell colSpan={6} />
             </TableRow>
           )}
         </TableBody>
@@ -363,7 +547,7 @@ const handleChangeRowsPerPage = (event) => {
           <TableRow>
             <TablePagination
               rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-              colSpan={3}
+              colSpan={6}
               count={rows.length}
               rowsPerPage={rowsPerPage}
               page={page}

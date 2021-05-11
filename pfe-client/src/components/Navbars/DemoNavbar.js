@@ -9,6 +9,8 @@ import "assets/css/style.css";
 import {AiOutlineAlignLeft} from "react-icons/ai";
 import {FaUserCircle} from "react-icons/fa";
 import {RiLogoutBoxRLine} from "react-icons/ri";
+import Button from '@material-ui/core/Button';
+
 class Header extends React.Component {
 
   constructor(props) {
@@ -203,13 +205,33 @@ class Header extends React.Component {
                 <DropdownMenu right  >  
              
                       <DropdownItem  >  
-                      &nbsp;      <span className="font-weight-bold">{this.state.user.nom}&nbsp;{this.state.user.prenom} </span>   <br></br>
-                      &nbsp;    <small> entrer a votre profile</small>                    
+
+                      
+                      &nbsp;     
+                       <Button
+                      style={{margin:0,padding:0}}
+                       href="/user/user-page"
+                        >
+
+                          <span className="font-weight-bold">{this.state.user.nom}&nbsp;{this.state.user.prenom}  <br></br> <small className="text-secondary"style={{fontSize:9}}> Consulter votre profile</small> </span>  
+                 
+                       </Button>
+                                     
 
                       </DropdownItem>
-                      <hr></hr>
+                      <hr style={{margin:0}}></hr>
                       <DropdownItem  >  
-                     <RiLogoutBoxRLine size={22}/> <Link to="/login" onClick={  ()=>this.logout()  }>  se deconnecter</Link> 
+
+                      &nbsp;      <Button
+                      style={{margin:0,padding:0}}
+                      startIcon={ <RiLogoutBoxRLine size={22}/>}
+                      onClick={  ()=>this.logout()  }
+                      href="/login"
+                    >
+       <small> déconnexion</small> 
+
+      </Button>
+                        
                   
                       </DropdownItem>
                 </DropdownMenu>

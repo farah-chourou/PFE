@@ -174,15 +174,27 @@ export default function BullRecuMed(props) {
               <TableCell component="th" scope="row">
                 {row.recepteur}
               </TableCell>
+
+
               <TableCell component="th" scope="row" >
-              <span className="etat shadow p-1"> {row.etat} </span>   
+               {row.etat=="Accepté"? 
+                <span className="etatAccepter  p-1 px-2 "> {row.etat} </span>   
+                :row.etat=="Rejeté"?
+                <span className="etatRejeter shadow p-1 px-2 "> {row.etat} </span>   
+                 :row.etat=="Contre visite"?
+                 <span className="etatVisite shadow p-1 px-2 "> {row.etat} </span>   
+                 :row.etat=="en cours"?
+                 <span className="etatAttente shadow p-1 px-2 "> {row.etat} </span>   
+                :                <span className="etatAutre shadow p-1 px-2 "> {row.etat} </span>   
+
+              } 
               </TableCell>
               <TableCell component="th" scope="row" align="center">
              
                 <Tooltip title="Envoyer">
                 
               <IconButton aria-label="delete" className={classes.margin} onClick={() => envoyer()} style={{outline:"none"}}> 
-                      <MdSend  size={20} className="envoyerIcon" />
+                      <MdSend  size={20} className="envoyerIcon"  />
                 </IconButton>  
                    </Tooltip>
 

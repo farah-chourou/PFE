@@ -45,7 +45,10 @@ import moment from 'moment';
 import 'moment/locale/fr';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import backgroundImage from "fond8.png";
 
+import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 //pagination
 const useStyles1 = makeStyles((theme) => ({
   root: {
@@ -406,26 +409,13 @@ var requestSearch =(
   <Row>
   <Col md="12">
     <Card >
-      <CardHeader className="bg-light">
+      <CardHeader className="bg-light" style={{ backgroundImage: `linear-gradient(#fffbfbb0, #fffbfbb0),url(${backgroundImage})`,backgroundSize:"100%",paddingBottom:17}}>
         <Row>
-          <Col md={9}>
-          <CardTitle tag="h4">Bulletin récemment envoyé</CardTitle>
-          
-           </Col>
-
-           <Col md={3}>  
-           </Col>
-        
-         </Row>
+          <Col md={12}>
+          <CardTitle tag="h4">Bulletin Récemment Envoyé</CardTitle>
 
 
-      </CardHeader>
-      <CardBody>
-   <TableContainer style={{ overflow: "hidden"}} >
-     <Row> 
-       <Col md={3}></Col>
-     <Col md={9} className=" align-self-end ">
-   <ButtonGroup  size="small" aria-label=" small  outlined primary button group" >
+          <ButtonGroup  size="small" aria-label=" small  outlined primary button group" >
         <Button style={{outline:"none"}} onClick={enAttente}>En attente</Button>
         <Button style={{outline:"none"}} onClick={accepter} >Accepté</Button>
         <Button style={{outline:"none"}} onClick={rejeter}> Rejeté</Button>
@@ -435,16 +425,33 @@ var requestSearch =(
 &nbsp;&nbsp;
 &nbsp;
       <ButtonGroup  size="small" aria-label=" small  outlined primary button group" style={{position:"relative" , bottom:-6}}>
-        <Button style={{outline:"none"}} onClick={()=>{changeAdd()}}><ArrowBackIosIcon fontSize="small"/></Button>
+        <Button style={{outline:"none"}} onClick={()=>{changeAdd()}}><ArrowLeftIcon fontSize="small"/></Button>
         <Button style={{outline:"none"}} >{annee}</Button>
-        <Button style={{outline:"none"}} onClick={()=>{  setAnnee(annee-1);changeSubstract();}}> <ArrowForwardIosIcon fontSize="small"/></Button>
+        <Button style={{outline:"none"}} onClick={()=>{  setAnnee(annee-1);changeSubstract();}}> <ArrowRightIcon fontSize="small"/></Button>
 
       </ButtonGroup>
       
+      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;
       &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;
+
        
       <ButtonGroup color="primary" size="small" aria-label=" small   primary button group" style={{position:"relative",bottom:-8,width:180 }}>
-      <TextField id="standard-search" label="Rechercher par N° bulletin" type="search"
+      <TextField id="standard-search" label="Rechercher par N° bulletin" type="search" 
        InputLabelProps={{className:classes.cssLabel}}
        InputProps={{
               className: classes.input,
@@ -462,47 +469,21 @@ var requestSearch =(
 
       </ButtonGroup>
 
-{/*  
-<div  className={classes.aa} style={{width:300}}className="d-inline-block">
-      <ButtonDropdown isOpen={dropdownOpen} toggle={ () => setOpen(!dropdownOpen)} >
-  <DropdownToggle split color="light" style={{outline:"none",fontSize:20}} />
-  <DropdownMenu>
-      <>
-    <DropdownItem header>FILTRER PAR</DropdownItem>
-    <DropdownItem onClick={()=>{setFilter("Nom d'utilisateur")}}>Nom d'utilisateur</DropdownItem>
-    <DropdownItem onClick={()=>{setFilter("Email")}}>Email</DropdownItem>
-    </>
-  </DropdownMenu>
-</ButtonDropdown>
-&nbsp;
-{filter !=null ?
-      <Chip
-      variant="outlined"
-        size="small"
-        label={filter}
-        onDelete={()=>setFilter(null)}
-color="primary"
-        />
-      
-      :false}
-      <InputBase
-      
-        className={classes.input}
-        placeholder="Rechercher ici ..."
-        inputProps={{ 'aria-label': 'search google maps' }}
-        value={searched}
-        onChange={ e =>setSearched(e.target.value)}
-      />
-      
-      {searched == "" ?
-      <IconButton  className={classes.iconButton} aria-label="search"style={{outline:"none"}}  >
-        <SearchIcon  />
-      </IconButton>
-      :   
-      <IconButton  className={classes.iconButton} aria-label="search" style={{outline:"none"}}>
-      <HighlightOffIcon onClick={()=>setSearched("")}/>
-    </IconButton>}
-    </div>*/}
+           </Col>
+
+           
+        
+         </Row>
+
+
+      </CardHeader>
+      <CardBody>
+   <TableContainer style={{ overflow: "hidden"}} >
+     <Row> 
+       <Col md={3}></Col>
+     <Col md={9} className=" align-self-end ">
+
+
 
       </Col></Row>
       <Table className={classes.table} aria-label="custom pagination table">

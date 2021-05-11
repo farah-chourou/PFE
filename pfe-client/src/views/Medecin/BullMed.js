@@ -35,6 +35,16 @@ import Button from '@material-ui/core/Button';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import {BsPlusSquareFill} from "react-icons/bs"
 
+import backgroundImage from "fond8.png";
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+
+import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import SearchIcon from '@material-ui/icons/Search';
+
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+
+
 //pagination
 const useStyles1 = makeStyles((theme) => ({
   root: {
@@ -60,6 +70,22 @@ const useStyles = makeStyles((theme) => ({
   button: {
     margin: theme.spacing(1),
   },
+  
+  iconButton: {
+    padding: 10,
+    
+  },
+  divider: {
+    height: 28,
+    margin: 4,
+  },
+  input: {
+    height: 30,
+    color : '#3d5afe',
+    borderWidth: '1px',
+    borderColor: 'green !important'
+  },
+  
 }));
 
 
@@ -181,6 +207,9 @@ export default function UsersList() {
   const[date,setDate] = useState("")
   const [showAutre,setShowAutre]=useState(false)
   const[commentaireMed,setCommentaireMed] = useState("")
+
+  const  [searched,setSearched] = useState("")
+
 //tabs
 
 useEffect(() => {
@@ -259,7 +288,7 @@ const ajouterAvis = ()=>{
 
 
 
-  const   handleSubmit= (e)=>{
+ const   handleSubmit= (e)=>{
     e.preventDefault();
     ajouterAvis()
   }  
@@ -296,23 +325,52 @@ const handleChangeRowsPerPage = (event) => {
   setPage(0);
 };
 
+//filter
+var requestSearch =(
 
+  rows.filter((row) => {
+  return row.numBull.toString().includes(searched);
+  }));
 
   return (
     <div className="content"  component={Paper}>
    <NotificationAlert ref={notificationAlert} />
 
     <Row>
-
-  <Col md={12}>
+<Col md={1}></Col>
+  <Col md={10}>
     <Card >
-      <CardHeader className="bg-light">
+      <CardHeader className="bg-light"  style={{backgroundImage: `linear-gradient(#fffbfbb0, #fffbfbb0),url(${backgroundImage})`,backgroundSize:"100%",paddingBottom:30}}>
         <Row>
           <Col md={9}>
-          <CardTitle tag="h4">Liste des bulletins deja envoyer</CardTitle>
+          <CardTitle tag="h4">Bulletin  Dernièrement Récu</CardTitle>
            <p className="card-category">
-           </p> 
-           </Col>
+           </p>            </Col>
+
+         <Col d={3}>
+         <ButtonGroup color="primary" size="small" aria-label=" small   primary button group" style={{position:"relative",bottom:-8,width:180 }}>
+      <TextField id="standard-search" label="Rechercher par N° bulletin" type="search" 
+       InputLabelProps={{className:classes.cssLabel}}
+       InputProps={{
+              className: classes.input,
+              startAdornment: (
+                <InputAdornment position="start">
+                <SearchIcon  aria-label="toggle password visibility" />           
+                </InputAdornment>
+              ),
+            }} 
+         
+            value={searched}
+            onChange={ e =>setSearched(e.target.value)}
+            />
+      
+
+      </ButtonGroup>
+
+      
+
+         </Col>
+       
 
            <Col md={3}>  
      
@@ -333,40 +391,49 @@ const handleChangeRowsPerPage = (event) => {
       <Table className={classes.table} aria-label="custom pagination table">
 
       <TableHead>
-          <TableRow>
-            <TableCell >  <b> Numero bulletin </b> </TableCell>
-            <TableCell  ><b>Date d'envoi </b></TableCell>
-            <TableCell ><b>Envoyer par </b></TableCell>
-            <TableCell ><b>Autre </b></TableCell>
+          <TableRow className="text-uppercase	">
+            <TableCell  style={{color:"#1565c0"}}>  <b> Numero bulletin </b> </TableCell>
+            <TableCell   style={{color:"#1565c0"}}><b>Date d'envoi </b></TableCell>
+            <TableCell  style={{color:"#1565c0"}}  ><b>Envoyer par </b></TableCell>
+            <TableCell   style={{color:"#1565c0"}}><b> &nbsp;&nbsp;Autre </b></TableCell>
 
           </TableRow>
         </TableHead>
 
         <TableBody>
           {(rowsPerPage > 0
-            ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            : rows
+            ? requestSearch.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            : requestSearch
           ).map((row) => (
-            <StyledTableRow  key={row.numBull}>
-              <StyledTableCell style={{ width: 160 }}  >
+            <TableRow  key={row.numBull}>
+              <TableCell style={{ width: 160 }}  >
                 {row.numBull}
-              </StyledTableCell>
-              <StyledTableCell style={{ width: 160 }} >
+              </TableCell>
+              <TableCell style={{ width: 160 }} >
                 {row.date}
-              </StyledTableCell>
-              <StyledTableCell style={{ width: 160 }} >
+              </TableCell>
+              <TableCell style={{ width: 160 }} >
                 {row.expediteur}
-              </StyledTableCell>
-              <StyledTableCell style={{ width: 160 }} >
-              <Button onClick={() =>(setShow(true), setNumBull(row.numBull))}>   <BsPlusSquareFill  size={20} className="text-lignt" /> &nbsp;AVIS </Button>   
+              </TableCell>
+             <TableCell style={{ width: 160 }} >
+                   <Button
+                     variant="contained"
+                     color="primary"
+                     className={classes.button}
+                     startIcon={<AddCircleIcon />}
+                     onClick={() =>(setShow(true), setNumBull(row.numBull))}
+                     style={{outline:"none"}}
+                   >
+                     Avis
+                   </Button>
 
-              </StyledTableCell>
-            </StyledTableRow>
+              </TableCell>
+            </TableRow>
           ))}
 
           {emptyRows > 0 && (
             <TableRow style={{ height: 53 * emptyRows }}>
-              <StyledTableCell colSpan={6} />
+              <TableCell colSpan={6} />
             </TableRow>
           )}
         </TableBody>
