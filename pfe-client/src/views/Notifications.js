@@ -176,7 +176,7 @@ export default function Notifications(props) {
 
           <Row  className="justify-content-md-center mb-5" style={{marginTop: 100 }} >
            
-            <Col md={6}> {console.log(notifications)}
+            <Col md={7} style={{backgroundColor:"white",padding:35,borderRadius:"10px",boxShadow:" rgba(0, 0, 0, 0.35) 0px 5px 15px"}}> 
           
             <span> 
          <div class=" text-uppercase  mb-3" style={{borderBottom: "1px solid #E2E2E2",fontSize:"20px" }}><b> Notifications </b>    </div>
@@ -198,18 +198,23 @@ export default function Notifications(props) {
                  <div key={R.id} >
                  {R.expediteurNotif == null ?
                  
-                 <Row   className="mb-3 p py-1  " onClick={()=> getBull(R.id)}  style={{border:"1px solid #E2E2E2",borderRadius: "5px" , backgroundColor:"white",boxShadow:"5px 5px 5px gray"}}>  
-                 
+                 <Row   className="mb-3 p py-1  " onClick={()=> getBull(R.id)}  style={{backgroundColor:"#FDFDFF",border:"1px solid #E2E2E2",borderRadius: "5px" ,boxShadow:"5px 5px 5px gray"}}>  
+              
                  <Col md={1} className=" font-weight-bold text-uppercase">  
-                 <AiFillAlert size="25px" className="text-danger"/>
+                 <AiFillAlert size="25px" style={{color:"#d64161"}}/>
 
                  </Col>
+               
                  &nbsp;
                   <Col md={10} className=" pb-2 "  >   
-                 <Row className="font-weight-bold text-uppercase">
-                 { R.etat == false ?
-                   <FaCircle className="" size={10} color="rgb(81, 137, 241)"/> 
-                   :<FaCircle className=" text-light" size={10} /> }
+                  <Row className="font-weight-bold text-uppercase">
+                 <Col md={10} style={{color:"#d64161"}}> Rappel</Col>
+                 <Col md={2} className="" > 
+                  { R.etat == false ?
+                   <FaCircle style={{position:"relative",left:80}} className="" size={10} color="rgb(81, 137, 241)"/> 
+                   :<FaCircle style={{position:"relative",left:80}} className=" text-light" size={10} /> }
+                   
+                   </Col>
                   </Row>
                 
                   <div>  bulletin numero <b> {R.suivisBullMed.numBull}</b><br></br> est encore en attente de votre avis  </div>  
@@ -219,7 +224,7 @@ export default function Notifications(props) {
                  </Row>
 
               : 
-                 <Row  width="90px"  className="mb-2 p py-2  " onClick={()=> getBull(R.id)}  style={{border:"1px solid #E2E2E2",borderRadius: "5px" , backgroundColor:"#f5f5f5",boxShadow:"5px 5px 5px gray"}}>  
+                 <Row  width="90px"  className="mb-3 p py-2   " onClick={()=> getBull(R.id)}  style={{backgroundColor:"#FDFDFF",border:"1px solid #E2E2E2",borderRadius: "5px",boxShadow:"5px 5px 5px gray"}}>  
                  
                  <Col md={1} className=" font-weight-bold text-uppercase">  
 

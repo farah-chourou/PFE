@@ -7,7 +7,7 @@ import axios from "axios";
 import NotificationAlert from "react-notification-alert";
 import Button from '@material-ui/core/Button';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-
+import GroupAddIcon from '@material-ui/icons/GroupAdd';
 export default class EditUser extends Component {
     constructor(props) {
         super(props)
@@ -157,27 +157,27 @@ export default class EditUser extends Component {
 
       errorName(){
         this.setState({     
-            nameError: "user Exist",
+            nameError: "Ce nom d'utilisateur est déjà utilisé !",
          })}
      
    
    errorNameAndEmail(){
         this.setState({     
-            nameError: "user Exist",  
-            emailError: "email Already Exist"
+            nameError: "Ce nom d'utilisateur est déjà utilisé !",  
+            emailError: "Cet email est déja utilisé ! "
    
          })}
           
     
    errorEmail(){
      this.setState({     
-         emailError: "email Already Exist"
+         emailError: "Cet email est déja utilisé !"
       })
    }
    
    errorPassword(){
      this.setState({     
-         passwordError: "pasword mich kifkif"
+         passwordError: "Les mots de passe ne sont pas identiques ! "
       })
    }
     
@@ -242,7 +242,7 @@ export default class EditUser extends Component {
         keyboard={false} 
       >
         <Modal.Header closeButton>
-          <Modal.Title> Ajouter un utilisateur </Modal.Title>
+          <Modal.Title> <GroupAddIcon fontSize="large"/> Nouveau utilisateur </Modal.Title>
         </Modal.Header>
         <Form  onSubmit={this.handleSubmit}>
 
@@ -252,20 +252,29 @@ export default class EditUser extends Component {
                       <Row>
                       <Col className="pr-1" md="6">
                         <Form.Group>
-                          <label>Username</label>
-                          <Form.Control placeholder="Enter Username.."type="text" name="userName" required value={this.state.userName} onChange={this.handleChange}/>
-                        </Form.Group>
-                        <div> {this.state.nameError} </div>
+                          <label>Nom d'utilisateur</label>
+                          <Form.Control placeholder="Enter Username.."type="text" name="userName" required value={this.state.userName} onChange={this.handleChange}
+                                  isInvalid={ !!this.state.nameError}
+                                  />
+                                                <Form.Control.Feedback type='invalid'>
+                                                 {this.state.nameError}
+                                                </Form.Control.Feedback>
+                                              </Form.Group>
+          
 
                       </Col>
                       <Col className="pl-1" md="6">
                         <Form.Group>
                           <label htmlFor="exampleInputEmail1">
-                            Email address
+                            Adresse email
                           </label>
-                          <Form.Control placeholder="Email"type="email" name="email" required value={this.state.email} onChange={this.handleChange}/>
+                          <Form.Control placeholder="Email"type="email" name="email" required value={this.state.email} onChange={this.handleChange}
+                           isInvalid={ !!this.state.emailError}  />
+                          <Form.Control.Feedback type='invalid'>
+                                                 {this.state.emailError}
+                              </Form.Control.Feedback>
+                       
                         </Form.Group>
-                        <div> {this.state.emailError} </div>
 
                       </Col>
                     </Row>
@@ -273,22 +282,21 @@ export default class EditUser extends Component {
                     <Row>
                       <Col className="pr-1" md="4">
                         <Form.Group>
-                          <label>First Name</label>
+                          <label>Nom</label>
                           <Form.Control placeholder="Company"type="text" name="nom" required value={this.state.nom} onChange={this.handleChange}/>
                         </Form.Group>
                       </Col>
                       <Col className="px-1" md="4">
                         <Form.Group>
-                          <label>Last Name</label>
+                          <label>Prénom</label>
                           <Form.Control  placeholder="Last Name"  type="text" required name="prenom" value={this.state.prenom} onChange={this.handleChange}/>
                         </Form.Group>
                       </Col>
 
                       <Col className="pl-1" md="4">
                       <Form.Group controlId="formGridState">
-                          <Form.Label>Sex</Form.Label>
+                          <Form.Label>Sexe</Form.Label>
                           <Form.Control as="select" defaultValue="Choose..."name="sex" required value={this.state.sex} onChange={this.handleChange}  >
-                          <option > Choisir</option>
                             <option value="homme"> Homme</option>
                             <option value="femme"> Femme</option>
                     
@@ -301,7 +309,7 @@ export default class EditUser extends Component {
                     <Row>
                     <Col className="pr-1" md="6">
                         <Form.Group>
-                          <label>Phone Number</label>
+                          <label>N° télephone</label>
                           <Form.Control  placeholder="+216" type="text" name="tel"  required value={this.state.tel} onChange={this.handleChange}/>
                         </Form.Group>
                       </Col>
@@ -309,9 +317,8 @@ export default class EditUser extends Component {
                       <Form.Group controlId="formGridState">
                           <Form.Label>Role</Form.Label>
                           <Form.Control as="select" defaultValue="Choose..."name="role" required value={this.state.role} onChange={this.handleChange} onClick={()=> {this.show(this.state.role)}} >
-                            <option>Choose...</option>
                             <option value="medecin"> Medecin</option>
-                            <option value="validateur"> validateur</option>
+                            <option value="validateur"> Validateur</option>
                       
 
                            </Form.Control>
@@ -343,18 +350,22 @@ export default class EditUser extends Component {
 
                       <Col className="pr-1" md="6">
                         <Form.Group>
-                          <label>Password</label>
-                          <Form.Control placeholder="Enter password"type="password"  required name="password" value={this.state.password}  onChange={this.handleChange}/>
+                          <label>Mot de passe</label>
+                          <Form.Control placeholder="Enter password"type="password" minLength={5} required name="password" value={this.state.password}  onChange={this.handleChange}/>
                         </Form.Group>
                       </Col>
 
                       <Col className="pl-1" md="6">
                         <Form.Group>
-                          <label>Confirm Password</label>
-                          <Form.Control placeholder="Confirm password.." type="password" required name="confirmPassword" value={this.state.confirmPassword}  onChange={this.handleChange}/>
+                          <label>Confirmer mot de passe</label>
+                          <Form.Control placeholder="Confirm password.." type="password" required name="confirmPassword" value={this.state.confirmPassword}  onChange={this.handleChange}
+                          isInvalid={ !!this.state.passwordError}  />
+                          <Form.Control.Feedback type='invalid'>
+                                                 {this.state.passwordError}
+                              </Form.Control.Feedback>
+                       
                         </Form.Group>
                       </Col>
-                      <div> {this.state.passwordError} </div>
                     </Row>
       
                     <div className="clearfix"></div>
@@ -370,9 +381,18 @@ export default class EditUser extends Component {
         </Modal.Body>
         <Modal.Footer>
         <Button style={{backgroundColor: "gray"}} className="text-light border border-muted" onClick={() => this.handleCloseUpdate()}>
-         <b>  Anuuler</b> 
+         <b>  Anuler</b> 
           </Button>
-        <Button className="btn-fill pull-right"type="submit" variant="info"   color="primary"  >  Ajouter  </Button>
+          &nbsp;
+          <Button
+      style={{outline:"none"}}
+        variant="contained"
+        color="primary"
+        type="submit"
+      >
+
+        AJOUTER
+      </Button>
        
         </Modal.Footer>  </Form>
       </Modal>

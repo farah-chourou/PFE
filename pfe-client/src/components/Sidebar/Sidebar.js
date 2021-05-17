@@ -7,7 +7,7 @@ import backgroundImage from "fond1.png";
 
 import PerfectScrollbar from "perfect-scrollbar";
 
-import logo from "logoo.png";
+import logo from "logo.png";
 
 var ps;
 
@@ -83,7 +83,7 @@ class Sidebar extends React.Component {
           <Nav>
          
           <Nav className=" text-light text-uppercase font-weight-bold">
-          &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;   Role :   {this.state.user.role}
+          {/*&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;   Role :   {this.state.user.role}*/}
          </Nav>
             {this.props.routes.map((prop, key) => {
             

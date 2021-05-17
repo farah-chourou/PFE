@@ -208,7 +208,7 @@ const[num,setNum]=useState()
           setBullNonValide([])
           res.data.map(e => 
             <div key={e.numBull}>
-            {moment(e.date).isBetween(  moment().startOf('week'), moment().endOf('week')) == true? 
+            {moment(e.date).isBetween(  moment().startOf('week').subtract(1, 'days'), moment().endOf('week').add(1, 'days')) == true? 
                 (    setBullNonValide(prevState => [...prevState, e]))
 
             :false}</div>
@@ -219,7 +219,7 @@ const[num,setNum]=useState()
          setBullValide([]);
          result.data.map(e => 
             <div key={e.numBull}>  
-           { moment(e.date).isBetween( moment().startOf('week'), moment().endOf('week')) == true? 
+           { moment(e.date).isBetween( moment().startOf('week').subtract(1, 'days'), moment().endOf('week').add(1, 'days')) == true? 
                 (    setBullValide(prevState => [...prevState, e]))
                :false}</div>
   )
@@ -231,7 +231,7 @@ const[num,setNum]=useState()
 
         result.data.map(e => 
           <div key={e.numBull}>  
-          { moment(e.date).isBetween( moment().startOf('week'), moment().endOf('week')) == true? 
+          { moment(e.date).isBetween( moment().startOf('week').subtract(1, 'days'), moment().endOf('week').add(1, 'days')) == true? 
                (    setBullValide2(prevState => [...prevState, e]))
               :false}</div>
         )
@@ -248,7 +248,7 @@ const getInfoValid = (u) =>{
   axios.get('http://localhost:8080/getAllBullEtape1' ).then( res => {
     res.data.map(e => 
       <div key={e.numBull}>
-      {(moment(e.date).isBetween( moment().startOf('week'), moment().endOf('week')) == true && e.expediteur.userName ==u) ? 
+      {(moment(e.date).isBetween( moment().startOf('week').subtract(1, 'days'), moment().endOf('week').add(1, 'days')) == true && e.expediteur.userName ==u) ? 
           (    setBullValidateur(prevState => [...prevState, e]))
 
       :false}</div>
@@ -258,7 +258,7 @@ const getInfoValid = (u) =>{
       axios.get('http://localhost:8080/getAllBullEtape2' ).then( res => {
     res.data.map(e => 
       <div key={e.numBull}>
-      {(moment(e.date).isBetween( moment().startOf('week'), moment().endOf('week')) == true && e.expediteur.userName ==u) ? 
+      {(moment(e.date).isBetween( moment().startOf('week').subtract(1, 'days'), moment().endOf('week').add(1, 'days')) == true && e.expediteur.userName ==u) ? 
           (    setBullValidateur(prevState => [...prevState, e]))
 
       :false}</div>

@@ -14,8 +14,9 @@ import TextField from '@material-ui/core/TextField';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import LockIcon from '@material-ui/icons/Lock';
-import logo from "logoo.png";
+import logo from "logo.png";
 import backgroundImage from "login.jpg";
+import { Random } from 'react-animated-text';
 
  class Login extends React.Component {
   constructor(props) {
@@ -31,12 +32,15 @@ import backgroundImage from "login.jpg";
       password:'',
       userName:'',
       error:'',
-      isLogin:false
+      isLogin:false,
+      clicked:false
 
    }
 
    this.handleChange=this.handleChange.bind(this);
    this.handleSubmit=this.handleSubmit.bind(this);
+   this.click=this.click.bind(this);
+
 }
 
 
@@ -90,11 +94,11 @@ handleSubmit=(e)=> {
 
      localStorage.setItem("user", JSON.stringify(result.data));
      if(result.data.role == "medecin"){ 
-      this.props.history.push('/user');}
+      this.props.history.push('/user/user-page');}
       if(result.data.role== "responsable"){ 
          this.props.history.push('/user/dashboard');}
       if(result.data.role == "validateur"){ 
-        this.props.history.push('/user');}   
+        this.props.history.push('/user/user-page');}   
      
         axios.put('http://localhost:8080/connecte/'+this.state.userName)
 
@@ -113,6 +117,9 @@ handleChange = (event) => {
       [event.target.name]:value
   })
 }
+click = () => {
+ this.setState({clicked:true})
+}
 
 
 
@@ -129,7 +136,7 @@ error(){
 
   render() {
     return (
-      <div style={{paddingBottom:103 , paddingTop:103,backgroundImage: `linear-gradient(rgba(233, 233, 235, 0.993), rgba(238, 235, 235, 0.993))`}} > 
+      <div style={{paddingBottom:103 , paddingTop:103,backgroundImage: `linear-gradient(#F8F8F8, rgba(238, 235, 235, 0.993))`}} > 
    <Container  > 
      <Row className="justify-content-center " style={{}}>
 
@@ -137,9 +144,27 @@ error(){
        <Row className="justify-content-center"> 
        <Col md={12} className="  bg-lignt text-light" > 
 
-              <h3 className="text-center  text-uppercase " style={{paddingTop:90}} >  <span style={{borderBottom:"1px solid white"}}>Bienvenue  </span>  </h3> 
+              <h3 className="text-center  text-uppercase " style={{paddingTop:90}} >  <span>    
+                {this.state.clicked == false?
+  <Random
+   style={{borderBottom:"1px solid white"}}
+  text="Bienvenue"
+  iterations={1}
+  effect="verticalFadeIn"
+  effectChange={2}
+  effectDirection="up"
+/> 
+:  <Random
+style={{borderBottom:"1px solid white"}}
+text="Bienvenue"
+iterations={0}
+effect="verticalFadeIn"
+effectChange={1}
+effectDirection="up"
+/> }
+</span>  </h3> 
        <br></br>
-       
+
        <div className=" text-center px-5 pb-2"> 
        <small >
        "Mutulal by Codway vous shouaite un bon travail "
@@ -147,9 +172,10 @@ error(){
         </div>
        
        
-        <h3 className=" text-center" style={{paddingTop:95}}> <img src={logo} alt="MUTUAL-BY-CODWAY-logo"height={63} /> </h3> 
+        <h3 className=" text-center" style={{paddingTop:92}}> <img src={logo} alt="MUTUAL-BY-CODWAY-logo"height={70} /> </h3> 
   
          </Col>
+
          </Row>
 
 
@@ -162,10 +188,9 @@ error(){
         <Form onSubmit={this.handleSubmit}>
 
        {this.state.error==""?
-       <>
+       <> 
         <TextField  fullWidth style={{marginBottom:40}}
         size="large"
-        id="input-with-icon-textfield"
         label="Nom d'utilisateur"
         InputProps={{
           startAdornment: (
@@ -174,7 +199,7 @@ error(){
             </InputAdornment>
           ),
         }}
-        name="userName" value={this.state.userName} onChange={this.handleChange}
+        name="userName" value={this.state.userName} onChange={this.handleChange} onClick={this.click}
       />
       <br></br> 
     <TextField 
@@ -227,7 +252,7 @@ error(){
       
 <br></br>
 <Row><Col md={3} > </Col> <Col> 
-<Button variant="contained" size="medium" color="primary" type="submit"  style={{outline:"none",borderRadius:30,paddingRight:50,paddingLeft:50}}>
+<Button variant="contained" size="medium"  type="submit"  style={{outline:"none",borderRadius:30,paddingRight:50,paddingLeft:50,backgroundColor:"#0C7A9B",color:"white"}}>
           Login
  </Button>
 

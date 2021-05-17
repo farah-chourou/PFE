@@ -261,8 +261,8 @@ const   AddBull = () => {
      axios.post('http://localhost:8080/addBull/' +user.id + '/'+ recepteur , suivisBulletein).then(res  => { 
 
      console.log(res.data) ;
-     if(res.data.message =="Bull already exist !"){
-         setError("bulletin deja exist !")
+     if(res.data.message =="Ce bulletin déjà existe !"){
+         setError("Ce bulletin déjà existe !")
      } else{
       getAllBullUser();
              notify("br");
@@ -346,13 +346,8 @@ rows.filter((row) => {
            <p className="card-category">
            </p> 
 
-           <ButtonGroup color="primary" size="small" aria-label=" small   primary button group" style={{position:"relative",bottom:-8,width:180 }}>
-  
-      
-            
-            {filter=="Date" ?
-
-
+     <ButtonGroup color="primary" size="small" aria-label=" small   primary button group" style={{position:"relative",bottom:-8,width:180 }}>
+      {filter=="Date" ?
           <TextField  id="date" label="Rechercher ici "  type="date" p={0}
        InputLabelProps={{          shrink: true,       }} style={{width:500}}
        InputProps={{
@@ -470,18 +465,13 @@ rows.filter((row) => {
          
             value={searched}
             onChange={ e =>setSearched(e.target.value)}
-            />    
-            
-          
-          }
-      
-
+            />  }
       </ButtonGroup>
 
            </Col>
 
            <Col md={4}>  
-           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <Button
       style={{outline:"none"}}
         variant="contained"
@@ -491,7 +481,7 @@ rows.filter((row) => {
         onClick={() =>setShow(true)}
       >
 
-        AJOUTER BULLETIN
+        AJOUTER 
       </Button>
    
            </Col>
@@ -598,16 +588,20 @@ rows.filter((row) => {
                 <Form.Row >
                   <Form.Group as={Col} >
                     <Form.Label>Numero Bulletin</Form.Label>
-                    <Form.Control className="bg-white" type="number" required placeholder="Enter numero of bulletin" name="numBull" value={numBull} onChange={e => setNumBull(e.target.value)}/>
+                    <Form.Control className="bg-white" type="number" required placeholder="Enter numero of bulletin" name="numBull" value={numBull} onChange={e => setNumBull(e.target.value)}
+                    isInvalid={ !!error}
+                                  />
+                                                <Form.Control.Feedback type='invalid'>
+                                                {error}
+                                                </Form.Control.Feedback>
+                
                   </Form.Group>
-                {error}
                 </Form.Row>
-                <div>{error} </div>
                 <Form.Row >
                 <Form.Group as={Col} controlId="formGridState">
-                    <Form.Label>Specialité medecin</Form.Label>
+                    <Form.Label> &nbsp;Specialité medecin</Form.Label>
                     <Form.Control as="select"  required name="specialiteMed" value={specialiteMed} onChange={e => setSpecialiteMed(e.target.value)}>
-                    <option>Choose...</option>
+                    <option>Choisir...</option>
 
                       {medecins.map( R => 
                       <option value={R.specialite} > {R.specialite}    ( Docteur &nbsp;{R.userName}) </option> )}
@@ -625,7 +619,7 @@ rows.filter((row) => {
                 <Form.Group as={Col} controlId="formGridState">
                     <Form.Label>envoyer a :</Form.Label>
                     <Form.Control as="select" name="recepteur" required value={recepteur} onChange={e => setRecepteur(e.target.value)}>
-                    <option>Choose...</option>
+                    <option>Choisir...</option>
 
                       {responsables.map( R => 
                       <option value={R.userName} > responsable  ({R.userName}) </option> )}
@@ -645,9 +639,16 @@ rows.filter((row) => {
         <Modal.Footer>
         <Button style={{backgroundColor: "gray"}} className="text-light border border-muted" onClick={() => setShow(false)}>
          <b>  Anuuler</b> 
-          </Button>
-        <Button className="btn-fill pull-right"type="submit"  required variant="info"   color="primary" >  Ajouter & envoyer  </Button>
-       
+          </Button>&nbsp;
+          <Button
+        style={{outline:"none"}}
+        variant="contained"
+        color="primary"
+        type="submit"
+      >
+
+        AJOUTER & envoyer
+      </Button>       
         </Modal.Footer>  </Form>
       </Modal>
 

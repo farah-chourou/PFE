@@ -21,7 +21,7 @@ import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import Slide from '@material-ui/core/Slide';
-import backgroundImage from "img5.jpg";
+import backgroundImage from "bg2.png";
 import moment from 'moment';
 import 'moment/locale/fr';
 import { IoLogoBitbucket } from "react-icons/io";
@@ -135,7 +135,7 @@ export default function Notification(props) {
       }
     
     const  getBull = (id) => {
-        history.push('/user/soloBulletin/'+id);
+        history.push('/user/DétailsNotification/'+id);
         window.location.reload(false);
 
       }
@@ -172,12 +172,12 @@ export default function Notification(props) {
          
           <DropdownMenu right    >
             
-            <div style={{ backgroundImage: `url(${backgroundImage})`,backgroundColor:'blue',opacity:"0.8",backgroundRepeat:"no-repeat",paddingTop:14,borderTopLeftRadius:5,borderTopRightRadius:5,paddingBottom:"10px",position:"relative",top:"-8px" }}> 
+            <div style={{backgroundImage: `linear-gradient(rgba(51, 51, 51, 0.466)  , rgba(51, 51, 51, 0.466)  ),url(${backgroundImage})`,backgroundRepeat:"no-repeat",paddingTop:14,borderTopLeftRadius:5,borderTopRightRadius:5,paddingBottom:"10px",position:"relative",top:"-8px" }}> 
          <span class=" text-uppercase text-white py-2 mb-3" style={{borderBottom: "1px solid #E2E2E2",paddingRight:"154px",opacity:"none"}}><b>  &nbsp;&nbsp; Notifications </b>    </span>
      {notifNonlu > 0 ? <div><div style={{fontSize:14, paddingLeft: 8,color:"rgb(81, 137, 241)",paddingTop:'10px',color:"white"}} className="my-1 "> &nbsp;  Vous avez <b>{notifNonlu} </b> notification non lu encore <br></br> &nbsp; <Link class="text-white" onClick={lu}> Marquer tout comme lu</Link><br></br> </div>  </div> :false } 
         
        </div>
-                {notifications.length == 0 ?  <div className="text-center small"> No notification avaible  </div>
+                {notifications.length == 0 ?  <div className="text-center small"> Aucune notification   </div>
                  : 
 
                 (<div className="scrollbar" id="style-7"> 
@@ -232,12 +232,12 @@ export default function Notification(props) {
                 <Row  width="100px" >  
                 <Col md={1} className=" font-weight-bold text-uppercase" style={{ }}>  
                 
-                <AiFillAlert size="25px" className="text-danger"/>
+                <AiFillAlert size="25px" style={{color:"#d64161"}}/>
                 </Col>
                 &nbsp;
                  <Col md={10} className="pb-2  "  style={{borderBottom: "1px solid #E2E2E2"}}>   
                 <Row className="font-weight-bold text-uppercase">
-                <Col md={10} className="text-danger"> Rappel</Col>
+                <Col md={10} style={{color:"#d64161"}}> Rappel</Col>
                 <Col md={2} className="" > 
                  { R.etat == false ?
                   <FaCircle className="" size={10} color="rgb(81, 137, 241)"/> 

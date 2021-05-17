@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import {FaUserEdit} from "react-icons/fa";
-import {Tabs, Tab, Button, Modal,Form} from "react-bootstrap";
+import {Tabs, Tab, Modal,Form} from "react-bootstrap";
 import {Card,CardHeader,CardBody,CardTitle,Table,Row,Col,} from "reactstrap";
 import ModalModifyUser from "../Modal/ModalModifyUser";
 import axios from "axios";
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 
 export default class EditUser extends Component {
     constructor(props) {
@@ -245,7 +246,17 @@ export default class EditUser extends Component {
         <Button style={{backgroundColor: "gray"}} className="text-light border border-muted" onClick={() => this.handleCloseUpdate()}>
          <b>  Anuuler</b> 
           </Button>
-        <Button className="btn-fill pull-right"type="submit" variant="info"   color="primary" onClick={() => this.handleCloseUpdate()} >  Modifier  </Button>
+          &nbsp;
+          <Button
+      style={{outline:"none"}}
+        variant="contained"
+        color="primary"
+        type="submit"
+        onClick={() => this.handleCloseUpdate()}
+      >
+
+        Modifier
+      </Button>
        
         </Modal.Footer>  </Form>
       </Modal>

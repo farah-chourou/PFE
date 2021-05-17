@@ -34,6 +34,11 @@ import BullRecuMed from "./BullRecuMed"
 import {FiAlertCircle} from 'react-icons/fi';
 import backgroundImage from "fond8.png";
 
+import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import SearchIcon from '@material-ui/icons/Search';
+
+import ButtonGroup from '@material-ui/core/ButtonGroup';
 
 //pagination
 const useStyles1 = makeStyles((theme) => ({
@@ -52,7 +57,24 @@ const useStyles = makeStyles((theme) => ({
   table: {
     minWidth: 500,
   },
- 
+  button: {
+    margin: theme.spacing(1),
+  },
+  
+  iconButton: {
+    padding: 10,
+    
+  },
+  divider: {
+    height: 28,
+    margin: 4,
+  },
+  input: {
+    height: 30,
+    color : '#3d5afe',
+    borderWidth: '1px',
+    borderColor: 'green !important'
+  },
 }));
 
 //animation
@@ -181,6 +203,7 @@ export default function CustomPaginationActionsTable() {
   const [bulletinsMed,setBulletinsMed] = useState([]);
   const [numberBullValid,setNumberBullValid] =useState(0);
   const [numberBullMed,setNumberBullMed] =useState(0);
+  const  [searched,setSearched] = useState("")
 
 
 //tabs
@@ -289,9 +312,9 @@ const onFilter=(numBull)=>{
 
 const onNotif = ()=>{
   color ="success";
-  title ="Succés!";
+  title ="Succés";
   message="Bulletin envoyer avec succés"
-  icon ="nc-icon nc-simple-remove"
+  icon ="nc-icon nc-check-2"
   notify("br"); 
 }
 const notificationAlert = React.createRef();
@@ -333,6 +356,19 @@ const handleChangeRowsPerPage = (event) => {
   setPage(0);
 };
 
+//filter
+var requestSearch =(
+
+  rows.filter((row) => {
+  return row.numBull.toString().includes(searched);
+  }));
+  var requestSearchMed =(
+
+    rowsMedecin.filter((row) => {
+    return row.numBull.toString().includes(searched);
+    }));
+  
+
   return (
     <div className="content" component={Paper}>
   <NotificationAlert ref={notificationAlert} />
@@ -351,6 +387,28 @@ const handleChangeRowsPerPage = (event) => {
            </Col>
 
            <Col md={3}>  
+
+           <ButtonGroup color="primary" size="small" aria-label=" small   primary button group" style={{position:"relative",bottom:-8,width:180 }}>
+      <TextField id="standard-search" label="Rechercher par N° bulletin" type="search" 
+       InputLabelProps={{className:classes.cssLabel}}
+       InputProps={{
+              className: classes.input,
+              startAdornment: (
+                <InputAdornment position="start">
+                <SearchIcon  aria-label="toggle password visibility" />           
+                </InputAdornment>
+              ),
+            }} 
+         
+            value={searched}
+            onChange={ e =>setSearched(e.target.value)}
+            />
+      
+
+      </ButtonGroup>
+
+      
+
            </Col>
         
          </Row>
@@ -404,8 +462,8 @@ const handleChangeRowsPerPage = (event) => {
 
         <TableBody>
           {(rowsPerPage > 0
-            ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            : rows
+            ? requestSearch.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            : requestSearch
           ).map((row) => (
             <TableRow key={row.numBull}>
             
@@ -499,8 +557,8 @@ const handleChangeRowsPerPage = (event) => {
      
           {console.log(rowsMedecin)}
           {(rowsPerPage > 0
-            ? rowsMedecin.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            : rowsMedecin
+            ? requestSearchMed.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            : requestSearchMed
           ).map((row) => (
             <BullRecuMed key={row.numBull} row={row} onFilter={onFilter} onNotif={onNotif} />
 

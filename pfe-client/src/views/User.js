@@ -111,14 +111,22 @@ export default function Icons() {
   }, [])
 
   const getUser =()=>{
+ 
+    axios.get("http://localhost:8080/getUserwithPasswordEncrypt/"+ JSON.parse(local).id).then(res => {
+
+      setPassword(res.data)
+      setLastPassword(res.data)
+
+
+    })
+
     axios.get("http://localhost:8080/getUser/"+ JSON.parse(local).id).then(res => {
       setNom(res.data.nom)
       setPrenom(res.data.prenom)
       setAdresse(res.data.adresse)
       setTel(res.data.tel)
       setEmail(res.data.email)
-      setPassword(res.data.password)
-      setLastPassword(res.data.password)
+   
       setSpecialite(res.data.specialite)
 
     })
@@ -154,11 +162,11 @@ export default function Icons() {
     axios.put(`http://localhost:8080/updateUserPassword/`+ JSON.parse(local).userName,newUser).then(res => {
    
     })
- setShow(true)}
+ setShow(true)
  if(show==false){
  //window.location.reload(false);
  setPassActuel("")
-}
+}}
 
   }
 
@@ -452,7 +460,8 @@ if(PassActuel== Password){
                               variant="outlined"
                               size="small"
                               InputProps={{
-                                className: classes.input}}
+                                className: classes.input,
+                                minLength: 12}}
                                 onChange={(event)=>{setPassActuel(event.target.value);check()}}
                                 type="password"
                             /> 

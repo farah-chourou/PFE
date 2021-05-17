@@ -11,6 +11,8 @@ import com.pfe.demo.Exception.RessourceNotFoundException;
 import com.pfe.demo.RestController.Util.ApiResponse;
 import com.pfe.demo.RestController.Util.Status;
 import com.pfe.demo.Security.AES256;
+import com.pfe.demo.Service.NotificationService;
+import com.pfe.demo.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,37 +41,17 @@ public class UserRestController {
     @Autowired
     NotificationRepository notificationRepo;
 
+    @Autowired
+    NotificationService notificationService;
+
+    @Autowired
+    UserService userService;
+
 
     @PostMapping("/register/{confirmPass}")
     public ResponseEntity<User> register (@RequestBody User user, @PathVariable String confirmPass){
-
-       if( userRepo.findByUserName(user.getUserName()) !=  null &&  userRepo.findByEmail(user.getEmail()) != null){
-
-           return new ResponseEntity(new ApiResponse(false, "Email and Username is already taken!"),
-                   HttpStatus.ALREADY_REPORTED);
-       }
-          else if( userRepo.findByUserName(user.getUserName()) !=  null ){
-
-            return new ResponseEntity(new ApiResponse(false, "Username is already taken!"),
-                    HttpStatus.ALREADY_REPORTED);
-        } else if ( userRepo.findByEmail(user.getEmail()) != null){
-
-            return new ResponseEntity(new ApiResponse(false, "Email is already taken!"),
-                    HttpStatus.ALREADY_REPORTED);
-        }else if (user.getPassword().equals(confirmPass) == false){
-
-           return new ResponseEntity(new ApiResponse(false, "Password not confirm"),
-                   HttpStatus.ALREADY_REPORTED);
-       }
-
-        user.setMembreDepuis(new Date());
-        user.setPassword(AES256.encrypt(user.getPassword()));
-        user.setCouleur(  user.RandomColor());
-        User u = userRepo.save(user);
-        return ResponseEntity.ok(u);}
-
-
-
+    return userService.Register(user,confirmPass);
+    }
 
      @PostMapping("/login")
      public ResponseEntity<User> login(@RequestBody User user ) throws  Exception{
@@ -79,49 +61,7 @@ public class UserRestController {
             return new ResponseEntity(new ApiResponse(false, "User not exist !"),
                     HttpStatus.ALREADY_REPORTED);
         }
-
-       // if(loginUser.getRole().equals("medecin")){
-            LocalDate aujourdhui = LocalDate.now();
-
-            LocalDate daysAgo = LocalDate.now().minusDays(1);
-        // System.out.println(aujourdhui.with(DayOfWeek.SUNDAY));
-         System.out.println(aujourdhui);
-
-            List<SuivisBullMed>  bull = suivisBullMedRepo.findAllByRecepteurAndEtape(loginUser.getUserName(), 2);
-
-
-
-
-            for (SuivisBullMed bullMed : bull) {
-              if(bullMed.getDate().isAfter(daysAgo)==false && bullMed.getDate().isBefore(aujourdhui)==true) {
-              Notification rappel =   notificationRepo.findByRecepteurAndSuivisBullMed(loginUser.getUserName(),bullMed);
-              Notification notif = new Notification();
-
-                  if(rappel == null){
-                    notif.setMessage("Rappel: vous avez un ancien bulletin a traiter");
-                    notif.setDate(new Date());
-                    notif.setRecepteur(loginUser.getUserName());
-                    notif.setEtat(false);
-                    notif.setVu(false);
-                    notif.setSuivisBullMed(bullMed);
-                    notificationRepo.save(notif);}
-              else {
-                  notif.setMessage("Rappel: vous avez un ancien bulletin a traiter");
-                  notif.setDate(new Date());
-                  notif.setRecepteur(loginUser.getUserName());
-                  notif.setEtat(false);
-                  notif.setVu(false);
-                  notif.setSuivisBullMed(bullMed);
-                  notificationRepo.save(notif);
-                  notificationRepo.deleteById(rappel.getId());
-
-
-                  }
-               }
-            }
-
-
-
+         notificationService.Rappel(user);
          return  ResponseEntity.ok(loginUser);
     }
 
@@ -154,29 +94,13 @@ public class UserRestController {
 
     @DeleteMapping("/deleteUser/{id}")
     public  Status getEtatUser(@PathVariable Long id){
-
-        User user = userRepo.findById(id).orElseThrow(()-> new RessourceNotFoundException("mafamech"));
-
-        List <Notification> n= notificationRepo.findByRecepteur(user.getUserName());
-        List <Notification> b = notificationRepo.findByExpediteurNotif(user);
-
-        if ( b.isEmpty() == true && n.isEmpty() == true ){
-            userRepo.deleteById(id);
-            return Status.OK;
-        }else
-            return Status.Not_OK;
+     return userService.delete(id);
     }
 
     @PutMapping("/updateUserAdmin/{id}")
     public User updateUserAdmin(@PathVariable Long id, @RequestBody User newUser){
-        User user = userRepo.findById(id).orElseThrow(()-> new RessourceNotFoundException("mafamech"));
-        user.setAdresse(newUser.getAdresse());
-        user.setNom(newUser.getUserName());
-        user.setPrenom(newUser.getPrenom());
-        user.setRole(newUser.getRole());
-        user.setTel(newUser.getTel());
-        userRepo.save(user);
-        return user;
+
+        return userService.UpdateUser(id, newUser);
     }
 
 
@@ -224,7 +148,7 @@ public class UserRestController {
     @PutMapping("/updateUserPassword/{userName}")
     public User updateUserPassword(@PathVariable String userName, @RequestBody User newUser){
         User user = userRepo.findByUserName(userName);
-        user.setPassword(newUser.getPassword());
+        user.setPassword(AES256.encrypt(newUser.getPassword()));
         userRepo.save(user);
         return user;
     }
@@ -234,4 +158,11 @@ public class UserRestController {
     }
 
 
+    @GetMapping("/getUserwithPasswordEncrypt/{id}")
+    public String getUserwithPasswordEncrypt(@PathVariable Long id ){
+       User u= userRepo.findById(id).orElseThrow(()-> new RessourceNotFoundException("mafamech"));
+
+        return  AES256.decrypt(u.getPassword());
+
+    }
 }

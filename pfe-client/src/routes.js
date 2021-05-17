@@ -64,7 +64,7 @@ var routes = [
   {
     path: "/bulletin",
     name: " Bulletin récu ",
-    icon: "nc-icon nc-caps-small",
+    icon: "nc-icon nc-single-copy-04",
     component: AllBull,
     layout: "/user",
     role:"responsable",
@@ -74,7 +74,7 @@ var routes = [
   {
     path: "/bulletinMedecin",
     name: " Bulletin récu",
-    icon: "nc-icon nc-caps-small",
+    icon: "nc-icon nc-single-copy-04",
     component: BullMed,
     layout: "/user",
     role:"medecin",
@@ -86,7 +86,7 @@ var routes = [
   {
     path: "/bulletinValidateur",
     name: " Bulletin récu",
-    icon: "nc-icon nc-caps-small",
+    icon: "nc-icon nc-single-copy-04",
     component: BullValid,
     layout: "/user",
     role:"validateur",
@@ -95,7 +95,7 @@ var routes = [
   },
  
   {
-    path: "/soloBulletin/:id",
+    path: "/DétailsNotification/:id",
     name: "bulletin",
     icon: "nc-icon nc-spaceship",
     component: BulletinNotif,
@@ -106,7 +106,7 @@ var routes = [
   {
     path: "/historiqueBull",
     name: "historique",
-    icon: "nc-icon nc-bell-55",
+    icon: "nc-icon nc-bullet-list-67",
     component: HistoriqueValid,
     layout: "/user",
     role:"validateur",
@@ -116,7 +116,7 @@ var routes = [
   {
     path: "/historiqueBullMed",
     name: "historique",
-    icon: "nc-icon nc-bell-55",
+    icon: "nc-icon  nc-bullet-list-67",
     component: HistoriqueMed,
     layout: "/user",
     role:"medecin",
@@ -125,7 +125,7 @@ var routes = [
   {
     path: "/historiqueBulle",
     name: "historique",
-    icon: "nc-icon nc-bell-55",
+    icon: "nc-icon nc-bullet-list-67",
     component: HistoriqueResp,
     layout: "/user",
     role:"responsable",

@@ -38,6 +38,9 @@ public class BullMedService {
     @Autowired
     AvisRepository avisRepository;
 
+    @Autowired
+    MailService mailService;
+
     public SuivisBullMed ajouterBullMed(int numBull,  String specialiteMed , String userName){
 
         if(suivisBullMedRepo.findByNumBull(numBull) !=null) {
@@ -72,6 +75,9 @@ public class BullMedService {
         notif.setSuivisBullMed(su);
 
         notificationRepo.save(notif);
+         /* String expediteur=exped.getUserName();
+        mailService.sendSimpleMessage(recep.getEmail(),"Nouvelle notification (MUTUAL by CODWAY)","Bonjour, \nvous avez une nouvelle notification de la part " + expediteur + " . \nBien recu a vous.");*/
+
        return bull;
     }
 
@@ -100,6 +106,8 @@ public class BullMedService {
         notif.setSuivisBullMed(bull);
 
         notificationRepo.save(notif);
+          /* String expediteur=expediteur.getUserName();
+        mailService.sendSimpleMessage(bull.getExpediteur().getEmail(),"Nouvelle notification (MUTUAL by CODWAY)","Bonjour, \nvous avez une nouvelle notification de la part " + expediteur + " . \nBien recu a vous.");*/
       return bull;
     }
 
@@ -126,6 +134,8 @@ public class BullMedService {
         notif.setVu(false);
         notif.setSuivisBullMed(bull);
         notificationRepo.save(notif);
+         /* String expediteur=expediteur.getUserName();
+        mailService.sendSimpleMessage(bull.getExpediteur().getEmail(),"Nouvelle notification (MUTUAL by CODWAY)","Bonjour, \nvous avez une nouvelle notification de la part " + expediteur + " . \nBien recu a vous.");*/
         return bull;
     }
 
@@ -144,6 +154,8 @@ public class BullMedService {
         notif.setVu(false);
         notif.setSuivisBullMed(bull);
         notificationRepo.save(notif);
+         /* String expediteur=expediteur.getUserName();
+        mailService.sendSimpleMessage(bullValid.getExpediteur().getEmail(),"Nouvelle notification (MUTUAL by CODWAY)","Bonjour, \nvous avez une nouvelle notification de la part " + expediteur + " . \nBien recu a vous.");*/
         return bull;
     }
 

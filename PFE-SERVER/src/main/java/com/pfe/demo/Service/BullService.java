@@ -42,19 +42,9 @@ public class BullService {
     AvisRepository avisRepository;
 
     @Autowired
-    private JavaMailSender emailSender;
+    MailService mailService;
 
 
-
-    public void sendSimpleMessage(
-         String to, String subject, String text) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("noreply@baeldung.com");
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(text);
-        emailSender.send(message);
-    }
 
 
     public SuivisBull ajouterBulletin(SuivisBull suivisBulletein,  Long id,  String recepteur){
@@ -67,7 +57,6 @@ public class BullService {
 
 
         User exp= userRepo.findById(id).orElseThrow(()-> new RessourceNotFoundException("mafamech"));
-        // expediteur.addS(suivisBulletein);
         suivisBulletein.setExpediteur(exp);
 
         suivisBulletein.setDate(LocalDate.now());
@@ -88,8 +77,9 @@ public class BullService {
         notif.setSuivisBull(s);
 
         notificationRepo.save(notif);
+
        /* String expediteur=exp.getUserName();
-        sendSimpleMessage(recep.getEmail(),"Nouvelle notification (MUTUAL by CODWAY)","Bonjour, \nvous avez une nouvelle notification de la part " + expediteur + " . \nBien recu a vous.");*/
+        mailService.sendSimpleMessage(recep.getEmail(),"Nouvelle notification (MUTUAL by CODWAY)","Bonjour, \nvous avez une nouvelle notification de la part " + expediteur + " . \nBien recu a vous.");*/
        return bull;
 
     }

@@ -392,10 +392,10 @@ var requestSearch =(
 
       <TableHead>
           <TableRow className="text-uppercase	">
-            <TableCell  style={{color:"#1565c0"}}>  <b> Numero bulletin </b> </TableCell>
-            <TableCell   style={{color:"#1565c0"}}><b>Date d'envoi </b></TableCell>
-            <TableCell  style={{color:"#1565c0"}}  ><b>Envoyer par </b></TableCell>
-            <TableCell   style={{color:"#1565c0"}}><b> &nbsp;&nbsp;Autre </b></TableCell>
+            <TableCell >  <b> Numero bulletin </b> </TableCell>
+            <TableCell   ><b>Date d'envoi </b></TableCell>
+            <TableCell    ><b>Envoyer par </b></TableCell>
+            <TableCell><b> &nbsp;&nbsp;Autre </b></TableCell>
 
           </TableRow>
         </TableHead>
@@ -406,18 +406,18 @@ var requestSearch =(
             : requestSearch
           ).map((row) => (
             <TableRow  key={row.numBull}>
-              <TableCell style={{ width: 160 }}  >
+              <TableCell style={{ width: 165 }}  >
                 {row.numBull}
               </TableCell>
-              <TableCell style={{ width: 160 }} >
+              <TableCell style={{ width: 165 }} >
                 {row.date}
               </TableCell>
-              <TableCell style={{ width: 160 }} >
+              <TableCell style={{ width: 165 }} >
                 {row.expediteur}
               </TableCell>
              <TableCell style={{ width: 160 }} >
                    <Button
-                     variant="contained"
+                     variant="outlined"
                      color="primary"
                      className={classes.button}
                      startIcon={<AddCircleIcon />}
@@ -537,8 +537,8 @@ var requestSearch =(
         <Modal.Footer>
         <Button style={{backgroundColor: "gray"}} className="text-light border border-muted" onClick={() => setShow(false)}>
          <b>  Anuuler</b> 
-          </Button>
-        <Button className="btn-fill pull-right"type="submit"  required variant="info"   color="primary"  >  Ajouter & envoyer  </Button>
+          </Button> &nbsp;
+        <Button className="btn-fill pull-right"type="submit"  required   variant="contained"  style={{backgroundColor:"#0C7A9B",color:"white"}} >  Ajouter & envoyer  </Button>
        
         </Modal.Footer>  </Form>
       </Modal>

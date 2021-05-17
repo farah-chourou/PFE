@@ -229,9 +229,9 @@ const notify =(place) => {
 
 <Form >
 
-<Row className="justify-content-md-center " >
+<Row className="justify-content-md-center  " >
 <Col md={1}> </Col>
-<Col md={8} className="border shadow rounded p-4 ">
+<Col md={8} className="border shadow rounded p-4 " style={{backgroundColor:"white"}}>
 <Row style={{borderBottom:"1px solid gray"}}>  
 <Col md={7} style={{display:"flex"}} >
   <h6 style={{}}>  Etape &nbsp;</h6><Avatar style={{backgroundColor : "pink",fontSize:13,width:"22px",height:"22px",position:"relative",top:"-2px"}} className="text-uppercase shadow text-dark border border-secondary">   {bull.etape}</Avatar>
@@ -358,7 +358,7 @@ style={{    width: '160px'}}
          <Row className="justify-content-md-center " >
          <Col md={1}> </Col>
          
-         <Col md={8} className="border shadow rounded p-4 ">
+         <Col md={8} className="border shadow rounded p-4 "style={{backgroundColor:"white"}}>
          
          <Row>  
          <Col md={12} style={{display:"flex",borderBottom:"1px solid gray"}}>
@@ -424,7 +424,7 @@ style={{    width: '160px'}}
 
          <Row className="justify-content-md-center " >
          <Col md={1}> </Col>
-         <Col md={8} className="border shadow rounded p-4 ">
+         <Col md={8} className="border shadow rounded p-4 "style={{backgroundColor:"white"}}>
          Cette bulletin est deja traité
          </Col>
          <Col md={1}>  </Col>
@@ -436,7 +436,7 @@ style={{    width: '160px'}}
 
      <Row className="justify-content-md-center " >
      <Col md={1}> </Col>
-     <Col md={8} className="border shadow rounded p-4 ">
+     <Col md={8} className="border shadow rounded p-4 "style={{backgroundColor:"white"}}>
      <Row>  
      <Col md={12} style={{display:"flex",borderBottom:"1px solid gray"}}>
        <h6 style={{}}>  Etape &nbsp;</h6><Avatar style={{backgroundColor : "pink",fontSize:13,width:"22px",height:"22px",position:"relative",top:"-2px"}} className="text-uppercase shadow text-dark border border-secondary">   {bull.etape}</Avatar>
@@ -526,7 +526,7 @@ style={{    width: '160px'}}
 
     <Row className="justify-content-md-center " >
     <Col md={1}> </Col>
-    <Col md={8} className="border shadow rounded p-4 ">
+    <Col md={8} className="border shadow rounded p-4 "style={{backgroundColor:"white"}}>
     <Row style={{borderBottom:"1px solid gray"}}>  
     <Col md={7} style={{display:"flex"}} >
       <h6 style={{}}>  Etape &nbsp;</h6><Avatar style={{backgroundColor : "pink",fontSize:13,width:"22px",height:"22px",position:"relative",top:"-2px"}} className="text-uppercase shadow text-dark border border-secondary">   {bull.etape}</Avatar>
@@ -649,7 +649,7 @@ style={{    width: '160px'}}
        
     <Row className="justify-content-md-center " >
     <Col md={1}> </Col>
-    <Col md={8} className="border shadow rounded p-4 ">
+    <Col md={8} className="border shadow rounded p-4 "style={{backgroundColor:"white"}}>
     <Row style={{borderBottom:"1px solid gray"}}>  
     <Col md={7} style={{display:"flex"}} >
       <h6 style={{}}>  Etape &nbsp;</h6><Avatar style={{backgroundColor : "pink",fontSize:13,width:"22px",height:"22px",position:"relative",top:"-2px"}} className="text-uppercase shadow text-dark border border-secondary">   {bull.etape}</Avatar>

@@ -338,7 +338,7 @@ var requestSearch =(
       <CardHeader   style={{backgroundImage: `linear-gradient(#fffbfbb0, #fffbfbb0),url(${backgroundImage})`,backgroundSize:"100%",paddingBottom:30}}>
         <Row>
           <Col md={12}>
-          <CardTitle tag="h4">Listes Des Dullletins Validées</CardTitle>
+          <CardTitle tag="h4">Listes Des Bullletins Validées</CardTitle>
            <p className="card-category">
            </p> 
 
@@ -417,37 +417,34 @@ var requestSearch =(
               <Accordion  onChange={handleChange('panel1')}>
        {row.etat=="Accepté" ? 
         <AccordionSummary
-        style={{backgroundColor:"#e5eef7"}}
+        style={{}}
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1bh-content"
           id="panel1bh-header"
         >
           <Typography className={classes.heading }  > <span style={{color:"#185fad"}}> &nbsp;&nbsp;&nbsp;&nbsp; <b> Etat:</b>  {row.etat} </span>   </Typography>
-          <Typography style={{color:"#185fad"}}> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rembourssement accepter</Typography>
         </AccordionSummary>
 
        : row.etat=="Rejeté"?
 
        <AccordionSummary
-       style={{backgroundColor:"#f8e9e9f8"}}
+       style={{}}
          expandIcon={<ExpandMoreIcon />}
          aria-controls="panel1bh-content"
          id="panel1bh-header"
        >
          <Typography className={classes.heading }  > <span  style={{color:"#d64161"}}> &nbsp;&nbsp;&nbsp;&nbsp; <b> Etat:</b>  {row.etat} </span>   </Typography>
-         <Typography   style={{color:"#d64161"}}> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rembourssement accepter</Typography>
        </AccordionSummary>
 
        :row.etat == "Contre visite" ?
        <AccordionSummary  
-       style={{backgroundColor:"#c5beb2"}}
+       style={{}}
          expandIcon={<ExpandMoreIcon />}
          aria-controls="panel1bh-content"
          id="panel1bh-header"
        >
         
-         <Typography className={classes.heading }  > <span className="text-light "> &nbsp;&nbsp;&nbsp;&nbsp; <b> Etat:</b>  {row.etat} </span>   </Typography>
-         <Typography className={classes.secondaryHeading} className="text-light "> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rembourssement accepter</Typography>
+         <Typography className={classes.heading }  > <span className="text-dark "> &nbsp;&nbsp;&nbsp;&nbsp; <b> Etat:</b>  {row.etat} </span>   </Typography>
        </AccordionSummary>
 
       : <AccordionSummary  
@@ -458,45 +455,34 @@ var requestSearch =(
       >
        
         <Typography className={classes.heading }  > <span className="text-dark "> &nbsp;&nbsp;&nbsp;&nbsp; <b> Etat:</b>  {row.etat} </span>   </Typography>
-        <Typography className={classes.secondaryHeading} className="text-secondary "> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rembourssement accepter</Typography>
       </AccordionSummary>}
         <AccordionDetails>
           <Typography>
        
           <Row >
-          <Row className="mx-3 " style={{borderBottom:"1px dotted grey"}}>
-             <Col md={4} className="text-center">  <br></br> <img src={logo} alt="MUTUAL-BY-CODWAY-logo" width="150px"  style={{ /* border:"0.5px solid #c7c7c7 " , borderRadius:"20px"*/}} /> </Col>
-             <Col md={6} className="ml-4" > 
-             <div class="d-flex flex-column">
-               <div class="p-1"><b>Medecin:</b> Docteur {row.recepteur } saadi</div>
+          <Row className="mx-3 ">
+
+
+            
+             <Col md={12} className="" > 
+             <div class="d-flex flex-column text-dark">
+               <div class="p-1"><b>Medecin:</b> Docteur {row.recepteur } </div>
                <div class="p-1"><b>Spécialité:</b>  {row.specialite}</div>
                <div class="p-1"><b>Date d'envoie:</b> {moment(row.date).format("dddd, Do  MMMM YYYY  , h:mm:ss a")}</div>
+               <div class="p-1"><b>Avis medical:</b>  {row.etat}</div>
+               <div class="p-1"><b>Commentaire du medecin:</b>  {row.commentaireMed}</div>
+               <div class="p-1"><b>Commenatire du responsable:</b> {row.commentaireResp==null? "Pas de commentaire" : row.commentaireResp}</div>
+
              </div>
               </Col>
-            
+         
+   
+
 
            </Row>
 
 
-          <Row  className="mx-3 mt-3" > 
-          <Col md={12} ><b>Avis medical:</b>  {row.etat} </Col>
-          </Row>
-
-          <Row  className=" mx-3"> 
-          <Col md={12} ><b>Commentaire du medecin:</b> <br></br>
- 
-          <Card>
-            <Card.Body>{row.commentaireMed}</Card.Body>
-          </Card>    
-          </Col>
-    
-          <Col md={12} ><b>Commenatire du responsable:</b><br></br>
-          <Card>
-            <Card.Body> {row.commentaireResp==null? "Pas de commentaire" : row.commentaireResp}</Card.Body>
-          </Card>            
-             </Col>
-
-          </Row>
+          
 
           <Row  className="m1-3 mx-3"> 
        <small style={{paddingLeft:"480px"}}>  Envoyer par {row.expediteur} </small> 

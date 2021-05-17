@@ -440,7 +440,7 @@ rowsMedecin.filter((row) => {
 
 
            </Col>
-<Col md={1}></Col>
+       <Col md={1}></Col>
            <Col md={2}>  
            <div className="d-inline-block  " style={{marginLeft:2,position:"relative",top:-12}}>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
            <AddUser validateurs={getValidateurs} medecins={getMedecins}  /></div>  
