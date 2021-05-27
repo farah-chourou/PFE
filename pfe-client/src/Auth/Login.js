@@ -128,7 +128,7 @@ click = () => {
 
 error(){
      this.setState({     
-         error: "Nom ou password n'existe pas !",    
+         error: "Nom ou mot de passe n'existe pas !",    
 
       })}
        
@@ -184,7 +184,7 @@ effectDirection="up"
        
        <Row className="justify-content-center "> 
        <Col md={12} className=" border shadow-lg   bg-light " style={{borderTopRightRadius:10,borderBottomRightRadius:10,padding:50,paddingTop:90}}> 
-       <h3 className="text-center text-uppercase"> <b>Login </b>  </h3> <br></br>
+       <h3 className="text-center text-uppercase"> <b>Connexion </b>  </h3> <br></br>
         <Form onSubmit={this.handleSubmit}>
 
        {this.state.error==""?
@@ -253,7 +253,7 @@ effectDirection="up"
 <br></br>
 <Row><Col md={3} > </Col> <Col> 
 <Button variant="contained" size="medium"  type="submit"  style={{outline:"none",borderRadius:30,paddingRight:50,paddingLeft:50,backgroundColor:"#0C7A9B",color:"white"}}>
-          Login
+          se connecter
  </Button>
 
 </Col></Row>

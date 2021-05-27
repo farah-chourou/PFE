@@ -128,7 +128,7 @@ const BullEnAttente = () =>{
                       <DoneIcon style={{fontSize:36,color:"#FCA820"}}/>
                     </Col>
                     <Col md="9" xs="7">
-                        <p className="card-category " style={{fontSize:15}}>Bulletins ajouter  </p>
+                        <p className="card-category " style={{fontSize:15}}>Bulletins ajoutés  </p>
                         <CardTitle tag="p" >     <CountUp end={bullAjouter.length} />    </CardTitle>
               
                       </Col>
@@ -148,7 +148,7 @@ const BullEnAttente = () =>{
                    <DoneAllIcon style={{fontSize:35,color:"#185fad"}}/>
                     </Col>
                     <Col md="9" xs="7">
-                        <p className="card-category ">Bulletins terminer</p>
+                        <p className="card-category ">Bulletins terminés</p>
                         <CardTitle tag="p" ><CountUp end={bullValider.length} /></CardTitle>
                         <p />
                     </Col>

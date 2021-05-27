@@ -6,11 +6,14 @@ import com.pfe.demo.Exception.RessourceNotFoundException;
 import com.pfe.demo.RestController.Util.ApiResponse;
 import com.pfe.demo.RestController.Util.Status;
 import com.pfe.demo.Service.BullMedService;
+import com.pfe.demo.Service.MailService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -39,8 +42,11 @@ public class BullMedRestController {
 
     @Autowired
     BullMedService bullMedService;
+    @Autowired
+    MailService mailService;
+    
   @PostMapping("/addBullMed/{numBull}/{specialiteMed}/{userName}")
-    public ResponseEntity<SuivisBullMed> addBullMed( @PathVariable int numBull, @PathVariable String specialiteMed , @PathVariable String userName){
+    public ResponseEntity<SuivisBullMed> addBullMed( @PathVariable int numBull, @PathVariable String specialiteMed , @PathVariable String userName) throws MessagingException {
 
         if(bullMedService.ajouterBullMed(numBull,specialiteMed,userName)==null) {
             return  new ResponseEntity(new ApiResponse(false, "Bull already exist !"),
@@ -49,6 +55,7 @@ public class BullMedRestController {
 
         return ResponseEntity.ok(bullMedService.ajouterBullMed(numBull,specialiteMed,userName));
     }
+
 
 
     @GetMapping("/getAllBullMedEtape2/{userName}") //sprint2 ki tji l bul  lil med // kenit ismha getAllBullMed
@@ -124,14 +131,14 @@ public class BullMedRestController {
 
 
     @PutMapping("/ajouterAvis/{numBull}/{avis}")
-    public SuivisBullMed addAvis( @PathVariable int numBull , @PathVariable String avis, @RequestBody SuivisBullMed bullMed){
+    public SuivisBullMed addAvis( @PathVariable int numBull , @PathVariable String avis, @RequestBody SuivisBullMed bullMed) throws MessagingException {
 
         return bullMedService.ajouterAvis(numBull,avis,bullMed);
     }
 
 
     @PutMapping("/ajouterAvis/{numBull}/{avis}/{autreAvis}")
-    public SuivisBullMed addOtherAvis( @PathVariable int numBull , @PathVariable String avis, @PathVariable String autreAvis, @RequestBody SuivisBullMed bullMed){
+    public SuivisBullMed addOtherAvis( @PathVariable int numBull , @PathVariable String avis, @PathVariable String autreAvis, @RequestBody SuivisBullMed bullMed) throws MessagingException {
 
         return bullMedService.ajouterAutreAvis(numBull,avis,autreAvis,bullMed);
     }
@@ -146,7 +153,7 @@ public class BullMedRestController {
         return bull;
     }
     @PutMapping("/envoyer/{numBull}")
-    public SuivisBullMed addCommentResp( @PathVariable int numBull ){
+    public SuivisBullMed addCommentResp( @PathVariable int numBull ) throws MessagingException {
         return bullMedService.envoyer(numBull);
     }
 

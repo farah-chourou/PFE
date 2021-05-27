@@ -138,7 +138,7 @@ export default function Notifications(props) {
       }
     
     const  getBull = (id) => {
-        history.push('/user/soloBulletin/'+id);
+        history.push('/user/DétailsNotification/'+id);
         window.location.reload(false);
 
       }

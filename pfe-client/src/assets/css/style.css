@@ -168,3 +168,33 @@ top: -1px;
   .table-wrapper-scroll-y {
   display: block;
   }
+
+
+
+
+
+  /*  Alert   */
+  .alertt {
+      
+    color:#ff1111;
+    position: relative;
+
+    -webkit-animation: colorchange 2s infinite alternate;
+    
+    
+  }
+
+  @-webkit-keyframes colorchange {
+  
+    50% {
+      
+      color: #ff1111;}
+   
+    
+  
+    
+    100% {
+      
+      color: rgb(0, 0, 0);
+    }
+  }

@@ -62,6 +62,11 @@ selectEmpty: {
       const [showAutre,setShowAutre]=useState(false)
      const[commentaireMed,setCommentaireMed] = useState("")
       const [autreAvis,setAutreAvis] = useState("")
+
+      const [showSelect,setShowSelect]=useState(false)
+  const [medecins,setMedecins]=useState([])
+  const [specialiteMed,setSpecialiteMed]=useState()
+
       moment.locale('fr');
 
 
@@ -74,13 +79,14 @@ selectEmpty: {
         updateEtatNotif();
 
         getAllAvis();
+        getAllMed();
 
        }, [])
 
 
    const getBull=()=>{
       axios.get('http://localhost:8080/getNotif/'+id).then(res => {
-      { {console.log(res.data.suivisBull)}
+      { 
         (res.data.suivisBull != null)? 
 setBull(res.data.suivisBull)      
       : 
@@ -219,7 +225,28 @@ const notify =(place) => {
  notificationAlert.current.notificationAlert(options);
 
 }
+//add Specialitee
+const addSpec =()=> {
+  console.log(specialiteMed)
+  axios.put('http://localhost:8080/addSpec/'+bull.numBull+'/'+specialiteMed).then(res => {
 
+      setShowSelect(false)
+      setSpecialiteMed("")
+      getBull();   
+
+  })
+      
+ }
+
+  
+ const getAllMed=()=>{
+  axios.get(`http://localhost:8080/getMedecins`)
+  .then(res => {
+    setMedecins(res.data)
+  
+      }
+      )
+    }
         return (
          
        <div className="content">
@@ -237,7 +264,7 @@ const notify =(place) => {
   <h6 style={{}}>  Etape &nbsp;</h6><Avatar style={{backgroundColor : "pink",fontSize:13,width:"22px",height:"22px",position:"relative",top:"-2px"}} className="text-uppercase shadow text-dark border border-secondary">   {bull.etape}</Avatar>
 </Col>
 <Col md={5} className="">
-  <small className="text-secondary"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; Envoyer le {moment(notif.date).format("dddd, Do  MMMM YYYY  ")} </small>
+  <small className="text-secondary"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  Envoyer le {moment(notif.date).format("dddd, Do  MMMM YYYY à LT ")} </small>
 </Col>
 </Row>
 <Row className="mt-3">  
@@ -360,18 +387,30 @@ style={{    width: '160px'}}
          
          <Col md={8} className="border shadow rounded p-4 "style={{backgroundColor:"white"}}>
          
-         <Row>  
-         <Col md={12} style={{display:"flex",borderBottom:"1px solid gray"}}>
+         <Row style={{borderBottom:"1px solid gray"}}>  
+         <Col md={7} style={{display:"flex"}}>
            <h6 style={{}}>  Etape &nbsp;</h6><Avatar style={{backgroundColor : "pink",fontSize:13,width:"22px",height:"22px",position:"relative",top:"-2px"}} className="text-uppercase shadow text-dark border border-secondary">   {bull.etape}</Avatar>
          </Col>
+         <Col md={5} className="">
+      <small className="text-secondary"> &nbsp; &nbsp;&nbsp;Envoyer le {moment(notif.date).format("dddd, Do  MMMM YYYY à LT ")} </small>
+    </Col>
          </Row>
          <Row className="mt-3">  
          <Col md={4}>
          <p style={{}}>  <b> Numero bulletin:</b> {bull.numBull}  </p>
          </Col>
          <Col md={4}>
-         <p style={{}}> <b>specialite medecin: </b>{bull.specialiteMed}    </p>
-         </Col>
+         <p style={{}}> <b>specialite medecin: </b>
+           {bull.specialiteMed =="Aucune" ? 
+             
+             
+             <span className="alertt" onClick={()=>{setShowSelect(true) }}>{bull.specialiteMed}    </span> 
+           :  
+             <span> {bull.specialiteMed} </span>
+             
+             }    </p>
+
+       </Col>
          <Col md={4}>
          <p style={{}}> <b> Etat du bulletin:</b> {bull.etat} </p>
          </Col>
@@ -380,9 +419,7 @@ style={{    width: '160px'}}
          <Col md={4}>
          <p style={{}}>  <b> Envoyer par: </b>&nbsp; {expediteur.nom} &nbsp; {expediteur.prenom}</p>
          </Col>
-         <Col md={4}>
-         <p style={{}}>  <b>Date d'envoie:</b> {moment(notif.date).format("dddd, Do  MMMM YYYY  ")} </p>
-         </Col>
+        
          <Col md={4}>
          </Col>
          </Row>
@@ -425,7 +462,7 @@ style={{    width: '160px'}}
          <Row className="justify-content-md-center " >
          <Col md={1}> </Col>
          <Col md={8} className="border shadow rounded p-4 "style={{backgroundColor:"white"}}>
-         Cette bulletin est deja traité
+         Ce bulletin est deja traité
          </Col>
          <Col md={1}>  </Col>
          </Row> 
@@ -437,10 +474,13 @@ style={{    width: '160px'}}
      <Row className="justify-content-md-center " >
      <Col md={1}> </Col>
      <Col md={8} className="border shadow rounded p-4 "style={{backgroundColor:"white"}}>
-     <Row>  
-     <Col md={12} style={{display:"flex",borderBottom:"1px solid gray"}}>
-       <h6 style={{}}>  Etape &nbsp;</h6><Avatar style={{backgroundColor : "pink",fontSize:13,width:"22px",height:"22px",position:"relative",top:"-2px"}} className="text-uppercase shadow text-dark border border-secondary">   {bull.etape}</Avatar>
-     </Col>
+     <Row style={{borderBottom:"1px solid gray"}}>  
+     <Col md={7} style={{display:"flex"}} >
+  <h6 style={{}}>  Etape &nbsp;</h6><Avatar style={{backgroundColor : "pink",fontSize:13,width:"22px",height:"22px",position:"relative",top:"-2px"}} className="text-uppercase shadow text-dark border border-secondary">   {bull.etape}</Avatar>
+</Col>
+<Col md={5} className="">
+  <small className="text-secondary"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  Envoyer le {moment(notif.date).format("dddd, Do  MMMM YYYY à LT  ")} </small>
+</Col>
      </Row>
      <Row className="mt-3">  
      <Col md={4}>
@@ -458,7 +498,6 @@ style={{    width: '160px'}}
      <p style={{}}>  <b> Envoyer par: </b>&nbsp; {expediteur.nom} &nbsp; {expediteur.prenom}</p>
      </Col>
      <Col md={4}>
-     <p style={{}}>  <b>Date d'envoie:</b> {moment(notif.date).format("dddd, Do  MMMM YYYY  ")} </p>
      </Col>
      <Col md={4}>
    
@@ -532,7 +571,7 @@ style={{    width: '160px'}}
       <h6 style={{}}>  Etape &nbsp;</h6><Avatar style={{backgroundColor : "pink",fontSize:13,width:"22px",height:"22px",position:"relative",top:"-2px"}} className="text-uppercase shadow text-dark border border-secondary">   {bull.etape}</Avatar>
     </Col>
     <Col md={5} className="">
-      <small className="text-secondary"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; Envoyer le {moment(notif.date).format("dddd, Do  MMMM YYYY  ")} </small>
+      <small className="text-secondary"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Envoyer le {moment(notif.date).format("dddd, Do  MMMM YYYY à LT  ")} </small>
     </Col>
     </Row>
     <Row className="mt-3">  
@@ -655,7 +694,7 @@ style={{    width: '160px'}}
       <h6 style={{}}>  Etape &nbsp;</h6><Avatar style={{backgroundColor : "pink",fontSize:13,width:"22px",height:"22px",position:"relative",top:"-2px"}} className="text-uppercase shadow text-dark border border-secondary">   {bull.etape}</Avatar>
     </Col>
     <Col md={5} className="">
-      <small className="text-secondary"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; Envoyer le {moment(notif.date).format("dddd, Do  MMMM YYYY  ")} </small>
+      <small className="text-secondary"> &nbsp; &nbsp;   Envoyer le {moment(notif.date).format("dddd, Do  MMMM YYYY à LT  ")} </small>
     </Col>
     </Row>
     <Row className="mt-3">  
@@ -726,7 +765,7 @@ style={{    width: '160px'}}
         </Modal.Header>
         <Modal.Body  >
 
-        <h5>  < FiAlertCircle size={55} color="orange"/>    &nbsp; Est-vous sur de supprimer cet utilisateur ?</h5> 
+        <h5>  < FiAlertCircle size={55} color="orange"/>    &nbsp; Est-vous sur de supprimer cet bulletin ?</h5> 
         </Modal.Body>
          <Modal.Footer>
           <Button style={{backgroundColor: "orange"}} className="text-light border border-muted" onClick={handleDelete}>
@@ -736,6 +775,35 @@ style={{    width: '160px'}}
       </Modal>
 
 
+      <Modal
+        show={showSelect}
+        onHide={() => setShowSelect(false)}
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title> Sélectionner le  spécialité du médecin pour le bulletin N° {bull.numBull} </Modal.Title>
+        </Modal.Header>
+        <Modal.Body  >
+
+        <Form.Group as={Col} controlId="formGridState">
+         <Form.Label> &nbsp;Specialité medecin</Form.Label>
+         <Form.Control as="select"  required name="specialiteMed" value={specialiteMed} onChange={e => setSpecialiteMed(e.target.value)} style={{height:45}}>
+                    <option>Choisir...</option>
+
+                      {medecins.map( R => 
+                      <option value={R.specialite} > {R.specialite}    (Docteur&nbsp;{R.userName}) </option>)}
+
+         </Form.Control>
+         </Form.Group> 
+
+        </Modal.Body>
+         <Modal.Footer>
+          <Button style={{backgroundColor: "orange"}} className="text-light border border-muted" onClick={addSpec}>
+         <b> CONFIRMER</b> 
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
          
      </div>

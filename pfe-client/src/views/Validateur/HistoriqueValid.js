@@ -261,11 +261,13 @@ const   AddBull = () => {
      axios.post('http://localhost:8080/addBull/' +user.id + '/'+ recepteur , suivisBulletein).then(res  => { 
 
      console.log(res.data) ;
-     if(res.data.message =="Ce bulletin déjà existe !"){
+     if(res.data.message =="Bull already exist !"){
          setError("Ce bulletin déjà existe !")
      } else{
       getAllBullUser();
              notify("br");
+             axios.post('http://localhost:8080/mailValidResp/', suivisBulletein).then(res  => { 
+     });
        setShow(false);
   
 bulletinsValid.map((d)=> {
@@ -501,9 +503,9 @@ rows.filter((row) => {
 
       <TableHead>
           <TableRow>
-            <TableCell style={{color:"#1565c0"}}>  <b> Numero bulletin </b> </TableCell>
-            <TableCell   style={{color:"#1565c0"}}><b>Date d'envoi </b></TableCell>
-            <TableCell  style={{color:"#1565c0"}}><b>Specialité du medecin </b></TableCell>
+            <TableCell >  <b> Numero bulletin </b> </TableCell>
+            <TableCell   ><b>Date d'envoi </b></TableCell>
+            <TableCell ><b>Specialité du medecin </b></TableCell>
 
           </TableRow>
         </TableHead>
@@ -514,10 +516,10 @@ rows.filter((row) => {
             : rows
           ).map((row) => (
             <TableRow  key={row.numBull}>
-              <TableCell style={{ width: 160 }}  >
+              <TableCell style={{ width: 174 }}  >
                 {row.numBull}
               </TableCell>
-              <TableCell style={{ width: 160 }} >
+              <TableCell style={{ width: 174}} >
                 {row.date}
               </TableCell>
               <TableCell style={{ width: 160 }} >
@@ -600,12 +602,13 @@ rows.filter((row) => {
                 <Form.Row >
                 <Form.Group as={Col} controlId="formGridState">
                     <Form.Label> &nbsp;Specialité medecin</Form.Label>
-                    <Form.Control as="select"  required name="specialiteMed" value={specialiteMed} onChange={e => setSpecialiteMed(e.target.value)}>
+                    <Form.Control as="select"  required name="specialiteMed" value={specialiteMed} onChange={e => setSpecialiteMed(e.target.value)} style={{height:45}}>
                     <option>Choisir...</option>
 
                       {medecins.map( R => 
-                      <option value={R.specialite} > {R.specialite}    ( Docteur &nbsp;{R.userName}) </option> )}
-                
+                      <option value={R.specialite} > {R.specialite}    (Docteur&nbsp;{R.userName}) </option>)}
+                      <option value="Aucune">  Aucune de ces spécialités </option>
+
                     </Form.Control>
                   </Form.Group> 
 
@@ -617,12 +620,13 @@ rows.filter((row) => {
                 
                 <Form.Row >
                 <Form.Group as={Col} controlId="formGridState">
-                    <Form.Label>envoyer a :</Form.Label>
-                    <Form.Control as="select" name="recepteur" required value={recepteur} onChange={e => setRecepteur(e.target.value)}>
+                    <Form.Label>Envoyer a</Form.Label>
+                    <Form.Control as="select" name="recepteur" required value={recepteur}  style={{height:45}} onChange={e => setRecepteur(e.target.value)}>
                     <option>Choisir...</option>
 
                       {responsables.map( R => 
                       <option value={R.userName} > responsable  ({R.userName}) </option> )}
+
                 
                     </Form.Control>
                   </Form.Group> 

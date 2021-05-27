@@ -92,7 +92,8 @@ export default class EditUser extends Component {
                this.handleReset();
                this.validateurs();
                this.medecins();
-
+               axios.post(`http://localhost:8080/mailSend` ,user).then(result  => {  
+              })
 
                 }
           })  
@@ -253,7 +254,7 @@ export default class EditUser extends Component {
                       <Col className="pr-1" md="6">
                         <Form.Group>
                           <label>Nom d'utilisateur</label>
-                          <Form.Control placeholder="Enter Username.."type="text" name="userName" required value={this.state.userName} onChange={this.handleChange}
+                          <Form.Control placeholder="Entrer nom d'utilisateur.."type="text" name="userName" required value={this.state.userName} onChange={this.handleChange}
                                   isInvalid={ !!this.state.nameError}
                                   />
                                                 <Form.Control.Feedback type='invalid'>
@@ -283,20 +284,20 @@ export default class EditUser extends Component {
                       <Col className="pr-1" md="4">
                         <Form.Group>
                           <label>Nom</label>
-                          <Form.Control placeholder="Company"type="text" name="nom" required value={this.state.nom} onChange={this.handleChange}/>
+                          <Form.Control placeholder="Votre nom"type="text" name="nom" required value={this.state.nom} onChange={this.handleChange}/>
                         </Form.Group>
                       </Col>
                       <Col className="px-1" md="4">
                         <Form.Group>
                           <label>Prénom</label>
-                          <Form.Control  placeholder="Last Name"  type="text" required name="prenom" value={this.state.prenom} onChange={this.handleChange}/>
+                          <Form.Control  placeholder="votre prénom"  type="text" required name="prenom" value={this.state.prenom} onChange={this.handleChange}/>
                         </Form.Group>
                       </Col>
 
                       <Col className="pl-1" md="4">
                       <Form.Group controlId="formGridState">
                           <Form.Label>Sexe</Form.Label>
-                          <Form.Control as="select" defaultValue="Choose..."name="sex" required value={this.state.sex} onChange={this.handleChange}  >
+                          <Form.Control as="select" defaultValue="Choisir..."name="sex" required value={this.state.sex} onChange={this.handleChange}  >
                             <option value="homme"> Homme</option>
                             <option value="femme"> Femme</option>
                     
@@ -317,6 +318,8 @@ export default class EditUser extends Component {
                       <Form.Group controlId="formGridState">
                           <Form.Label>Role</Form.Label>
                           <Form.Control as="select" defaultValue="Choose..."name="role" required value={this.state.role} onChange={this.handleChange} onClick={()=> {this.show(this.state.role)}} >
+                          <option > Choisir</option>
+
                             <option value="medecin"> Medecin</option>
                             <option value="validateur"> Validateur</option>
                       
@@ -340,8 +343,8 @@ export default class EditUser extends Component {
                     <Row>
                       <Col md="12">
                         <Form.Group>
-                          <label>Address</label>
-                          <Form.Control placeholder="Home Address" type="text" name="adresse"  required value={this.state.adresse} onChange={this.handleChange}/>
+                          <label>Addresse</label>
+                          <Form.Control placeholder="Votre adresse" type="text" name="adresse"  required value={this.state.adresse} onChange={this.handleChange}/>
                         </Form.Group>
                       </Col>
                     </Row>
@@ -351,14 +354,14 @@ export default class EditUser extends Component {
                       <Col className="pr-1" md="6">
                         <Form.Group>
                           <label>Mot de passe</label>
-                          <Form.Control placeholder="Enter password"type="password" minLength={5} required name="password" value={this.state.password}  onChange={this.handleChange}/>
+                          <Form.Control placeholder="Entrer mot de passe"type="password" minLength={5} required name="password" value={this.state.password}  onChange={this.handleChange}/>
                         </Form.Group>
                       </Col>
 
                       <Col className="pl-1" md="6">
                         <Form.Group>
                           <label>Confirmer mot de passe</label>
-                          <Form.Control placeholder="Confirm password.." type="password" required name="confirmPassword" value={this.state.confirmPassword}  onChange={this.handleChange}
+                          <Form.Control placeholder="Confirmer le mot de passe.." type="password" required name="confirmPassword" value={this.state.confirmPassword}  onChange={this.handleChange}
                           isInvalid={ !!this.state.passwordError}  />
                           <Form.Control.Feedback type='invalid'>
                                                  {this.state.passwordError}

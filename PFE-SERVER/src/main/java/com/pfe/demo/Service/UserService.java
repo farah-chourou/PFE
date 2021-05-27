@@ -12,9 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
@@ -37,8 +39,10 @@ public class UserService {
 
     @Autowired
     AvisRepository avisRepository;
+    @Autowired
+    MailService mailService;
 
-   public ResponseEntity<User> Register (User user,  String confirmPass){
+   public ResponseEntity<User> Register (User user,  String confirmPass) throws MessagingException {
         if( userRepo.findByUserName(user.getUserName()) !=  null &&  userRepo.findByEmail(user.getEmail()) != null){
 
             return new ResponseEntity(new ApiResponse(false, "Email and Username is already taken!"),
@@ -57,11 +61,12 @@ public class UserService {
             return new ResponseEntity(new ApiResponse(false, "Password not confirm"),
                     HttpStatus.ALREADY_REPORTED);
         }
-
         user.setMembreDepuis(new Date());
         user.setPassword(AES256.encrypt(user.getPassword()));
         user.setCouleur(  user.RandomColor());
         User u = userRepo.save(user);
+     
+
         return ResponseEntity.ok(u);
 
 
@@ -83,11 +88,22 @@ public class UserService {
     public  User UpdateUser( Long id,  User newUser)  {
         User user = userRepo.findById(id).orElseThrow(()-> new RessourceNotFoundException("mafamech"));
         user.setAdresse(newUser.getAdresse());
-        user.setNom(newUser.getUserName());
+        user.setNom(newUser.getNom());
         user.setPrenom(newUser.getPrenom());
         user.setRole(newUser.getRole());
         user.setTel(newUser.getTel());
+        user.setSpecialite(newUser.getSpecialite());
+
         userRepo.save(user);
         return user;
+    }
+
+    public User getUserById(Long id){
+      return  userRepo.findById(id).orElseThrow(()-> new RessourceNotFoundException("mafamech"));
+    }
+
+    public List<User> getResponsables(){
+            List<User> res= userRepo.findByRole("responsable");
+            return res;
     }
 }

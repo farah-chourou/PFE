@@ -174,6 +174,14 @@ export default function BullRecuMed(props) {
               <TableCell component="th" scope="row">
                 {row.recepteur}
               </TableCell>
+              <TableCell component="th" scope="row">
+
+                {row.bulletinValid== null ?
+                "aucun"
+                :row.bulletinValid.expediteur.userName
+
+              }
+              </TableCell>
 
 
               <TableCell component="th" scope="row" >

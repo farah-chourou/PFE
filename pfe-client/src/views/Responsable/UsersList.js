@@ -369,7 +369,7 @@ rowsMedecin.filter((row) => {
       <CardHeader style={ { backgroundImage: `linear-gradient(#fffbfbb0, #fffbfbb0),url(${backgroundImage})`,backgroundSize:"100%",paddingBottom:30}}>
         <Row >
           <Col md={9}>
-          <CardTitle tag="h4" style={{marginLeft:5,color:"black"}}>  Les Utilisateurs De La  Platform</CardTitle>
+          <CardTitle tag="h4" style={{marginLeft:5,color:"black"}}>  Les Utilisateurs De La  Platforme</CardTitle>
            <p className="card-category">
            </p> 
            
@@ -453,102 +453,14 @@ rowsMedecin.filter((row) => {
    <TableContainer >
       <AppBar position="static" color="white" >
         <Tabs /* TabColorProps={{style: {background:'white'}}} TabIndicatorProps={{style: {background:'white'}}} */ value={value}    onChange={handleChange}   indicatorColor="primary"    textColor="primary"  color="default"   aria-label="full width tabs example">
-          <Tab label="Validateurs" {...a11yProps(0)}  style={{outline: 'none'}} />
-          <Tab label="Medecins" {...a11yProps(1)}  style={{outline: 'none'}}/>
+          <Tab label="Medecins" {...a11yProps(0)}  style={{outline: 'none'}} />
+          <Tab label="Validateurs" {...a11yProps(1)}  style={{outline: 'none'}}/>
         </Tabs>
       </AppBar>
       <SwipeableViews axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'} index={value} onChangeIndex={handleChangeIndex} >
-        <TabPanel value={value} index={0} dir={theme.direction}>
-
-     {/*tab1*/}
-        <>
-
-
-
-      <Table className={classes.table} aria-label="custom pagination table">
- 
-
-      <TableHead >
-          <TableRow  >
-           <TableCell> <b> &nbsp; &nbsp;# </b></TableCell>
-            <TableCell > <b>Nom d'utilisateur  </b></TableCell>
-            <TableCell > <b> Email </b></TableCell>
-            <TableCell > <b> Numero télephone</b></TableCell>
-            <TableCell ><b> Autre</b> </TableCell>
-          
-          </TableRow>
-        </TableHead>
-
-        <TableBody>
-       {console.log(searched)}
-          {(rowsPerPage > 0
-            ? requestSearch.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            : requestSearch
-          ).map((row) => (
-            <TableRow key={row.id} hover>
-              <TableCell component="th" scope="row" >
-             
-                <Avatar style={{backgroundColor : row.couleur,fontSize:17}} className="text-uppercase shadow">    { row.nom.substr(0, 1) +row.prenom.substr(0, 1) }</Avatar>
-           
-              </TableCell>
-              <TableCell component="th" scope="row">
-
-              { row.userName}
-              </TableCell>
-              <TableCell style={{ width: 160 }} >
-                {row.Email}
-              </TableCell>
-              <TableCell component="th" scope="row">
-                {row.telephone}
-              </TableCell>
-              <TableCell component="th" scope="row">
-              <div className="d-inline-block ">
-                   <div className="d-inline-block mr-3">    <EditUser id={row.id} validateurs={getValidateurs} medecins={getMedecins}  /> </div> </div>   
-                <div className="d-inline-block "> 
-                <Tooltip title="Supprimer">
-                     <IconButton aria-label="delete"  style={{outline: 'none'}}>
-                  
-                     <MdDeleteSweep  style={{color:"2b2b2b"}} onClick={()=>{ setShow(true) ;setId(row.id) }}/>
-                     </IconButton>
-                   </Tooltip>
-          
-                   </div>  
-         </TableCell>
-            </TableRow>
-          ))}
-
-          {emptyRows > 0 && (
-            <TableRow style={{ height: 53 * emptyRows }}>
-              <TableCell colSpan={6} />
-            </TableRow>
-          )}
-        </TableBody>
-    
-        <TableRow   >
-            <TablePagination 
-         
-              rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-              colSpan={7}
-              count={rows.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              SelectProps={{
-                inputProps: { 'aria-label': 'rows per page' },
-                native: true,
-              }}
-              onChangePage={handleChangePage}
-              onChangeRowsPerPage={handleChangeRowsPerPage}
-              ActionsComponent={TablePaginationActions}
-            />
-          </TableRow>
-    
-      </Table>
-    </>
-
- {/*tab2*/}
-        </TabPanel>
      
-        <TabPanel value={value} index={1} dir={theme.direction}>
+     
+        <TabPanel value={value} index={0} dir={theme.direction}>
         <>
 
       <Table className={classes.table} aria-label="custom pagination table">
@@ -556,10 +468,12 @@ rowsMedecin.filter((row) => {
       <TableHead>
           <TableRow  >
            <TableCell> <b> &nbsp; &nbsp;# </b></TableCell>
-            <TableCell> <b>Nom d'utilisateur  </b></TableCell>
+            <TableCell> <b>Nom  </b></TableCell>
+            <TableCell> <b>Prénom  </b></TableCell>
             <TableCell > <b> Email </b></TableCell>
             <TableCell > <b> Spécialité medecin</b></TableCell>
             <TableCell > <b> Numero télephone</b></TableCell>
+    
             <TableCell ><b> Autre</b> </TableCell>
           
           </TableRow>
@@ -576,7 +490,10 @@ rowsMedecin.filter((row) => {
 
               </TableCell>
               <TableCell component="th" scope="row">
-                {row.userName}
+                {row.nom}
+              </TableCell>
+              <TableCell component="th" scope="row">
+                {row.prenom}
               </TableCell>
               <TableCell component="th" scope="row">
                 {row.Email}
@@ -636,7 +553,98 @@ rowsMedecin.filter((row) => {
 
 
         </TabPanel>
-   
+        <TabPanel value={value} index={1} dir={theme.direction}>
+
+{/*tab1*/}
+   <>
+
+
+
+ <Table className={classes.table} aria-label="custom pagination table">
+
+
+ <TableHead >
+     <TableRow  >
+      <TableCell> <b> &nbsp; &nbsp;# </b></TableCell>
+       <TableCell > <b>Nom  </b></TableCell>
+       <TableCell > <b>Prénom  </b></TableCell>
+       <TableCell > <b> Email </b></TableCell>
+       <TableCell > <b> Numero télephone</b></TableCell>
+       <TableCell ><b> Autre</b> </TableCell>
+     
+     </TableRow>
+   </TableHead>
+
+   <TableBody>
+  {console.log(searched)}
+     {(rowsPerPage > 0
+       ? requestSearch.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+       : requestSearch
+     ).map((row) => (
+       <TableRow key={row.id} hover>
+         <TableCell component="th" scope="row" >
+        
+           <Avatar style={{backgroundColor : row.couleur,fontSize:17}} className="text-uppercase shadow">    { row.nom.substr(0, 1) +row.prenom.substr(0, 1) }</Avatar>
+      
+         </TableCell>
+         <TableCell style={{ width: 165 }}>
+         { row.nom}
+         </TableCell>
+         <TableCell style={{ width: 165 }}>
+         { row.prenom}
+         </TableCell>
+         <TableCell style={{ width: 165 }} >
+           {row.Email}
+         </TableCell>
+         <TableCell component="th" scope="row">
+           {row.telephone}
+         </TableCell>
+         <TableCell component="th" scope="row">
+         <div className="d-inline-block ">
+              <div className="d-inline-block mr-3">    <EditUser id={row.id} validateurs={getValidateurs} medecins={getMedecins}  /> </div> </div>   
+           <div className="d-inline-block "> 
+           <Tooltip title="Supprimer">
+                <IconButton aria-label="delete"  style={{outline: 'none'}}>
+             
+                <MdDeleteSweep  style={{color:"2b2b2b"}} onClick={()=>{ setShow(true) ;setId(row.id) }}/>
+                </IconButton>
+              </Tooltip>
+     
+              </div>  
+    </TableCell>
+       </TableRow>
+     ))}
+
+     {emptyRows > 0 && (
+       <TableRow style={{ height: 53 * emptyRows }}>
+         <TableCell colSpan={6} />
+       </TableRow>
+     )}
+   </TableBody>
+
+   <TableRow   >
+       <TablePagination 
+    
+         rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+         colSpan={7}
+         count={rows.length}
+         rowsPerPage={rowsPerPage}
+         page={page}
+         SelectProps={{
+           inputProps: { 'aria-label': 'rows per page' },
+           native: true,
+         }}
+         onChangePage={handleChangePage}
+         onChangeRowsPerPage={handleChangeRowsPerPage}
+         ActionsComponent={TablePaginationActions}
+       />
+     </TableRow>
+
+ </Table>
+</>
+
+
+   </TabPanel>
       </SwipeableViews>
     </TableContainer>
     </CardBody>

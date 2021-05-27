@@ -13,6 +13,8 @@ public interface NotificationRepository extends JpaRepository<Notification,Long>
 
     List<Notification> findByRecepteurAndEtat(String user , Boolean etat);
     List<Notification> findAll();
+    List<Notification> findAllByOrderById();
+
    List <Notification> findAllByRecepteurAndSuivisBullMed(String recepteur, SuivisBullMed suivisBullMed);
 
     Optional<Notification>  findById(Long id );

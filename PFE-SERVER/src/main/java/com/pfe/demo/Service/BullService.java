@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -47,7 +48,7 @@ public class BullService {
 
 
 
-    public SuivisBull ajouterBulletin(SuivisBull suivisBulletein,  Long id,  String recepteur){
+    public SuivisBull ajouterBulletin(SuivisBull suivisBulletein,  Long id,  String recepteur) throws MessagingException {
         if(suivisBullRepo.findByNumBull(suivisBulletein.getNumBull()) != null){
             return null;
         }
@@ -78,8 +79,7 @@ public class BullService {
 
         notificationRepo.save(notif);
 
-       /* String expediteur=exp.getUserName();
-        mailService.sendSimpleMessage(recep.getEmail(),"Nouvelle notification (MUTUAL by CODWAY)","Bonjour, \nvous avez une nouvelle notification de la part " + expediteur + " . \nBien recu a vous.");*/
+        String expediteur=exp.getUserName();
        return bull;
 
     }

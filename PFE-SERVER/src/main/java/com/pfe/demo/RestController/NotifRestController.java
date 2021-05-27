@@ -35,7 +35,7 @@ public class NotifRestController {
 
     @GetMapping("/getNotif")
     public List<Notification> getAllNotif(){
-        List<Notification> notifs = notificationRepo.findAll();
+        List<Notification> notifs = notificationRepo.findAllByOrderById();
         return notifs;
     }
 

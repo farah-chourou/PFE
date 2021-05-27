@@ -11,6 +11,7 @@ import com.pfe.demo.Exception.RessourceNotFoundException;
 import com.pfe.demo.RestController.Util.ApiResponse;
 import com.pfe.demo.RestController.Util.Status;
 import com.pfe.demo.Security.AES256;
+import com.pfe.demo.Service.MailService;
 import com.pfe.demo.Service.NotificationService;
 import com.pfe.demo.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -47,10 +49,22 @@ public class UserRestController {
     @Autowired
     UserService userService;
 
-
+    @Autowired
+    MailService mailService;
+    
     @PostMapping("/register/{confirmPass}")
-    public ResponseEntity<User> register (@RequestBody User user, @PathVariable String confirmPass){
+    public ResponseEntity<User> register (@RequestBody User user, @PathVariable String confirmPass) throws MessagingException {
     return userService.Register(user,confirmPass);
+    }
+    
+    @PostMapping("/mailSend")
+    public User sendMail(@RequestBody User user) {
+    	   try { 
+    	        mailService.userAccount(user);}
+    	        catch(Exception e) {
+    	        	
+    	        }
+    	return user;
     }
 
      @PostMapping("/login")
@@ -68,8 +82,7 @@ public class UserRestController {
 
     @GetMapping("/getResponsables")
     public List<User> getAllResponsable(){
-        List<User> res= userRepo.findByRole("responsable");
-    return res;
+    return userService.getResponsables();
     }
 
     @GetMapping("/getValidateurs")
@@ -87,7 +100,7 @@ public class UserRestController {
 
    @GetMapping("/getUser/{id}")
    public User getUser(@PathVariable Long id ){
-        return   userRepo.findById(id).orElseThrow(()-> new RessourceNotFoundException("mafamech"));
+        return userService.getUserById(id);
 
    }
 

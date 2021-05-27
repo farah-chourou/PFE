@@ -33,8 +33,8 @@ public class SuivisBullMed {
     @ManyToOne
     private User expediteur;
 
-   /* @ManyToOne
-    private User recepteur;*/
+   @ManyToOne
+    private SuivisBull suivisBull;
 
     @JsonIgnore
     @OneToMany(mappedBy = "suivisBullMed")

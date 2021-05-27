@@ -136,7 +136,7 @@ export default class EditUser extends Component {
         keyboard={false}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Modifier l utilisateur </Modal.Title>
+          <Modal.Title>Modifier l'utilisateur </Modal.Title>
         </Modal.Header>
         <Form  onSubmit={this.handleSubmit}>
 
@@ -144,25 +144,20 @@ export default class EditUser extends Component {
 
             
                    <Row>
-                      <Col className="pr-1" md="5">
-                        <Form.Group>
-                          <label>Company </label>
-                          <Form.Control defaultValue="CODWAY"disabled placeholder="Company" type="text" ></Form.Control>
-                        </Form.Group>
-                      </Col>
+                     
                       
-                      <Col className="px-1" md="3">
+                      <Col className="pr-1" md="6">
                         <Form.Group>
-                          <label>Username</label>
+                          <label>Nom d'utilisateur</label>
                           <Form.Control placeholder="Enter Username.."type="text" disabled name="userName" required value={this.state.userName} onChange={this.handleChange}/>
                         </Form.Group>
                         <div> {this.state.nameError} </div>
 
                       </Col>
-                      <Col className="pl-1" md="4">
+                      <Col className="pl-1" md="6">
                         <Form.Group>
                           <label htmlFor="exampleInputEmail1">
-                            Email address
+                            Adresse email
                           </label>
                           <Form.Control placeholder="Email"type="email"  disabled name="email" required value={this.state.email} onChange={this.handleChange}/>
                         </Form.Group>
@@ -174,13 +169,13 @@ export default class EditUser extends Component {
                     <Row>
                       <Col className="pr-1" md="6">
                         <Form.Group>
-                          <label>First Name</label>
+                          <label>Nom</label>
                           <Form.Control placeholder="Company"type="text" name="nom" required value={this.state.nom} onChange={this.handleChange}/>
                         </Form.Group>
                       </Col>
                       <Col className="pl-1" md="6">
                         <Form.Group>
-                          <label>Last Name</label>
+                          <label>Prénom</label>
                           <Form.Control  placeholder="Last Name"  type="text" required name="prenom" value={this.state.prenom} onChange={this.handleChange}/>
                         </Form.Group>
                       </Col>
@@ -190,7 +185,7 @@ export default class EditUser extends Component {
                     <Row>
                     <Col className="pr-1" md="6">
                         <Form.Group>
-                          <label>Phone Number</label>
+                          <label>N° téléphone </label>
                           <Form.Control  placeholder="+216" type="text" name="tel"  required value={this.state.tel} onChange={this.handleChange}/>
                         </Form.Group>
                       </Col>
@@ -198,7 +193,7 @@ export default class EditUser extends Component {
                       <Form.Group as={Col} controlId="formGridState">
                           <Form.Label>Role</Form.Label>
                           <Form.Control as="select" defaultValue="Choose..."name="role" required value={this.state.role} onChange={this.handleChange} onClick={()=> {this.show(this.state.role)}} >
-                            <option>Choose...</option>
+                            <option>Choisir...</option>
                             <option value="medecin"> Medecin</option>
                             <option value="validateur"> validateur</option>
                       
@@ -212,7 +207,7 @@ export default class EditUser extends Component {
                     <Row>
                     <Col className="pr-1" md="12">
                     <Form.Group>
-                    <label>Specialite</label>
+                    <label>Spécialite</label>
                     <Form.Control placeholder="specialite" type="text" name="specialite"  required value={this.state.specialite} onChange={this.handleChange}/>
                     </Form.Group>
                       </Col>
@@ -224,7 +219,7 @@ export default class EditUser extends Component {
                     <Row>
                       <Col md="12">
                         <Form.Group>
-                          <label>Address</label>
+                          <label>Addresse</label>
                           <Form.Control placeholder="Home Address" type="text" name="adresse"  required value={this.state.adresse} onChange={this.handleChange}/>
                         </Form.Group>
                       </Col>

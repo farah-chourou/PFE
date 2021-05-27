@@ -10,6 +10,8 @@ import com.pfe.demo.Entities.User;
 import com.pfe.demo.Exception.RessourceNotFoundException;
 import com.pfe.demo.RestController.Util.ApiResponse;
 import com.pfe.demo.Service.BullService;
+import com.pfe.demo.Service.MailService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
@@ -43,9 +46,11 @@ public class BullRestController {
 
     @Autowired
     BullService bullService;
+    @Autowired
+    MailService mailService;
 
    @PostMapping("/addBull/{id}/{recepteur}")
-    public ResponseEntity<SuivisBull> addBull(@RequestBody SuivisBull suivisBulletein, @PathVariable Long id, @PathVariable String recepteur){
+    public ResponseEntity<SuivisBull> addBull(@RequestBody SuivisBull suivisBulletein, @PathVariable Long id, @PathVariable String recepteur) throws MessagingException {
 
       if(bullService.ajouterBulletin(suivisBulletein,id,recepteur)== null){
           return  new ResponseEntity(new ApiResponse(false, "Bull already exist !"),
@@ -56,6 +61,13 @@ public class BullRestController {
         else return ResponseEntity.ok(bullService.ajouterBulletin(suivisBulletein,id,recepteur));
     }
 
+    @PostMapping("/mailValidResp")
+    public SuivisBull mailValidResp (@RequestBody SuivisBull suivisBulletein) throws MessagingException
+    {
+        SuivisBull s = suivisBullRepo.findByNumBull(suivisBulletein.getNumBull());
+        mailService.validResp(s.getRecepteur().getEmail(),s.getExpediteur() ,s);
+        return suivisBulletein;
+    }
     @GetMapping("/getAllBull")
     public List<SuivisBull> getAlBull(){
 
@@ -116,5 +128,14 @@ public class BullRestController {
 
         return bullService.getPerfermantValid();
     }
+
+    @PutMapping("/addSpec/{numBull}/{specialite}")
+    public SuivisBull ajouterSpecialite(@PathVariable int numBull,@PathVariable String specialite){
+        SuivisBull bull = suivisBullRepo.findByNumBull(numBull);
+        bull.setSpecialiteMed(specialite);
+        suivisBullRepo.save(bull);
+        return bull;
+    }
+
 
 }

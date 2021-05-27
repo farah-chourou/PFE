@@ -39,6 +39,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import SearchIcon from '@material-ui/icons/Search';
 
 import ButtonGroup from '@material-ui/core/ButtonGroup';
+import{AiFillAlert}from"react-icons/ai";
 
 //pagination
 const useStyles1 = makeStyles((theme) => ({
@@ -176,8 +177,8 @@ TablePaginationActions.propTypes = {
 
 
 
-function createData(numBull, date, expediteur,specialite,etat,recepteur,commentaireMed,commentaireResp) {
-  return { numBull, date ,expediteur,specialite,etat,recepteur, history: [
+function createData(numBull, date, expediteur,specialite,etat,recepteur,commentaireMed,commentaireResp,bulletinValid) {
+  return { numBull, date ,expediteur,specialite,etat,recepteur,bulletinValid, history: [
     { commentaireMed, commentaireResp , numBull },
    
   ],};
@@ -204,9 +205,10 @@ export default function CustomPaginationActionsTable() {
   const [numberBullValid,setNumberBullValid] =useState(0);
   const [numberBullMed,setNumberBullMed] =useState(0);
   const  [searched,setSearched] = useState("")
-
-
-//tabs
+  const [showSelect,setShowSelect]=useState(false)
+  const [medecins,setMedecins]=useState([])
+  const [specialiteMed,setSpecialiteMed]=useState()
+  //tabs
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -218,6 +220,7 @@ export default function CustomPaginationActionsTable() {
 useEffect(() => {
   const local = localStorage.getItem("user");
   setUser(JSON.parse(local)) 
+  getAllMed();
 
    getAllBullResp();
    getAllBullMed();
@@ -232,22 +235,12 @@ useEffect(() => {
 
 
 const getAllBullResp =() =>{
-  axios.get('http://localhost:8080/getAllBull').then(res => {
- 
-    const local = localStorage.getItem("user");
-    setUser(JSON.parse(local)) 
+  const local = localStorage.getItem("user");
 
-    res.data.map(k => 
-      <div >
-       {(k.recepteur.userName == JSON.parse(local).userName && k.etape == 1) ?  
-      ( bulletinsResp.push(k),
-      setNumberBullValid(
-        bulletinsResp.length
-      )
-      )  
-      : false}
-      </div>
-    )
+
+  axios.get('http://localhost:8080/getAlBullEtape1Byrecep/'+JSON.parse(local).userName).then(res => {
+ 
+  setBulletinsResp(res.data)
  }
  )
 }
@@ -273,7 +266,7 @@ const getAllBullMed =() =>{
 
 var rowsMedecin =[];
 bulletinsMed.map((d)=> {
-rowsMedecin.push(createData(d.numBull,d.date, d.expediteur.userName, d.specialiteMed,d.etat,d.recepteur,d.commentaireMed,d.commentaireResp))
+rowsMedecin.push(createData(d.numBull,d.date, d.expediteur.userName, d.specialiteMed,d.etat,d.recepteur,d.commentaireMed,d.commentaireResp,d.suivisBull))
 
 }) 
 
@@ -291,6 +284,23 @@ const handleDelete =()=> {
      
 }
 
+const addSpec =()=> {
+  console.log(specialiteMed)
+  axios.put('http://localhost:8080/addSpec/'+numBull+'/'+specialiteMed).then(res => {
+    getAllBullResp()
+    bulletinsResp.map((d)=> {
+      rows.push(createData(d.numBull,d.date, d.expediteur.userName, d.specialiteMed,d.etat))
+      
+      })
+
+      setShowSelect(false)
+      setSpecialiteMed("")
+  })
+   
+
+    
+      
+ }
 const envoyerBull = (numBull,specialiteMed) => {
 
   axios.post('http://localhost:8080/addBullMed/'+ numBull + "/" + specialiteMed + "/"+ user.userName).then(res => {
@@ -368,7 +378,15 @@ var requestSearch =(
     return row.numBull.toString().includes(searched);
     }));
   
-
+    const getAllMed=()=>{
+      axios.get(`http://localhost:8080/getMedecins`)
+      .then(res => {
+        setMedecins(res.data)
+      
+          }
+          )
+        }
+  
   return (
     <div className="content" component={Paper}>
   <NotificationAlert ref={notificationAlert} />
@@ -380,9 +398,9 @@ var requestSearch =(
       <CardHeader className="bg-light" style={{backgroundImage: `linear-gradient(#fffbfbb0, #fffbfbb0),url(${backgroundImage})`,backgroundSize:"100%",paddingBottom:15}}>
         <Row>
           <Col md={9}>
-          <CardTitle tag="h4"> Bulletin  Dernièrement Récu</CardTitle>
+          <CardTitle tag="h4"> Bulletin  Dernièrement Reçu</CardTitle>
            <p className="card-category"style={{color:"#545455"}}>
-             vous avez <b> {numberBullValid}</b>  bulletins recu des validateurs et <b> {bulletinsMed.length}</b>  bulletins  recu des medecins 
+             vous avez <b> {bulletinsResp.length}</b>  bulletins reçu des validateurs et <b> {bulletinsMed.length}</b>  bulletins  reçu des medecins 
            </p> 
            </Col>
 
@@ -430,8 +448,8 @@ var requestSearch =(
           aria-label="full width tabs example"
           
         >
-          <Tab label="Bulettins recu des validateurs" {...a11yProps(0)}   style={{outline: 'none'}}/>
-          <Tab label="Bulettins recu des medecins" {...a11yProps(1)} style={{outline: 'none'}} />
+          <Tab label="Bulettins reçu des validateurs" {...a11yProps(0)}   style={{outline: 'none'}}/>
+          <Tab label="Bulettins reçu des medecins" {...a11yProps(1)} style={{outline: 'none'}} />
 
         </Tabs>
       </AppBar>
@@ -454,6 +472,7 @@ var requestSearch =(
             <TableCell > <b> Date d'envoie </b></TableCell>
             <TableCell > <b> Specialité medecin</b></TableCell>
             <TableCell ><b> Expéditeur</b> </TableCell>
+            
             <TableCell ><b >  Etat</b> </TableCell>
             <TableCell ><b>  Autre</b> </TableCell>
 
@@ -476,10 +495,19 @@ var requestSearch =(
               {row.date}
            
               </TableCell>
-             
               <TableCell component="th" scope="row">
-                {row.specialite}
-              </TableCell>
+             {row.specialite =="Aucune" ?
+            
+           <span className="alertt">
+             
+             <AiFillAlert size={22} style={{position:"relative",top:-4}} onClick={()=>{setShowSelect(true); setNumBull(row.numBull) }}/>
+             &nbsp; {row.specialite} </span>   
+            : 
+          <span>  {row.specialite}</span> }
+
+          </TableCell>
+         
+           
               <TableCell component="th" scope="row">
                 {row.expediteur}
               </TableCell>
@@ -513,7 +541,7 @@ var requestSearch =(
     
           <TableRow  >
             <TablePagination 
-              rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+              rowsPerPageOptions={[5, 10, 25, { label: 'Tout', value: -1 }]}
               colSpan={7}
               count={rows.length}
               rowsPerPage={rowsPerPage}
@@ -546,7 +574,10 @@ var requestSearch =(
           <TableCell> <b>Numero bulletins  </b></TableCell>
             <TableCell > <b> Date d'envoie </b></TableCell>
             <TableCell > <b> Specialité medecin</b></TableCell>
+            
             <TableCell ><b> Expéditeur</b> </TableCell>
+            <TableCell ><b> Validateur </b> </TableCell>
+
             <TableCell ><b >  Etat</b> </TableCell>
             <TableCell ><b>  Envoyer</b> </TableCell>
 
@@ -622,7 +653,7 @@ var requestSearch =(
         </Modal.Header>
         <Modal.Body  >
 
-        <h5>  < FiAlertCircle size={55} color="orange"/>    &nbsp; Est-vous sur de supprimer cet utilisateur ?</h5> 
+        <h5>  < FiAlertCircle size={55} color="orange"/>    &nbsp; Est-vous sur de supprimer ce bulletin ?</h5> 
         </Modal.Body>
          <Modal.Footer>
           <Button style={{backgroundColor: "orange"}} className="text-light border border-muted" onClick={handleDelete}>
@@ -631,6 +662,37 @@ var requestSearch =(
         </Modal.Footer>
       </Modal>
 
+
+
+      <Modal
+        show={showSelect}
+        onHide={() => setShowSelect(false)}
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title> Sélectionner le  spécialité du médecin pour le bulletin N° {numBull} </Modal.Title>
+        </Modal.Header>
+        <Modal.Body  >
+
+        <Form.Group as={Col} controlId="formGridState">
+         <Form.Label> &nbsp;Specialité medecin</Form.Label>
+         <Form.Control as="select"  required name="specialiteMed" value={specialiteMed} onChange={e => setSpecialiteMed(e.target.value)} style={{height:45}}>
+                    <option>Choisir...</option>
+
+                      {medecins.map( R => 
+                      <option value={R.specialite} > {R.specialite}    (Docteur&nbsp;{R.userName}) </option>)}
+
+         </Form.Control>
+         </Form.Group> 
+
+        </Modal.Body>
+         <Modal.Footer>
+          <Button style={{backgroundColor: "orange"}} className="text-light border border-muted" onClick={addSpec}>
+         <b> CONFIRMER</b> 
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
 
     

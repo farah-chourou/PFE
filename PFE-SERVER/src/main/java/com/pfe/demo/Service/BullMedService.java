@@ -6,10 +6,13 @@ import com.pfe.demo.RestController.Util.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 import java.lang.reflect.Array;
 import java.time.DayOfWeek;
@@ -40,13 +43,16 @@ public class BullMedService {
 
     @Autowired
     MailService mailService;
+    @Autowired
+    private JavaMailSender emailSender;
 
-    public SuivisBullMed ajouterBullMed(int numBull,  String specialiteMed , String userName){
+    public SuivisBullMed ajouterBullMed(int numBull,  String specialiteMed , String userName) throws MessagingException {
 
         if(suivisBullMedRepo.findByNumBull(numBull) !=null) {
             return  null;
         }
-
+ 
+        SuivisBull bullValid = suivisBullRepo.findByNumBull(numBull);
         SuivisBullMed bullMed =new SuivisBullMed();
 
         User recep = userRepo.findBySpecialite(specialiteMed);
@@ -59,6 +65,7 @@ public class BullMedService {
         bullMed.setDate(LocalDate.now());
         bullMed.setEtape(2);
         bullMed.setEtat("En attente");
+        bullMed.setSuivisBull(bullValid);
 
         SuivisBullMed bull =  suivisBullMedRepo.save(bullMed);
 
@@ -75,14 +82,14 @@ public class BullMedService {
         notif.setSuivisBullMed(su);
 
         notificationRepo.save(notif);
-         /* String expediteur=exped.getUserName();
-        mailService.sendSimpleMessage(recep.getEmail(),"Nouvelle notification (MUTUAL by CODWAY)","Bonjour, \nvous avez une nouvelle notification de la part " + expediteur + " . \nBien recu a vous.");*/
+        String expediteur=exped.getUserName();
+        mailService.respMed(recep.getEmail(), exped,bullMed );
 
-       return bull;
+        return bull;
     }
 
 
-    public SuivisBullMed ajouterAvis(int numBull ,  String avis, SuivisBullMed bullMed){
+    public SuivisBullMed ajouterAvis(int numBull ,  String avis, SuivisBullMed bullMed) throws MessagingException {
         SuivisBullMed bull = suivisBullMedRepo.findByNumBull(numBull);
         Avis a = avisRepository.findByAvis(avis);
         bull.setAvis(a);
@@ -91,6 +98,9 @@ public class BullMedService {
         bull.setEtat(a.getAvis());
         bull.setDate(LocalDate.now());
         bull.setDateEtape3(LocalDate.now());
+
+        mailService.MedResp(bull.getExpediteur().getEmail(), userRepo.findByUserName(bull.getRecepteur()),bull );
+
         suivisBullMedRepo.save(bull);
 
         User expediteur = userRepo.findByUserName(bull.getRecepteur());
@@ -106,13 +116,12 @@ public class BullMedService {
         notif.setSuivisBullMed(bull);
 
         notificationRepo.save(notif);
-          /* String expediteur=expediteur.getUserName();
-        mailService.sendSimpleMessage(bull.getExpediteur().getEmail(),"Nouvelle notification (MUTUAL by CODWAY)","Bonjour, \nvous avez une nouvelle notification de la part " + expediteur + " . \nBien recu a vous.");*/
+
       return bull;
     }
 
 
-    public SuivisBullMed ajouterAutreAvis(int numBull ,  String avis, String autreAvis,SuivisBullMed bullMed){
+    public SuivisBullMed ajouterAutreAvis(int numBull ,  String avis, String autreAvis,SuivisBullMed bullMed) throws MessagingException {
         SuivisBullMed bull = suivisBullMedRepo.findByNumBull(numBull);
         Avis a = new Avis();
         a.setAvis(autreAvis);
@@ -134,13 +143,13 @@ public class BullMedService {
         notif.setVu(false);
         notif.setSuivisBullMed(bull);
         notificationRepo.save(notif);
-         /* String expediteur=expediteur.getUserName();
-        mailService.sendSimpleMessage(bull.getExpediteur().getEmail(),"Nouvelle notification (MUTUAL by CODWAY)","Bonjour, \nvous avez une nouvelle notification de la part " + expediteur + " . \nBien recu a vous.");*/
+        mailService.MedResp(bull.getExpediteur().getEmail(), userRepo.findByUserName(bull.getRecepteur()),bull );
+
         return bull;
     }
 
 
-    public SuivisBullMed envoyer (int numBull){
+    public SuivisBullMed envoyer (int numBull) throws MessagingException {
         SuivisBullMed bull = suivisBullMedRepo.findByNumBull(numBull);
         bull.setEtape(4);
         suivisBullMedRepo.save(bull);
@@ -154,8 +163,8 @@ public class BullMedService {
         notif.setVu(false);
         notif.setSuivisBullMed(bull);
         notificationRepo.save(notif);
-         /* String expediteur=expediteur.getUserName();
-        mailService.sendSimpleMessage(bullValid.getExpediteur().getEmail(),"Nouvelle notification (MUTUAL by CODWAY)","Bonjour, \nvous avez une nouvelle notification de la part " + expediteur + " . \nBien recu a vous.");*/
+        mailService.respValid(bullValid.getExpediteur().getEmail(), bull.getExpediteur(),bull );
+
         return bull;
     }
 

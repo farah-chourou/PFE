@@ -22,6 +22,7 @@ import java.util.Set;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id")*/
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -53,10 +54,7 @@ public class User {
     private Set<Notification> notifications;
 
 
- public void updateProfile (String adresse, String telephone){
-    this.adresse = adresse;
-    this.tel=telephone;
- }
+
 
  public void addS(SuivisBull suivisBull){
      getSuivisBulleteinset().add(suivisBull);
