@@ -23,6 +23,7 @@ import  { useState, useEffect } from 'react';
 import {MdSend} from 'react-icons/md';
 import NotificationAlert from "react-notification-alert";
 import Tooltip from '@material-ui/core/Tooltip';
+import moment from 'moment';
 
 const useRowStyles = makeStyles({
     root: {
@@ -115,7 +116,7 @@ export default function HistoriqueBullMed(props) {
            
               </TableCell>
               <TableCell component="th" scope="row">
-              {row.date}
+              { moment(row.date).format('L')}
            
               </TableCell>
              

@@ -27,6 +27,8 @@ import clsx from 'clsx';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { green } from '@material-ui/core/colors';
 import Fab from '@material-ui/core/Fab';
+import moment from 'moment';
+
 import CheckIcon from '@material-ui/icons/Check';
 const useRowStyles = makeStyles({
     root: {
@@ -97,6 +99,7 @@ export default function BullRecuMed(props) {
           setSuccess(true);
           setLoading(false);
         }, 2000);
+        updateBull();
       }
     };
    const updateBull =() =>{
@@ -164,7 +167,7 @@ export default function BullRecuMed(props) {
            
               </TableCell>
               <TableCell component="th" scope="row">
-              {row.date}
+              { moment(row.date).format('L')}
            
               </TableCell>
              
@@ -248,7 +251,7 @@ export default function BullRecuMed(props) {
                         <Col md={5}>
                         <Form.Group>
                           <label>Ajouter votre commentaire ici</label>
-                          <Form.Control name="comment" value={comment} defaultValue={historyRow.commentaireResp} onChange={handleChange} as="textarea"  placeholder="" type="text" ></Form.Control>
+                          <Form.Control name="comment"defaultValue={historyRow.commentaireResp} onChange={handleChange} as="textarea"  placeholder="" type="text" ></Form.Control>
                         </Form.Group>
                           
                            </Col> 

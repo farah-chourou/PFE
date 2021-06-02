@@ -101,7 +101,8 @@ export default function Icons() {
   const [NewPass, setNewPass] = useState("")
   const [LastPassword,setLastPassword] = useState()
   const [Error, setError] = useState(false)
-  
+  const [ErrorLength, setErrorLength] = useState(false)
+
   const[show,setShow]=useState(false)
 
   useEffect(() => {
@@ -155,7 +156,12 @@ export default function Icons() {
      const local = localStorage.getItem("user");
     if(ConfirmPass!=NewPass){
       setError(true)
-    }else{ 
+    }else if
+      (NewPass.length <=5){
+      setError(false)
+      setErrorLength(true)
+    }
+    else{ 
       let newUser ={
         password:NewPass
         }
@@ -469,7 +475,9 @@ if(PassActuel== Password){
                            </div>
                            {PassActuel == Password?
                           <Form >
-                           <div class="p-3"> 
+                       
+                           {ErrorLength == false ?
+                               <div class="p-3"> 
                            <TextField
                               label="Modifier votre adresse"
                               id="outlined-size-small"
@@ -483,6 +491,25 @@ if(PassActuel== Password){
 
                             /> 
                            </div>
+                           :     <div class="p-3"> 
+                            <TextField
+                           label="Modifier votre adresse"
+                           error
+                           id="outlined-error-helper-text"
+                           helperText="Le mot de passe doit contenir au moins 6 caractère !"
+                           defaultValue={NewPass}
+                           variant="outlined"
+                           size="small"
+                           InputProps={{
+                             className: classes.input}}
+                             onChange={(event)=>setNewPass(event.target.value)}
+                             type="password"
+
+                         /> 
+                        </div>}
+
+
+                           {console.log(ErrorLength)}
                            {Error == false ? 
                            <div class="p-3"> 
                            <TextField
@@ -498,7 +525,8 @@ if(PassActuel== Password){
 
                             /> 
                            </div>
-                           : <div className="p-3"> <TextField
+                           : 
+                           <div className="p-3"> <TextField
                            error
                            id="outlined-error-helper-text"
                            label="Erreur"
@@ -510,6 +538,10 @@ if(PassActuel== Password){
                             onChange={(event)=>setConfirmPass(event.target.value)}
                             type="password"
                          /> </div>}
+                        
+                      
+                  
+                      
                            
                            </Form>
                            :

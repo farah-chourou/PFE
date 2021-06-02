@@ -63,7 +63,7 @@ var routes = [
   },
   {
     path: "/bulletin",
-    name: " Bulletins reçus ",
+    name: " Bulletins reçu ",
     icon: "nc-icon nc-single-copy-04",
     component: AllBull,
     layout: "/user",
@@ -73,7 +73,7 @@ var routes = [
   },
   {
     path: "/bulletinMedecin",
-    name: " Bulletins reçus",
+    name: " Bulletins reçu",
     icon: "nc-icon nc-single-copy-04",
     component: BullMed,
     layout: "/user",
@@ -85,7 +85,7 @@ var routes = [
 
   {
     path: "/bulletinValidateur",
-    name: " Bulletins reçus",
+    name: " Bulletins reçu",
     icon: "nc-icon nc-single-copy-04",
     component: BullValid,
     layout: "/user",

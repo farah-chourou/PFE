@@ -85,8 +85,8 @@ export default function Piee() {
 
   axios.get('http://localhost:8080/getAllBullRespMedEtape4/'+JSON.parse(local).userName).then( res => {
 
-    const start =  moment().startOf('month');
-    const end= moment().endOf('month');
+    const start =  moment().startOf('month').subtract(1,"days");
+    const end= moment().endOf('month').add(1,"days");
     res.data.map(e => 
       <div key={e.numBull}>
       {(e.avis.avis == "Accepté"&& moment(e.date).isBetween(  start, end) == true) ? (accepter.push(e),setNumAccepter(accepter.length)): 

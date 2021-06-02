@@ -512,7 +512,7 @@ rowsMedecin.filter((row) => {
                 <Tooltip title="Supprimer">
                      <IconButton aria-label="delete">
                   
-                     <MdDeleteSweep  style={{color:"#2b2b2b"}} onClick={()=>{ setShow(true) ;setId(row.id) }}/>
+                     <MdDeleteSweep  style={{color:"#2b2b2b",outline:"none"}} onClick={()=>{ setShow(true) ;setId(row.id) }}/>
                      </IconButton>
                    </Tooltip>
           

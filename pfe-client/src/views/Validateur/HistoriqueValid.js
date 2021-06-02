@@ -23,6 +23,7 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Avatar from '@material-ui/core/Avatar';
 import { deepOrange, deepPurple } from '@material-ui/core/colors';
+import moment from 'moment';
 
 import {FiAlertCircle} from 'react-icons/fi';
 import { MdDeleteSweep } from 'react-icons/md';
@@ -268,8 +269,11 @@ const   AddBull = () => {
              notify("br");
              axios.post('http://localhost:8080/mailValidResp/', suivisBulletein).then(res  => { 
      });
+     setError("")
        setShow(false);
-  
+  setSpecialiteMed("")
+  setNumBull("")
+  setRecepteur("")
 bulletinsValid.map((d)=> {
 rows.push(createData(d.numBull,d.date, d.specialiteMed))
 
@@ -289,7 +293,7 @@ const notify =(place) => {
     message: (
       <div className="text-left " style={{}}>
         <div>
-        <b>Succés!</b> <br></br>
+        <b>Succés</b> <br></br>
        Bulletin ajouter avec succés
          </div>
       </div>
@@ -520,7 +524,7 @@ rows.filter((row) => {
                 {row.numBull}
               </TableCell>
               <TableCell style={{ width: 174}} >
-                {row.date}
+                { moment(row.date).format('L')}
               </TableCell>
               <TableCell style={{ width: 160 }} >
                 {row.specialite}

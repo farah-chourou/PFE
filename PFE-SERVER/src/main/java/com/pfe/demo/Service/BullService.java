@@ -18,11 +18,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.mail.MessagingException;
 import javax.transaction.Transactional;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 @Service
 @Transactional
@@ -68,7 +72,16 @@ public class BullService {
 
         Notification notif = new Notification();
         notif.setMessage("Vous avez un nouveau bulletin a valider ");
-        notif.setDate(new Date());
+        SimpleDateFormat df = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z");
+   
+      
+
+        Date localTime = new Date();
+        
+        notif.setDate(localTime);
+
+        System.out.println("local Time:" + localTime);
+  
         notif.setExpediteurNotif(exp);
         notif.setRecepteur(recepteur);
         notif.setEtat(false);
@@ -96,6 +109,7 @@ public class BullService {
         List<SuivisBull> totale =new ArrayList<SuivisBull>();
 
         List<User> validateur = userRepo.findByRole("validateur");
+        if(validateur.isEmpty()==false) {
         for (User l : validateur) {
             List <SuivisBullMed> bullEtape4= suivisBullMedRepo.findAllByRecepteurAndEtape(l.getUserName(),4);
             List <SuivisBull> bullTotale= suivisBullRepo.findByExpediteur(l);
@@ -118,7 +132,11 @@ public class BullService {
                     p.add(bullV);
                 }
                 s.clear();} }
-        return p.get(0).getExpediteur();
+        return p.get(0).getExpediteur();}
+        else return null;
+        
+        
+        
     }
 
 }

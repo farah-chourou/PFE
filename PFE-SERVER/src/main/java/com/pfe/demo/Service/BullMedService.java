@@ -1,3 +1,4 @@
+			
 package com.pfe.demo.Service;
 
 import com.pfe.demo.DAO.*;
@@ -220,15 +221,17 @@ public class BullMedService {
                 lastPerfermant=(pSize/totaleSize);
                 s.clear();} }
             User perfermant = userRepo.findByUserName(p.get(0).getRecepteur() );
-
-        return perfermant;
+         if (perfermant !=null ) {
+       	return perfermant;
+         }else
+        return null;
     }
 
 
 
 
 
-    public User getPerfermantValidateur(){
+/*    public User getPerfermantValidateur(){
         LocalDate aujourdhui = LocalDate.now();
         LocalDate startOfWeek =  aujourdhui.with(DayOfWeek.MONDAY);
         LocalDate endOfWeek =  aujourdhui.with(DayOfWeek.SUNDAY);
@@ -237,7 +240,7 @@ public class BullMedService {
         List<SuivisBullMed> s =new ArrayList<SuivisBullMed>();
 
         List<User> validateur = userRepo.findByRole("medecin");
-
+if(validateur.size()!=0) {
         for (User l : validateur) {
             List <SuivisBullMed> bul= suivisBullMedRepo.findAllByRecepteurAndEtape(l.getUserName(),4);
             for(SuivisBullMed bullMed:bul){
@@ -253,7 +256,11 @@ public class BullMedService {
                 s.clear();} }
         User perfermant = userRepo.findByUserName(p.get(0).getRecepteur() );
         return perfermant;
-    }
+        }
+       
+           else
+            return null;
+    }*/
 
 
 

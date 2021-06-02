@@ -189,7 +189,6 @@ const ajouterAvis = (numBull)=>{
     message="Bulletin envoyer avec succés"
     icon ="nc-icon nc-simple-remove"
     notify("br"); 
-    notify("br");
   }else{
        axios.put(`http://localhost:8080/ajouterAvis/`+ numBull+ '/'+avis,bullMed).then(res => {
 
@@ -264,7 +263,7 @@ const addSpec =()=> {
   <h6 style={{}}>  Etape &nbsp;</h6><Avatar style={{backgroundColor : "pink",fontSize:13,width:"22px",height:"22px",position:"relative",top:"-2px"}} className="text-uppercase shadow text-dark border border-secondary">   {bull.etape}</Avatar>
 </Col>
 <Col md={5} className="">
-  <small className="text-secondary"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  Envoyer le {moment(notif.date).format("dddd, Do  MMMM YYYY à LT ")} </small>
+  <small className="text-secondary"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  Envoyer le {moment(notif.date).subtract(1,"hours").format("dddd, Do  MMMM YYYY à L ")} </small>
 </Col>
 </Row>
 <Row className="mt-3">  
@@ -392,7 +391,7 @@ style={{    width: '160px'}}
            <h6 style={{}}>  Etape &nbsp;</h6><Avatar style={{backgroundColor : "pink",fontSize:13,width:"22px",height:"22px",position:"relative",top:"-2px"}} className="text-uppercase shadow text-dark border border-secondary">   {bull.etape}</Avatar>
          </Col>
          <Col md={5} className="">
-      <small className="text-secondary"> &nbsp; &nbsp;&nbsp;Envoyer le {moment(notif.date).format("dddd, Do  MMMM YYYY à LT ")} </small>
+      <small className="text-secondary"> &nbsp; &nbsp;&nbsp;Envoyer le {moment(notif.date).subtract(1,"hours").format("dddd, Do  MMMM YYYY à LT ")} </small>
     </Col>
          </Row>
          <Row className="mt-3">  
@@ -571,7 +570,7 @@ style={{    width: '160px'}}
       <h6 style={{}}>  Etape &nbsp;</h6><Avatar style={{backgroundColor : "pink",fontSize:13,width:"22px",height:"22px",position:"relative",top:"-2px"}} className="text-uppercase shadow text-dark border border-secondary">   {bull.etape}</Avatar>
     </Col>
     <Col md={5} className="">
-      <small className="text-secondary"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Envoyer le {moment(notif.date).format("dddd, Do  MMMM YYYY à LT  ")} </small>
+      <small className="text-secondary"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Envoyer le {moment(notif.date).subtract(1,"hours").format("dddd, Do  MMMM YYYY à LT  ")} </small>
     </Col>
     </Row>
     <Row className="mt-3">  
@@ -694,7 +693,7 @@ style={{    width: '160px'}}
       <h6 style={{}}>  Etape &nbsp;</h6><Avatar style={{backgroundColor : "pink",fontSize:13,width:"22px",height:"22px",position:"relative",top:"-2px"}} className="text-uppercase shadow text-dark border border-secondary">   {bull.etape}</Avatar>
     </Col>
     <Col md={5} className="">
-      <small className="text-secondary"> &nbsp; &nbsp;   Envoyer le {moment(notif.date).format("dddd, Do  MMMM YYYY à LT  ")} </small>
+      <small className="text-secondary"> &nbsp; &nbsp;   Envoyer le {moment(notif.date).subtract(1,"hours").format("dddd, Do  MMMM YYYY à LT  ")} </small>
     </Col>
     </Row>
     <Row className="mt-3">  

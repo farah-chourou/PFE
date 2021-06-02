@@ -100,7 +100,7 @@ handleSubmit=(e)=> {
       if(result.data.role == "validateur"){ 
         this.props.history.push('/user/user-page');}   
      
-        axios.put('http://localhost:8080/connecte/'+this.state.userName)
+    //    axios.put('http://localhost:8080/connecte/'+this.state.userName)
 
      this.setState({
       isLogin:true

@@ -65,7 +65,7 @@ export default function Notification(props) {
     
    const   dropdownToggle =(e) => {
 
-        notificationsNonLu.map(n => 
+        notifications.map(n => 
           <>
           {axios.put('http://localhost:8080/updateVuNotif/'+ n.id)}
           </>
@@ -209,10 +209,10 @@ export default function Notification(props) {
                    </Col>
                   </Row>
                 
-                  {(R.suivisBull != null && R.expediteurNotif.role == "validateur") ? <div>  Nouveau bulletin  numero  <b> {R.suivisBull.numBull}</b>  a   <br></br> valider recu du validateur </div>  
-                : (R.suivisBull == null && R.expediteurNotif.role == "medecin") ? <div>  Nouveau bulletin  numero  <b> {R.suivisBullMed.numBull}</b>  a   <br></br> revalider recu du medecin </div>  
-                : (R.suivisBullMed != null && R.expediteurNotif.role == "responsable" && user.role=="validateur") ? <div> Bulletin  numero  <b> {R.suivisBullMed.numBull}</b>   est valider </div>  
-                : (R.suivisBullMed != null && R.expediteurNotif.role == "responsable" && user.role=="medecin") ? <div> Nouveau bulletin  numero  <b> {R.suivisBullMed.numBull}</b><br></br> pour  donner ton avis  </div>  
+                  {(R.suivisBull != null && R.expediteurNotif.role == "validateur") ? <div>  Nouveau bulletin  numéro  <b> {R.suivisBull.numBull}</b>, à<br></br> valider, reçu du validateur </div>  
+                : (R.suivisBull == null && R.expediteurNotif.role == "medecin") ? <div>  Nouveau bulletin  numéro  <b> {R.suivisBullMed.numBull}</b>, à<br></br> revalider, reçu du medecin </div>  
+                : (R.suivisBullMed != null && R.expediteurNotif.role == "responsable" && user.role=="validateur") ? <div> Bulletin  numéro  <b> {R.suivisBullMed.numBull}</b>   est validé </div>  
+                : (R.suivisBullMed != null && R.expediteurNotif.role == "responsable" && user.role=="medecin") ? <div> Nouveau bulletin  numéro  <b> {R.suivisBullMed.numBull}</b><br></br>, attend votre avis médicale  </div>  
 
                 : false}
 

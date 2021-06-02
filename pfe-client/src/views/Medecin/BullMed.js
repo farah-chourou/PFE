@@ -44,6 +44,7 @@ import SearchIcon from '@material-ui/icons/Search';
 
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 
+import moment from 'moment';
 
 //pagination
 const useStyles1 = makeStyles((theme) => ({
@@ -301,8 +302,8 @@ const notify =(place) => {
     message: (
       <div className="text-left " style={{}}>
         <div>
-        <b>Succés!</b> <br></br>
-       Avis ajouter avec succés et envoyer au responsable
+        <b>Succés</b> <br></br>
+       Avis ajouter avec succés 
          </div>
       </div>
     ),
@@ -410,7 +411,7 @@ var requestSearch =(
                 {row.numBull}
               </TableCell>
               <TableCell style={{ width: 165 }} >
-                {row.date}
+              { moment(row.date).format('L')}
               </TableCell>
               <TableCell style={{ width: 165 }} >
                 {row.expediteur}

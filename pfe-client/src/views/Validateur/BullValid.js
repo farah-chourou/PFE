@@ -468,10 +468,10 @@ var requestSearch =(
              <div class="d-flex flex-column text-dark">
                <div class="p-1"><b>Medecin:</b> Docteur {row.recepteur } </div>
                <div class="p-1"><b>Spécialité:</b>  {row.specialite}</div>
-               <div class="p-1"><b>Date d'envoie:</b> {moment(row.date).format("dddd, Do  MMMM YYYY  , h:mm:ss a")}</div>
+               <div class="p-1"><b>Date d'envoie:</b> {moment(row.date).format("dddd, Do  MMMM YYYY ")}</div>
                <div class="p-1"><b>Avis medical:</b>  {row.etat}</div>
                <div class="p-1"><b>Commentaire du medecin:</b>  {row.commentaireMed}</div>
-               <div class="p-1"><b>Commenatire du responsable:</b> {row.commentaireResp==null? "Pas de commentaire" : row.commentaireResp}</div>
+               <div class="p-1"><b>Commentaire du responsable:</b> {row.commentaireResp==null? "Pas de commentaire" : row.commentaireResp}</div>
 
              </div>
               </Col>

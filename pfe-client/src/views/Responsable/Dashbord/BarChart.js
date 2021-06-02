@@ -113,8 +113,8 @@ export default function BarChart() {
       const week1=  moment().startOf('month').add(7,'days');
       const week2=  moment().startOf('month').add(14,'days');
       const week3=  moment().startOf('month').add(21,'days');
-      const start =  moment().startOf('month');
-      const end= moment().endOf('month');
+      const start =  moment().startOf('month').subtract(1,"days");
+      const end= moment().endOf('month').add(1,"days");
     res.data.map(e => 
         <div key={e.numBull}>
             

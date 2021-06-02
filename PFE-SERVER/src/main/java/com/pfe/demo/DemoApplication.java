@@ -1,6 +1,9 @@
 package com.pfe.demo;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -10,7 +13,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+import com.pfe.demo.DAO.AvisRepository;
 import com.pfe.demo.DAO.UserRepository;
+import com.pfe.demo.Entities.Avis;
 import com.pfe.demo.Entities.User;
 import com.pfe.demo.Security.AES256;
 
@@ -24,16 +29,34 @@ public class DemoApplication implements CommandLineRunner{
    
     @Autowired
     UserRepository userRepo;
+    @Autowired
+    AvisRepository avisRepo;
   
     
-    
     public void run (String... args) throws Exception { 
-        System.out.println("aaa");
 
-        if(userRepo.findByUserName("farah13")==null){
-            System.out.println("ffff");
+    	if(avisRepo.findByAvis("Accepté") == null) {
+    		Avis avis =new Avis();
+    		avis.setAvis("Accepté");
+    		avisRepo.save(avis);
+    	}
+
+    	if(avisRepo.findByAvis("Rejeté") == null) {
+    		Avis avis =new Avis();
+    		avis.setAvis("Rejeté");
+    		avisRepo.save(avis);
+    	}
+
+    	if(avisRepo.findByAvis("Contre visite") == null) {
+    		Avis avis =new Avis();
+    		avis.setAvis("Contre visite");
+    		avisRepo.save(avis);
+    	}
+    		
+    	
+        if(userRepo.findByUserName("farah")==null){
             User admin = new User();
-            admin.setUserName("farah13");
+            admin.setUserName("farah");
             admin.setNom("farah");
             admin.setPrenom("chourou");
             admin.setSex("femme");
@@ -42,6 +65,8 @@ public class DemoApplication implements CommandLineRunner{
             admin.setCouleur("#ff3300");
             admin.setEmail("chouroufarah@gmail.com");
             admin.setTel("27893558");
+            admin.setConnecte(false);
+            admin.setLastConnect(new Date());
             AES256 aes = new AES256();
             admin.setPassword(aes.encrypt("admin2021"));
             admin.setRole("responsable");
@@ -49,11 +74,15 @@ public class DemoApplication implements CommandLineRunner{
         }
     }
     
+    
+    
     public static void main(String[] args) {
         SpringApplication.run(DemoApplication.class, args);
-        System.out.println(new Date());
+  
+
+   
 
     }
-    
+ 
 
 }

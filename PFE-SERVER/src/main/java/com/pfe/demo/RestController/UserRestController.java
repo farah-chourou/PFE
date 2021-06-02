@@ -76,6 +76,7 @@ public class UserRestController {
                     HttpStatus.ALREADY_REPORTED);
         }
          notificationService.Rappel(user);
+         userService.SetConnected(loginUser);
          return  ResponseEntity.ok(loginUser);
     }
 

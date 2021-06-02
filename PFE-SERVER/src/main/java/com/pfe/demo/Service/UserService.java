@@ -64,6 +64,7 @@ public class UserService {
         user.setMembreDepuis(new Date());
         user.setPassword(AES256.encrypt(user.getPassword()));
         user.setCouleur(  user.RandomColor());
+        user.setSex(user.getSex());
         User u = userRepo.save(user);
      
 
@@ -105,5 +106,12 @@ public class UserService {
     public List<User> getResponsables(){
             List<User> res= userRepo.findByRole("responsable");
             return res;
+    }
+    
+    public void SetConnected(User user) {
+    	if(user.getRole() != "Responsable") {
+    		user.setConnecte(true);
+    		userRepo.save(user);
+    	}
     }
 }

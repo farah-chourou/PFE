@@ -33,6 +33,7 @@ import AddCommentOutlinedIcon from '@material-ui/icons/AddCommentOutlined';
 import BullRecuMed from "./BullRecuMed"
 import {FiAlertCircle} from 'react-icons/fi';
 import backgroundImage from "fond8.png";
+import moment from 'moment';
 
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -492,7 +493,7 @@ var requestSearch =(
            
               </TableCell>
               <TableCell component="th" scope="row">
-              {row.date}
+              { moment(row.date).format('L')}
            
               </TableCell>
               <TableCell component="th" scope="row">
@@ -523,9 +524,15 @@ var requestSearch =(
                      </IconButton>
                    </Tooltip>
                    <Tooltip title="Envoyer">
-                     <IconButton aria-label="delete" style={{outline: 'none'}}>
-                  
-                     <MdSend  size={20} className="envoyerIcon" onClick={()=>{ envoyerBull(row.numBull,row.specialite);setNumberBullValid(numberBullValid - 1)}}/>                       </IconButton>
+                   {row.specialite =="Aucune" ?
+                     <IconButton aria-label="delete" style={{outline: 'none'}} disabled >
+                     <MdSend  size={20} onClick={()=>{ envoyerBull(row.numBull,row.specialite);setNumberBullValid(numberBullValid - 1)}}/>               
+                      </IconButton>
+                      :
+                      <IconButton aria-label="delete" style={{outline: 'none'}} >
+                      <MdSend  size={20} className="envoyerIcon" onClick={()=>{ envoyerBull(row.numBull,row.specialite);setNumberBullValid(numberBullValid - 1)}}/>               
+                       </IconButton>
+                   }
                    </Tooltip>
                    </div>  
          </TableCell>

@@ -33,6 +33,7 @@ import axios from "axios";
 import {Card,CardHeader,CardBody,CardTitle,Row,Col,ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
 import Button from '@material-ui/core/Button';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import moment from 'moment';
 
 import backgroundImage from "fond9.png";
 import Chip from '@material-ui/core/Chip';
@@ -446,7 +447,7 @@ rows.filter((row) => {
                 {row.numBull}
               </TableCell>
               <TableCell style={{ width: 160 }} >
-                {row.date}
+              { moment(row.date).format('L')}
               </TableCell>
               <TableCell style={{ width: 160 }} >
                 {row.expediteur}

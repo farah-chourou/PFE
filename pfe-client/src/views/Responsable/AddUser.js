@@ -284,13 +284,13 @@ export default class EditUser extends Component {
                       <Col className="pr-1" md="4">
                         <Form.Group>
                           <label>Nom</label>
-                          <Form.Control placeholder="Votre nom"type="text" name="nom" required value={this.state.nom} onChange={this.handleChange}/>
+                          <Form.Control placeholder="Ecrivez ici"type="text" name="nom" required value={this.state.nom} onChange={this.handleChange}/>
                         </Form.Group>
                       </Col>
                       <Col className="px-1" md="4">
                         <Form.Group>
                           <label>Prénom</label>
-                          <Form.Control  placeholder="votre prénom"  type="text" required name="prenom" value={this.state.prenom} onChange={this.handleChange}/>
+                          <Form.Control  placeholder="Ecrivez ici"  type="text" required name="prenom" value={this.state.prenom} onChange={this.handleChange}/>
                         </Form.Group>
                       </Col>
 
@@ -298,6 +298,8 @@ export default class EditUser extends Component {
                       <Form.Group controlId="formGridState">
                           <Form.Label>Sexe</Form.Label>
                           <Form.Control as="select" defaultValue="Choisir..."name="sex" required value={this.state.sex} onChange={this.handleChange}  >
+                          <option > Choisir..</option>
+
                             <option value="homme"> Homme</option>
                             <option value="femme"> Femme</option>
                     
@@ -344,7 +346,7 @@ export default class EditUser extends Component {
                       <Col md="12">
                         <Form.Group>
                           <label>Addresse</label>
-                          <Form.Control placeholder="Votre adresse" type="text" name="adresse"  required value={this.state.adresse} onChange={this.handleChange}/>
+                          <Form.Control placeholder="Entrez l'adresse ici" type="text" name="adresse"  required value={this.state.adresse} onChange={this.handleChange}/>
                         </Form.Group>
                       </Col>
                     </Row>
