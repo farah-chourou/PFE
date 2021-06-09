@@ -259,8 +259,8 @@ const BullEnAttente = () =>{
              <Image  className="border border-light "   src={require("assets/img/profile4.png")}roundedCircle width={50} />
              : <Image  className="border border-light "   src={require("assets/img/profile1.png")}roundedCircle width={50} />
     }
-               <br></br> <b > Dr {perfermantMed.nom}       {perfermantMed.prenom} </b> 
-               <br></br> <small> Spécialité : {perfermantMed.specialite}</small>
+               <br></br> <b > Dr Wejdene Hmomouda{perfermantMed.nom}       {perfermantMed.prenom} </b> 
+               <br></br> <small> Spécialité : Gynécologue{perfermantMed.specialite}</small>
                  <br></br>
                 <small className="py-2"> Le Medecin Le Plus Perfermant Pour <b>Cette Semaine </b> </small> 
                 </CardHeader>

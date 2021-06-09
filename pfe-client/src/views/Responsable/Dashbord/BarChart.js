@@ -129,9 +129,9 @@ export default function BarChart() {
         (e.avis.avis == "Rejeté" && moment(e.date).isBetween( start, week1) == true)? (rejeterLasttttWeek.push(e),setNumRejeter(rejeterLastWeek.length)): 
 
         (e.avis.avis == "Contre visite" && moment(e.date).isBetween( week3, end) == true)? (visiteLastWeek.push(e),setNumVisite(rejeterLastWeek.length)): 
-        (e.avis.avis == "Contre visite" && moment(e.date).isBetween(  week2, week3) == true)? (visiteLastWeek.push(e),setNumVisite(rejeterLasttWeek.length)): 
-        (e.avis.avis == "Contre visite" && moment(e.date).isBetween( week1,week2) == true)? (visiteLastWeek.push(e),setNumVisite(rejeterLastttWeek.length)): 
-        (e.avis.avis == "Contre visite" && moment(e.date).isBetween( start, week1)  == true)? (visiteLastWeek.push(e),setNumVisite(rejeterLasttttWeek.length)): 
+        (e.avis.avis == "Contre visite" && moment(e.date).isBetween(  week2, week3) == true)? (visiteLasttWeek.push(e),setNumVisite(rejeterLasttWeek.length)): 
+        (e.avis.avis == "Contre visite" && moment(e.date).isBetween( week1,week2) == true)? (visiteLastttWeek.push(e),setNumVisite(rejeterLastttWeek.length)): 
+        (e.avis.avis == "Contre visite" && moment(e.date).isBetween( start, week1)  == true)? (visiteLasttttWeek.push(e),setNumVisite(rejeterLasttttWeek.length)): 
 
          moment(e.date).isBetween(week3, end) == true? (autreLastWeek.push(e),setNumAutre(autreLastWeek.length)): 
         ( moment(e.date).isBetween( week2, week3) == true)? (autreLasttWeek.push(e),setNumAutre(autreLasttWeek.length)): 

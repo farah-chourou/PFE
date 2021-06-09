@@ -219,9 +219,9 @@ public class BullMedService {
                 float pSize= p.size();
 
                 lastPerfermant=(pSize/totaleSize);
-                s.clear();} }
+                s.clear();}}
             User perfermant = userRepo.findByUserName(p.get(0).getRecepteur() );
-         if (perfermant !=null ) {
+         if (p.isEmpty()==false ) {
        	return perfermant;
          }else
         return null;
